@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/Chirp.CLI/Chirp.CLI.csproj": {}
+    "/Users/victorlacour1/Desktop/Chirp/Chirp.CLI/Chirp.CLI.csproj": {}
   },
   "projects": {
-    "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/Chirp.CLI/Chirp.CLI.csproj": {
+    "/Users/victorlacour1/Desktop/Chirp/Chirp.CLI/Chirp.CLI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/Chirp.CLI/Chirp.CLI.csproj",
+        "projectUniqueName": "/Users/victorlacour1/Desktop/Chirp/Chirp.CLI/Chirp.CLI.csproj",
         "projectName": "Chirp.CLI",
-        "projectPath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/Chirp.CLI/Chirp.CLI.csproj",
-        "packagesPath": "/Users/mortennielsen/.nuget/packages/",
-        "outputPath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/Chirp.CLI/obj/",
+        "projectPath": "/Users/victorlacour1/Desktop/Chirp/Chirp.CLI/Chirp.CLI.csproj",
+        "packagesPath": "/Users/victorlacour1/.nuget/packages/",
+        "outputPath": "/Users/victorlacour1/Desktop/Chirp/Chirp.CLI/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/mortennielsen/.nuget/NuGet/NuGet.Config"
+          "/Users/victorlacour1/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
