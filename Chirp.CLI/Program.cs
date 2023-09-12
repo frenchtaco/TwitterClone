@@ -1,8 +1,13 @@
-﻿CSVParser csv = new CSVParser();
+﻿using SimpleDB;
+using System.Collections.Generic;
+
+
+CSVDatabase<Cheep> database_cheeps = new CSVDatabase<Cheep>();
 
 if (args[0] == "read")
 {
-    List<Cheep> cheeps = csv.read();
+    
+    IEnumerable<Cheep> cheeps = database_cheeps.Read();
     foreach (Cheep cheep in cheeps) {
         Console.WriteLine(cheep);
     }
@@ -16,7 +21,7 @@ else if (args[0] == "cheep")
         var timestamp = DateTime.Now;
         long unixTime = ((DateTimeOffset)timestamp).ToUnixTimeSeconds();
         var cheep = new Cheep(author, args[1], unixTime);
-        csv.write(cheep);
+        database_cheeps.Store(cheep);
     }
     catch (IOException e)
     {
