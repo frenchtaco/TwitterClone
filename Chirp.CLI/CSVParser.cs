@@ -10,7 +10,7 @@ public class CSVParser {
         using (var reader = new StreamReader(filename))
         using (var csv = new CsvReader(reader, config))
         {
-            var records = csv.GetRecords<Cheep>().ToList();;
+            var records = csv.GetRecords<Cheep>().ToList();
             return records;
         }
     }
