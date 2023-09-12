@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "dMRvAZrFLlyo3QcYqVr5FOWv52fucC+WWAc90XOalfKD6NFh+Hdb1whVYsX9dGxKtJoOFkoPbfC0TFznbfit6g==",
+  "dgSpecHash": "aX6tGuc3hA0y6SLD6FhDsGTtinIm1Wj9AKKIU1snASMCnS3Dzo5K9lk4SDmBRZWtcMJw46CE8bl83sRdadGIgw==",
   "success": true,
-  "projectFilePath": "c:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Kaare\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512"
+  ],
   "logs": []
 }

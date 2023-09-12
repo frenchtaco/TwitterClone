@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj": {}
+    "C:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj": {
+    "C:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
+        "projectUniqueName": "C:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
         "projectName": "Chirp.CLI",
-        "projectPath": "c:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
+        "projectPath": "C:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
         "packagesPath": "C:\\Users\\Kaare\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\obj\\",
+        "outputPath": "C:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Kaare\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -37,6 +37,12 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
+          "dependencies": {
+            "CsvHelper": {
+              "target": "Package",
+              "version": "[30.0.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
