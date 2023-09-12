@@ -3,5 +3,8 @@ obj/
 
 .sln
 .csproj
+.cache
+.json
+.probs
 
 SimpleDB/obj/
