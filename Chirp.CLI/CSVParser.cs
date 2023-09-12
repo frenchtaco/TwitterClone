@@ -17,7 +17,7 @@ public class CSVParser {
 
     public void write(Cheep record) {
         var records = read();
-        using (var writer = new StreamWriter("data\\chirp_cli_db.csv"))
+        using (var writer = new StreamWriter(filename))
         using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
         {
             records.Add(record);
