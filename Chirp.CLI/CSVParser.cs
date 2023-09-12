@@ -3,7 +3,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 
 public class CSVParser {
-    string filename = "data\\chirp_cli_db.csv";
+    string filename = "data/chirp_cli_db.csv";
 
     public List<Cheep> read() {
         var config = new CsvConfiguration(CultureInfo.InvariantCulture);
