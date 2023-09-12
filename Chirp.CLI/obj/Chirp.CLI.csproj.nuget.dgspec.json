@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj": {}
+    "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/Chirp.CLI/Chirp.CLI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj": {
+    "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/Chirp.CLI/Chirp.CLI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
+        "projectUniqueName": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/Chirp.CLI/Chirp.CLI.csproj",
         "projectName": "Chirp.CLI",
-        "projectPath": "C:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
-        "packagesPath": "C:\\Users\\Kaare\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Kaare\\OneDrive\\ITU\\Analysis, Design and Architecture\\Project\\Chirp\\Chirp.CLI\\obj\\",
+        "projectPath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/Chirp.CLI/Chirp.CLI.csproj",
+        "packagesPath": "/Users/mortennielsen/.nuget/packages/",
+        "outputPath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/Chirp.CLI/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Kaare\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/mortennielsen/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -41,6 +41,10 @@
             "CsvHelper": {
               "target": "Package",
               "version": "[30.0.1, )"
+            },
+            "System.CommandLine": {
+              "target": "Package",
+              "version": "[2.0.0-beta4.22272.1, )"
             }
           },
           "imports": [
@@ -59,7 +63,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.400/RuntimeIdentifierGraph.json"
         }
       }
     }
