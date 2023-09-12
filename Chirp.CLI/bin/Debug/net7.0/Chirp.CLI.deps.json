@@ -7,6 +7,7 @@
   "targets": {
     ".NETCoreApp,Version=v7.0": {
       "Chirp.CLI/1.0.0": {
+<<<<<<< HEAD
         "dependencies": {
           "CsvHelper": "30.0.1"
         },
@@ -21,6 +22,11 @@
             "fileVersion": "30.0.1.0"
           }
         }
+=======
+        "runtime": {
+          "Chirp.CLI.dll": {}
+        }
+>>>>>>> 416838eb56cbf1a365782315bed4bdd9adea2a95
       }
     }
   },
@@ -29,6 +35,7 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+<<<<<<< HEAD
     },
     "CsvHelper/30.0.1": {
       "type": "package",
@@ -36,6 +43,8 @@
       "sha512": "sha512-rcZtgbWR+As4G3Vpgx0AMNmShGuQLFjkHAPIIflzrfkJCx8/AOd4m96ZRmiU1Wi39qS5UVjV0P8qdgqOo5Cwyg==",
       "path": "csvhelper/30.0.1",
       "hashPath": "csvhelper.30.0.1.nupkg.sha512"
+=======
+>>>>>>> 416838eb56cbf1a365782315bed4bdd9adea2a95
     }
   }
 }
