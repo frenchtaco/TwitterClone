@@ -1,8 +1,7 @@
-﻿using SimpleDB;
-using System.Collections.Generic;
-
-
+﻿using System.Collections.Generic;
+using SimpleDB;
 CSVDatabase<Cheep> database_cheeps = new CSVDatabase<Cheep>();
+
 
 if (args[0] == "read")
 {

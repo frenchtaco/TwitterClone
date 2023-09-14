@@ -68,6 +68,20 @@
             "locale": "zh-Hant"
           }
         }
+      },
+      "SimpleDB/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "CsvHelper": "30.0.1",
+          "System.CommandLine": "2.0.0-beta4.22272.1"
+        },
+        "compile": {
+          "bin/placeholder/SimpleDB.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SimpleDB.dll": {}
+        }
       }
     }
   },
@@ -139,12 +153,16 @@
         "system.commandline.2.0.0-beta4.22272.1.nupkg.sha512",
         "system.commandline.nuspec"
       ]
+    },
+    "SimpleDB/1.0.0": {
+      "type": "project",
+      "path": "../CSVDB/SimpleDB.csproj",
+      "msbuildProject": "../CSVDB/SimpleDB.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "CsvHelper >= 30.0.1",
-      "System.CommandLine >= 2.0.0-beta4.22272.1"
+      "SimpleDB >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -153,11 +171,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\Chirp.CLI\\Chirp.CLI.csproj",
+      "projectUniqueName": "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\Chirp.CLI\\Chirp.CLI.csproj",
       "projectName": "Chirp.CLI",
-      "projectPath": "c:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\Chirp.CLI\\Chirp.CLI.csproj",
+      "projectPath": "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\Chirp.CLI\\Chirp.CLI.csproj",
       "packagesPath": "C:\\Users\\Bruger\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\Chirp.CLI\\obj\\",
+      "outputPath": "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\Chirp.CLI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Bruger\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -171,7 +189,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\CSVDB\\SimpleDB.csproj": {
+              "projectPath": "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\CSVDB\\SimpleDB.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -183,16 +205,6 @@
     "frameworks": {
       "net7.0": {
         "targetAlias": "net7.0",
-        "dependencies": {
-          "CsvHelper": {
-            "target": "Package",
-            "version": "[30.0.1, )"
-          },
-          "System.CommandLine": {
-            "target": "Package",
-            "version": "[2.0.0-beta4.22272.1, )"
-          }
-        },
         "imports": [
           "net461",
           "net462",
