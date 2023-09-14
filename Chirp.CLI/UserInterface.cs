@@ -1,7 +1,9 @@
+/*using SimpleDB;
+
 public class UserInterface {
-    static CSVParser csv = new CSVParser();
+    static CSVDatabase<T> csv = new();
     public static void read() {
-        List<Cheep> cheeps = csv.read();
+        List<Cheep> cheeps = csv.Read();
         foreach (Cheep cheep in cheeps) {
         Console.WriteLine(cheep);
         }
@@ -12,7 +14,7 @@ public class UserInterface {
         var timestamp = DateTime.Now;
         long unixTime = ((DateTimeOffset)timestamp).ToUnixTimeSeconds();
         var cheep = new Cheep(author, message, unixTime);
-        csv.write(cheep);
+        csv.Store(cheep);
         Console.WriteLine("Cheep sent");
     }
-}
+}*/
