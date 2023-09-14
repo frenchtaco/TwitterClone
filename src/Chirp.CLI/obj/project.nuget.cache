@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "NCTo/4XiV3NZYkkCpD+SjVW/CCqyOGrAfZVnsubAeD3xdcb+jtMPNcCOnrzGNPNLC/A2Hpyqjh2wEPrBXpTOgg==",
+  "success": true,
+  "projectFilePath": "c:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\Chirp.CLI\\Chirp.CLI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Bruger\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
+    "C:\\Users\\Bruger\\.nuget\\packages\\system.commandline\\2.0.0-beta4.22272.1\\system.commandline.2.0.0-beta4.22272.1.nupkg.sha512"
+  ],
+  "logs": []
+}
