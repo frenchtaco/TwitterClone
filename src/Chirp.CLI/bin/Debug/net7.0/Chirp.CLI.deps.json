@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v7.0": {
       "Chirp.CLI/1.0.0": {
         "dependencies": {
-          "SimpleDB": "1.0.0"
+          "SimpleDB": "1.0.0",
+          "System.CommandLine": "2.0.0-beta4.22272.1"
         },
         "runtime": {
           "Chirp.CLI.dll": {}

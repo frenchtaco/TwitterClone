@@ -7,7 +7,7 @@ namespace SimpleDB;
 
 public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
-    string filename = "data/chirp_cli_db.csv";
+    string filename = "/Users/victorlacour1/Desktop/Chirp/data/chirp_cli_db.csv";
     public IEnumerable<T> Read(int? limit = null)
     {
         var config = new CsvConfiguration(CultureInfo.InvariantCulture);
@@ -26,6 +26,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
         {
             csv.WriteRecord(record);
+            writer.Write("\n");
         }
     }
 }
