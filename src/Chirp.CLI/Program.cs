@@ -1,33 +1,87 @@
-﻿using System.Collections.Generic;
+﻿using System.CommandLine; 
+using System.Collections.Generic;
 using SimpleDB;
-CSVDatabase<Cheep> database_cheeps = new CSVDatabase<Cheep>();
+ 
+ 
 
-
-if (args[0] == "read")
+partial class Program
 {
-    
-    IEnumerable<Cheep> cheeps = database_cheeps.Read();
-    foreach (Cheep cheep in cheeps) {
-        Console.WriteLine(cheep);
+
+    public static async Task Main(string[] args)
+    {
+        var rootCommand = new RootCommand(); 
+        
+        var readone = new Option<bool> //changed from 'string' to 'bool' under hte command of Æmill.
+        (
+            name : "--readone",
+            description : "Gets and reads a specified cheep in the CHIRPIN' Database.©"
+        );
+
+        var readall = new Option<bool> //changed from 'string' to 'bool' under hte command of Æmill.
+        (
+            name : "--readall",
+            description : "Gets and reads all of the cheeps stored in our Chirpin' database."
+        );
+
+        var cheep = new Option<string>
+        (
+            name : "--cheep",
+            description : "Cheeps a cheep to the CHIRPIN' Database."
+        );
+
+        rootCommand.Add(readone);
+        rootCommand.Add(readall);
+        rootCommand.Add(cheep);
+
+        rootCommand.SetHandler((readOneValue, readAllValue, cheepValue) =>
+        {
+            Fondle(readOneValue, readAllValue, cheepValue);
+       
+        }, readone, readall, cheep);
+
+        var result = await rootCommand.InvokeAsync(args);
+    }
+
+    public static void Fondle(bool shouldReadOne, bool shouldReadAll, string msg)
+    {
+        //Console.WriteLine("yummy yummy I love brogramming! " + msg + shouldReadOne + shouldReadAll);
+        CSVDatabase<Cheep> database_cheeps = new CSVDatabase<Cheep>();  
+        
+        if (shouldReadAll)
+        {  
+            IEnumerable<Cheep> cheeps = database_cheeps.Read();
+            foreach (Cheep cheep in cheeps) {
+                Console.WriteLine(cheep);
+            }
+        }
+        else if (shouldReadOne)
+        {
+            IEnumerable<Cheep> cheeps = database_cheeps.Read();
+            Console.WriteLine(cheeps.ElementAt(0));
+        }
+        else if (msg != null)
+        {
+            try
+            {
+                string author = Environment.UserName;
+                var timestamp = DateTime.Now;
+                long unixTime = ((DateTimeOffset)timestamp).ToUnixTimeSeconds();
+                var cheep = new Cheep(author, msg.ToString(), unixTime);
+                database_cheeps.Store(cheep);
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("The file does not exist");
+                Console.WriteLine(e.Message);
+            }
+        }
     }
 
 }
-else if (args[0] == "cheep")
-{
-    try
-    {
-        string author = Environment.UserName;
-        var timestamp = DateTime.Now;
-        long unixTime = ((DateTimeOffset)timestamp).ToUnixTimeSeconds();
-        var cheep = new Cheep(author, args[1], unixTime);
-        database_cheeps.Store(cheep);
-    }
-    catch (IOException e)
-    {
-        Console.WriteLine("The file does not exist");
-        Console.WriteLine(e.Message);
-    }
-}
+
+
+
+
 /*using System.IO; 
 using System.Collections.Generic;
 using System; 
