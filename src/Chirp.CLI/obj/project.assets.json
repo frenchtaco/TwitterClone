@@ -167,19 +167,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/victorlacour1/.nuget/packages/": {}
+    "C:\\Users\\Bruger\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/victorlacour1/Desktop/Chirp/src/Chirp.CLI/Chirp.CLI.csproj",
+      "projectUniqueName": "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\Chirp.CLI\\Chirp.CLI.csproj",
       "projectName": "Chirp.CLI",
-      "projectPath": "/Users/victorlacour1/Desktop/Chirp/src/Chirp.CLI/Chirp.CLI.csproj",
-      "packagesPath": "/Users/victorlacour1/.nuget/packages/",
-      "outputPath": "/Users/victorlacour1/Desktop/Chirp/src/Chirp.CLI/obj/",
+      "projectPath": "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\Chirp.CLI\\Chirp.CLI.csproj",
+      "packagesPath": "C:\\Users\\Bruger\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\Chirp.CLI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/victorlacour1/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Bruger\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -191,8 +191,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "/Users/victorlacour1/Desktop/Chirp/src/CSVDB/SimpleDB.csproj": {
-              "projectPath": "/Users/victorlacour1/Desktop/Chirp/src/CSVDB/SimpleDB.csproj"
+            "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\CSVDB\\SimpleDB.csproj": {
+              "projectPath": "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\CSVDB\\SimpleDB.csproj"
             }
           }
         }

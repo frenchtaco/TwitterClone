@@ -97,3 +97,6 @@ C:/Users/Bruger/OneDrive/Documents/.ITU/3.Semester/Software_Architecture/Chirp/s
 /Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/Chirp.CLI/obj/Debug/net7.0/Chirp.CLI.pdb
 /Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/Chirp.CLI/obj/Debug/net7.0/Chirp.CLI.genruntimeconfig.cache
 /Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/Chirp.CLI/obj/Debug/net7.0/ref/Chirp.CLI.dll
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\Chirp.CLI\obj\Debug\net7.0\Chirp.CLI.dll
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\Chirp.CLI\obj\Debug\net7.0\refint\Chirp.CLI.dll
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\Chirp.CLI\obj\Debug\net7.0\Chirp.CLI.pdb

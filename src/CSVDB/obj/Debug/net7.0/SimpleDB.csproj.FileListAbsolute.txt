@@ -22,3 +22,11 @@ c:/Users/Bruger/OneDrive/Documents/.ITU/3.Semester/Software_Architecture/Chirp/s
 /Users/victorlacour1/Desktop/Chirp/src/CSVDB/obj/Debug/net7.0/refint/SimpleDB.dll
 /Users/victorlacour1/Desktop/Chirp/src/CSVDB/obj/Debug/net7.0/SimpleDB.pdb
 /Users/victorlacour1/Desktop/Chirp/src/CSVDB/obj/Debug/net7.0/ref/SimpleDB.dll
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\SimpleDB.csproj.AssemblyReference.cache
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\SimpleDB.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\SimpleDB.AssemblyInfoInputs.cache
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\SimpleDB.AssemblyInfo.cs
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\SimpleDB.csproj.CoreCompileInputs.cache
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\SimpleDB.dll
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\refint\SimpleDB.dll
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\SimpleDB.pdb
