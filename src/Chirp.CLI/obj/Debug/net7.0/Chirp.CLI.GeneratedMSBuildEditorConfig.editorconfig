@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Chirp.CLI
-build_property.ProjectDir = /Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/Chirp.CLI/
+build_property.ProjectDir = c:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\Chirp.CLI\
