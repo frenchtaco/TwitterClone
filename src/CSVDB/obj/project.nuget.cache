@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "P9u1rhu+L1Yy+Ysmhwk+WuDBh0amA77JgW1tOh1kHkALTYTXvE5h5rbnbvyuEPgrh9lzo3SKecv1j6LN9v1PVQ==",
+  "dgSpecHash": "vAb5MCOd6pRS8DuEtHFxst7KxVBdH43CmCzev9gniWcR+E4LtXIu4bw4DkV/YEW1gkOBuuVGb8KTHYFYSkbHMg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\CSVDB\\SimpleDB.csproj",
+  "projectFilePath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/SimpleDB.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Bruger\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
-    "C:\\Users\\Bruger\\.nuget\\packages\\system.commandline\\2.0.0-beta4.22272.1\\system.commandline.2.0.0-beta4.22272.1.nupkg.sha512"
+    "/Users/mortennielsen/.nuget/packages/csvhelper/30.0.1/csvhelper.30.0.1.nupkg.sha512",
+    "/Users/mortennielsen/.nuget/packages/system.commandline/2.0.0-beta4.22272.1/system.commandline.2.0.0-beta4.22272.1.nupkg.sha512"
   ],
   "logs": []
 }
