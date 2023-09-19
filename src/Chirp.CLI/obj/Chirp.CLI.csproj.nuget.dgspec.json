@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/victorlacour1/Desktop/Chirp/src/Chirp.CLI/Chirp.CLI.csproj": {}
+    "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/Chirp.CLI/Chirp.CLI.csproj": {}
   },
   "projects": {
-    "/Users/victorlacour1/Desktop/Chirp/src/Chirp.CLI/Chirp.CLI.csproj": {
+    "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/Chirp.CLI/Chirp.CLI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/victorlacour1/Desktop/Chirp/src/Chirp.CLI/Chirp.CLI.csproj",
+        "projectUniqueName": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/Chirp.CLI/Chirp.CLI.csproj",
         "projectName": "Chirp.CLI",
-        "projectPath": "/Users/victorlacour1/Desktop/Chirp/src/Chirp.CLI/Chirp.CLI.csproj",
-        "packagesPath": "/Users/victorlacour1/.nuget/packages/",
-        "outputPath": "/Users/victorlacour1/Desktop/Chirp/src/Chirp.CLI/obj/",
+        "projectPath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/Chirp.CLI/Chirp.CLI.csproj",
+        "packagesPath": "/Users/mortennielsen/.nuget/packages/",
+        "outputPath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/Chirp.CLI/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/victorlacour1/.nuget/NuGet/NuGet.Config"
+          "/Users/mortennielsen/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -26,8 +26,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "/Users/victorlacour1/Desktop/Chirp/src/CSVDB/SimpleDB.csproj": {
-                "projectPath": "/Users/victorlacour1/Desktop/Chirp/src/CSVDB/SimpleDB.csproj"
+              "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/SimpleDB.csproj": {
+                "projectPath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/SimpleDB.csproj"
               }
             }
           }
@@ -67,17 +67,17 @@
         }
       }
     },
-    "/Users/victorlacour1/Desktop/Chirp/src/CSVDB/SimpleDB.csproj": {
+    "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/SimpleDB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/victorlacour1/Desktop/Chirp/src/CSVDB/SimpleDB.csproj",
+        "projectUniqueName": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/SimpleDB.csproj",
         "projectName": "SimpleDB",
-        "projectPath": "/Users/victorlacour1/Desktop/Chirp/src/CSVDB/SimpleDB.csproj",
-        "packagesPath": "/Users/victorlacour1/.nuget/packages/",
-        "outputPath": "/Users/victorlacour1/Desktop/Chirp/src/CSVDB/obj/",
+        "projectPath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/SimpleDB.csproj",
+        "packagesPath": "/Users/mortennielsen/.nuget/packages/",
+        "outputPath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/victorlacour1/.nuget/NuGet/NuGet.Config"
+          "/Users/mortennielsen/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
