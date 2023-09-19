@@ -20,4 +20,4 @@ jobs:
         with:
           project: ITU-BDSA23-GROUP6 Chirp
           column: In progress
-          repo-token: ${{ secrets.BLAZEITT}}
+          repo-token: ${{ secrets.MYSECRET}}
