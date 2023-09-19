@@ -8,7 +8,10 @@ namespace SimpleDB
     public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
         private string file;
+
+        //relative path
         private string filename = "data//chirp_cli_db.csv";
+        
 
         public CSVDatabase()
         {
