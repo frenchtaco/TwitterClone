@@ -7,8 +7,7 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-            
-name: GitHub Project Automation+
+name: Move assigned card
 on:
   issues:
     types:
