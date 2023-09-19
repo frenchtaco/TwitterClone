@@ -8,14 +8,17 @@ namespace SimpleDB
     public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
         private string file;
-        private string filename = "data\\chirp_cli_db.csv";
+        private string filename = "data//chirp_cli_db.csv";
 
         public CSVDatabase()
         {
-            var projectFolder = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+          
+            //takes absolute path from the user, and combines it with the path to the csv file
+            var projectFolder = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName!;
             file = Path.Combine(projectFolder, filename);
-            //file = "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\data\\chirp_cli_db.csv";
+          
         }
+        
 
         public IEnumerable<T> Read(int? limit = null)
         {
@@ -30,7 +33,7 @@ namespace SimpleDB
 
         public void Store(T record)
         {
-            Console.WriteLine("howdy.");
+            Console.WriteLine("Your cheep has been stored.");
             using (var writer = new StreamWriter(file, true))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
@@ -38,5 +41,5 @@ namespace SimpleDB
                 writer.Write("\n");
             }
         }
-    }
+    };
 }
