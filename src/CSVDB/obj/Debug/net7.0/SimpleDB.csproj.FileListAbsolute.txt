@@ -30,3 +30,7 @@ C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\s
 C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\SimpleDB.dll
 C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\refint\SimpleDB.dll
 C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\SimpleDB.pdb
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\bin\Debug\net7.0\SimpleDB.deps.json
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\bin\Debug\net7.0\SimpleDB.dll
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\bin\Debug\net7.0\SimpleDB.pdb
+C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\src\CSVDB\obj\Debug\net7.0\ref\SimpleDB.dll
