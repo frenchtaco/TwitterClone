@@ -20,4 +20,4 @@ jobs:
         with:
           project: GROUP6
           column: In Progress
-          repo-token: ${{ secrets.MYSECRET}}
+          repo-token: ${{ secrets.MYSECRET }}
