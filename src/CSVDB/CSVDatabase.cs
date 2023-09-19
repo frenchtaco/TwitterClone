@@ -5,19 +5,36 @@ using CsvHelper.Configuration;
 namespace SimpleDB;
 
 
-public sealed class CSVDatabase<T> : IDatabaseRepository<T>
+namespace SimpleDB
 {
-    string filename = "/Users/victorlacour1/Desktop/Chirp/data/chirp_cli_db.csv";
-    public IEnumerable<T> Read(int? limit = null)
+    public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
-        var config = new CsvConfiguration(CultureInfo.InvariantCulture);
-        using (var reader = new StreamReader(filename))
-        using (var csv = new CsvReader(reader, config))
+        private string file;
+
+        //relative path
+        private string filename = "data//chirp_cli_db.csv";
+        
+
+        public CSVDatabase()
         {
-            var records = csv.GetRecords<T>().ToList();
-            return records;
+          
+            //takes absolute path from the user, and combines it with the path to the csv file
+            var projectFolder = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName!;
+            file = Path.Combine(projectFolder, filename);
+          
         }
-    }
+        
+
+        public IEnumerable<T> Read(int? limit = null)
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+            using (var reader = new StreamReader(file))
+            using (var csv = new CsvReader(reader, config))
+            {
+                var records = csv.GetRecords<T>().ToList();
+                return records;
+            }
+        }
 
     public void Store(T record)
     {
@@ -29,6 +46,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
             writer.Write("\n");
         }
     }
+};
 }
 
 
