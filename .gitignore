@@ -1,5 +1,11 @@
-Chirp.CLI/bin/
-Chirp.CLI/obj/
-CSVDB/obj/
+// Application
+src/Chirp.CLI/bin/
+src/Chirp.CLI/obj/
+src/CSVDB/obj/
+
+// Test
+tests/CSVDB.Tests/obj/
+tests/Chirp.CLI.Tests/bin/
+tests/Chirp.CLI.Tests/obj/
 
 .fake
