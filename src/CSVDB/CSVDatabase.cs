@@ -11,15 +11,12 @@ namespace SimpleDB
 
         //relative path
         private string filename = "data//chirp_cli_db.csv";
-        
 
         public CSVDatabase()
         {
-          
-            //takes absolute path from the user, and combines it with the path to the csv file
+            // Takes absolute path from the user, and combines it with the path to the csv file
             var projectFolder = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName!;
             file = Path.Combine(projectFolder, filename);
-          
         }
         
 

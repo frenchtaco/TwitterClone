@@ -34,3 +34,15 @@ c:/Users/Bruger/OneDrive/Documents/.ITU/3.Semester/Software_Architecture/Chirp/s
 /Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/obj/Debug/net7.0/refint/SimpleDB.dll
 /Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/obj/Debug/net7.0/SimpleDB.pdb
 /Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/obj/Debug/net7.0/ref/SimpleDB.dll
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/bin/Debug/net7.0/SimpleDB.deps.json
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/bin/Debug/net7.0/SimpleDB.dll
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/bin/Debug/net7.0/SimpleDB.pdb
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/obj/Debug/net7.0/SimpleDB.csproj.AssemblyReference.cache
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/obj/Debug/net7.0/SimpleDB.GeneratedMSBuildEditorConfig.editorconfig
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/obj/Debug/net7.0/SimpleDB.AssemblyInfoInputs.cache
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/obj/Debug/net7.0/SimpleDB.AssemblyInfo.cs
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/obj/Debug/net7.0/SimpleDB.csproj.CoreCompileInputs.cache
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/obj/Debug/net7.0/SimpleDB.dll
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/obj/Debug/net7.0/refint/SimpleDB.dll
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/obj/Debug/net7.0/SimpleDB.pdb
+/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/obj/Debug/net7.0/ref/SimpleDB.dll

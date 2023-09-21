@@ -148,24 +148,25 @@
     ]
   },
   "packageFolders": {
-    "/Users/mortennielsen/.nuget/packages/": {}
+    "/Users/millemollen/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/SimpleDB.csproj",
+      "projectUniqueName": "/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/SimpleDB.csproj",
       "projectName": "SimpleDB",
-      "projectPath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/SimpleDB.csproj",
-      "packagesPath": "/Users/mortennielsen/.nuget/packages/",
-      "outputPath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/CSVDB/obj/",
+      "projectPath": "/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/SimpleDB.csproj",
+      "packagesPath": "/Users/millemollen/.nuget/packages/",
+      "outputPath": "/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/CSVDB/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/mortennielsen/.nuget/NuGet/NuGet.Config"
+        "/Users/millemollen/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
+        "/usr/local/share/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -209,7 +210,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.400/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.307/RuntimeIdentifierGraph.json"
       }
     }
   }
