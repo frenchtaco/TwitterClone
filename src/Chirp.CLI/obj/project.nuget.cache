@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "m+870bJsbtoMjwFVs1gJ4zm60ty+Hy1SmTn0r5nyyJlFGdtJ4Vmx7iC4y613+hig4dgmYESKfzXJwXYZY30G7w==",
+  "dgSpecHash": "Hd89tE3e2z7Pug8L+2aRgDfVFfuRDFGx7xJkaYPXcepoZOv/etEb08sRxv942UVFqmXone3IZA5kZ+I+035sAg==",
   "success": true,
-  "projectFilePath": "/Users/mortennielsen/Projects/3rdsemester/chirp/Chirp/src/Chirp.CLI/Chirp.CLI.csproj",
+  "projectFilePath": "/Users/millemollen/Desktop/ITU/Semester 3/Analysis, Design and Software fucking/WorkingRepo/Chirp/src/Chirp.CLI/Chirp.CLI.csproj",
   "expectedPackageFiles": [
-    "/Users/mortennielsen/.nuget/packages/csvhelper/30.0.1/csvhelper.30.0.1.nupkg.sha512",
-    "/Users/mortennielsen/.nuget/packages/system.commandline/2.0.0-beta4.22272.1/system.commandline.2.0.0-beta4.22272.1.nupkg.sha512"
+    "/Users/millemollen/.nuget/packages/csvhelper/30.0.1/csvhelper.30.0.1.nupkg.sha512",
+    "/Users/millemollen/.nuget/packages/system.commandline/2.0.0-beta4.22272.1/system.commandline.2.0.0-beta4.22272.1.nupkg.sha512"
   ],
   "logs": []
 }
