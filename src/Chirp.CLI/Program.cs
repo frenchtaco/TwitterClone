@@ -9,7 +9,12 @@ public class Program
         C.O.R.E P.R.O.G.R.A.M
     
     *****************************/
-    public static async Task Main(string[] args)
+    public static void Main(string[] args)
+    {
+        Program.CoreProgram(args);
+    }
+
+    public static async Task CoreProgram(string[] arguments)
     {
         // Create the root command for our command line application.
         var rootCommand = new RootCommand();
@@ -48,6 +53,6 @@ public class Program
         }, readone, readall, cheep);
 
         // Invoke the root command to process the command line arguments.
-        var result = await rootCommand.InvokeAsync(args);
+        var result = await rootCommand.InvokeAsync(arguments);
     }
 }
