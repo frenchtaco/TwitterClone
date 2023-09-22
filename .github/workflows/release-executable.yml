@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'  # This will trigger the workflow for tags like v1.0, v2.0.1, etc
+      #test
 jobs:
   build_test_and_release:
     runs-on: ubuntu-latest
