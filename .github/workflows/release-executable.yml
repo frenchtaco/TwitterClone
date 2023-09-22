@@ -3,8 +3,7 @@ name: Build, Test, and Release Chirp Executable
 on:
   push:
     tags:
-      - 'test_v*'  # This will trigger the workflow for tags like v1.0, v2.0.1, etc.
-      #test
+      - 'v*'  # This will trigger the workflow for tags like v1.0, v2.0.1, etc
 jobs:
   build_test_and_release:
     runs-on: ubuntu-latest
@@ -27,24 +26,19 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 
     - name: Publish for Windows x64
-      run: dotnet publish --configuration Release --runtime win-x64 --no-self-contained
-    - name: Zip Windows Executable
-      run: zip -r ./publish/chirp-win-x64.zip ./publish/win-x64/
+      run: dotnet publish --configuration Release --runtime win-x64
+    - name: Zip windows exe
+      run:  7z a -tzip "${release_name}.zip" "./${release_name}/*"
 
     - name: Publish for MacOS x64
-      run: dotnet publish --configuration Release --runtime osx-x64 --output ./publish/osx-x64 --no-self-contained
+      run: dotnet publish --configuration Release --runtime osx-x64 
     - name: Zip MacOS x64 Executable
       run: zip -r ./publish/chirp-osx-x64.zip ./publish/osx-x64/
 
     - name: Publish for Linux x64
-      run: dotnet publish --configuration Release --runtime linux-x64 --output ./publish/linux-x64 --no-self-contained
+      run: dotnet publish --configuration Release --runtime linux-x64
     - name: Zip Linux Executable
       run: zip -r ./publish/chirp-linux-x64.zip ./publish/linux-x64/
-
-    - name: Publish for MacOS ARM
-      run: dotnet publish --configuration Release --runtime osx-arm64 --output ./publish/osx-arm64 --no-self-contained
-    - name: Zip MacOS ARM Executable
-      run: zip -r ./publish/chirp-osx-arm64.zip ./publish/osx-arm64/
 
     - name: Upload Executables
       uses: actions/upload-artifact@v2
