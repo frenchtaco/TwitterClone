@@ -5,20 +5,27 @@ using System.IO;
 
 namespace SimpleDB
 {
+    //sealed ensures that this class can't be inherited in any other class.
     public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
-        private string file;
+
+
+        public static CSVDatabase<T> Instance { get { return lazy.Value; } }
+
+        //I think is instance is only made when called which is the meaning of "lazy"
+        private static readonly Lazy<CSVDatabase<T>> lazy = new Lazy<CSVDatabase<T>>(() => 
+        new CSVDatabase<T>());
+
 
         //relative path
-        private string filename = "data//chirp_cli_db.csv";
-
-        public CSVDatabase()
-        {
-            // Takes absolute path from the user, and combines it with the path to the csv file
-            var projectFolder = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName!;
-            file = Path.Combine(projectFolder, filename);
-        }
+        private static string filename = "data//chirp_cli_db.csv";
+        private static string projectFolder = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName!;
+        private static string file = Path.Combine(projectFolder, filename);
         
+        //** THIS  CONSTRUCTOR IS SUPPOSED TO BE PRIVATE
+        private CSVDatabase()
+        {
+        }
 
         public IEnumerable<T> Read(int? limit = null)
         {
