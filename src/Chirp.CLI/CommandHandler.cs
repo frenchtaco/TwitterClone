@@ -5,7 +5,10 @@ namespace CommandHandle;
 public class CommandHandler 
 {
     private int commandCounter = 0;
-    private CSVDatabase<Cheep> database_cheeps = new CSVDatabase<Cheep>();
+
+         // This long line is called a reflection, and it forces the CSVDatabase's constructor to create an instance even though the constructor is PRIVATE.
+        // this is smart because by using this, we keep singleton property and can still use the method.
+        CSVDatabase<Cheep> database_cheeps =  (CSVDatabase<Cheep>)Activator.CreateInstance(typeof(CSVDatabase<Cheep>), nonPublic: true);//because something
 
 
     public void Fondle(bool shouldReadOne, bool shouldReadAll, string msg)
