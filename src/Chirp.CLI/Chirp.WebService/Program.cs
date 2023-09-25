@@ -31,15 +31,36 @@ var app = builder.Build();
 
 CSVDatabase<Cheep> database_cheeps =  (CSVDatabase<Cheep>)Activator.CreateInstance(typeof(CSVDatabase<Cheep>), nonPublic: true);//because something
 
-app.MapGet("/cheep", () => new Cheep("Billy Bones", "fuckery mockery", (long)DateTime.Now.Ticks));
+var username = Environment.UserName;
+long timestamp = (long)DateTime.Now.Ticks;
 
+
+
+// The POST command written is: 
+// curl -X POST -H "Content-Type: application/json" -d '{"Author":"YourUsername","Message":"YourMessage","Timestamp":1234567890}' http://localhost:5142/cheep
+// or equivalently, 
+// curl -X POST -d '{"Author":"YourUsername","Message":"YourMessage","Timestamp":1234567890}' http://localhost:5142/cheep
+
+
+
+app.MapPost("/cheep",  () => {
+    var cheep = new Cheep(username, "first test omg crazy", timestamp);
+    database_cheeps.Store(cheep);
+    return Results.Created("/cheeps", "Cheep was stored!");
+});
+
+
+//Get request!
+//app.MapGet("/cheep", () => new Cheep("Billy Bones", "fuckery mockery", (long)DateTime.Now.Ticks));
 app.MapGet("/cheeps", () => {
     var cheep = database_cheeps.Read();
     return Results.Json(cheep);
 });
 
-app.Run();
 
+
+app.Run();
+public record Cheep(string Author, string Message, long Timestamp);
 
 
 
@@ -73,4 +94,4 @@ app.Run();
 
 
 
-public record Cheep(string Author, string Message, long Timestamp);
+//public record Cheep(string Author, string Message, long Timestamp);
