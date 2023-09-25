@@ -37,13 +37,13 @@ jobs:
       run: dotnet publish --configuration Release --runtime osx-x64 --self-contained false
     
     - name: Zip MacOS x64 Executable
-      run: zip -r -j "Chirp.CLI-$tag-osx-x64.zip" src/Chirp.CLI/bin/Release/net7.0/osx-x64/publish/ -x "*.sln" "*.pdb"
+      run: zip -r "Chirp.CLI-$tag-osx-x64.zip" . -x "*.sln" "*.pdb"
 
     - name: Publish for Linux x64
       run: dotnet publish --configuration Release --runtime linux-x64 --self-contained false
 
     - name: Zip Linux Executable
-      run: zip -r -j "Chirp.CLI-$tag-linux-x64.zip" src/Chirp.CLI/bin/Release/net7.0/linux-x64/publish/ -x "*.sln" "*.pdb"
+      run: zip -r "Chirp.CLI-$tag-linux-x64.zip" . -x "*.sln" "*.pdb"
 
     - name: Upload Executables
       uses: actions/upload-artifact@v2
