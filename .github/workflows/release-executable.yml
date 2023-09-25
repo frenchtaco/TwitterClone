@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'  # This will trigger the workflow for tags like v1.0, v2.0.1, etc
+
 jobs:
   build_test_and_release:
     runs-on: ubuntu-latest
@@ -28,27 +29,28 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 
     - name: Publish for Windows x64
-      run: dotnet publish --configuration Release --runtime win-x64 --self-contained false
+      run: dotnet publish --configuration Release --runtime win-x64 --self-contained true
 
     - name: Zip Windows Executable
-      run: zip -r "Chirp.CLI-$tag-windows-x64.zip" . -x "*.sln" "*.pdb"
-     
+      run: zip -j "Chirp.CLI-$tag-windows-x64.zip" bin/Release/net7.0/win-x64/publish/Chirp.CLI.exe
+
     - name: Publish for MacOS x64
-      run: dotnet publish --configuration Release --runtime osx-x64 --self-contained false
-    
+      run: dotnet publish --configuration Release --runtime osx-x64 --self-contained true
+
     - name: Zip MacOS x64 Executable
-      run: zip -r "Chirp.CLI-$tag-macos-x64.zip" . -x "*.sln" "*.pdb"
+      run: zip -j "Chirp.CLI-$tag-macos-x64.zip" bin/Release/net7.0/osx-x64/publish/Chirp.CLI
 
     - name: Publish for Linux x64
-      run: dotnet publish --configuration Release --runtime linux-x64 --self-contained false
+      run: dotnet publish --configuration Release --runtime linux-x64 --self-contained true
 
     - name: Zip Linux Executable
-      run: zip -r "Chirp.CLI-$tag-linux-x64.zip" . -x "*.sln" "*.pdb"
+      run: zip -j "Chirp.CLI-$tag-linux-x64.zip" bin/Release/net7.0/linux-x64/publish/Chirp.CLI
 
     - name: Upload Release Artifacts
-      uses: softprops/action-gh-release@v1
+      uses: actions/upload-artifact@v2
       with:
-        files: |
-          Chirp.CLI-${{ env.tag }}-linux-x64.zip
-          Chirp.CLI-${{ env.tag }}-windows-x64.zip
-          Chirp.CLI-${{ env.tag }}-macos-x64.zip
+        name: Chirp-Executables
+        path: |
+          Chirp.CLI-$tag-windows-x64.zip
+          Chirp.CLI-$tag-macos-x64.zip
+          Chirp.CLI-$tag-linux-x64.zip
