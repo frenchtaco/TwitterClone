@@ -1,14 +1,17 @@
-﻿using System.CommandLine;
+using System.CommandLine;
 using System.Collections.Generic;
 using CommandHandle;
 
 public class Program
 {
     /*****************************
-    
+
         C.O.R.E P.R.O.G.R.A.M
     
     *****************************/
+    
+
+
     public static void Main(string[] args)
     {
         Program.CoreProgram(args);
