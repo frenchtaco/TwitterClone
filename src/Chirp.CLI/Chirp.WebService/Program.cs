@@ -37,23 +37,20 @@ long timestamp = (long)DateTime.Now.Ticks;
 
 
 // The POST command written is: 
-// curl -X POST -H "Content-Type: application/json" -d '{"Author":"YourUsername","Message":"YourMessage","Timestamp":1234567890}' http://localhost:5142/cheep
+// curl -X POST -H "Content-Type: application/json" -d "message" http://localhost:5142/cheep
 // or equivalently, 
-// curl -X POST -d '{"Author":"YourUsername","Message":"YourMessage","Timestamp":1234567890}' http://localhost:5142/cheep
-
-
-
+// curl -X POST -d "message" http://localhost:5142/cheep
 
 
 app.MapPost("/cheep", async (HttpContext context) => {
     //var message = context.Request.Body.ToString();
 
-    using (StreamReader reader = new StreamReader(context.Request.Body))
+    using (StreamReader reader = new StreamReader(context.Request.Body)) //fetching what is written in the terminal.
     {
-        string message = await reader.ReadToEndAsync();
+        string message = await reader.ReadToEndAsync(); //putting that into a string an doing something asynchronously.
 
-        var cheep = new Cheep(username, message, timestamp);
-        database_cheeps.Store(cheep);
+        var cheep = new Cheep(username, message, timestamp); // shoving it into our record.
+        database_cheeps.Store(cheep); //storing the record in our database.
     }
     
     return Results.Created("/cheeps", "Cheep was stored!");
@@ -72,36 +69,3 @@ app.MapGet("/cheeps", () => {
 app.Run();
 public record Cheep(string Author, string Message, long Timestamp);
 
-
-
-
-//builder.Services.AddDbContext<IDatabaseRepository<CSVDatabase<Cheep>>>(opt => opt.UseInMemoryDatabase("SimpleDB"));
-//builder.Services.AddDatabaseDeveloperPageExceptionFiler();
-
-
-
-
-
-
-
-// Send an asynchronous HTTP GET request and automatically construct a Cheep object from the
-// JSON object in the body of the response
-
-
-
-
-/*app.MapGet("/cheeps", async (CSVDatabase<Cheep> cheeps) =>
-    await cheeps.CSVDatabase)*/
-
-/*app.Use(async (Cheep cheep) =>
-{
-    Program program = new Program();
-    program.CoreProgram(args);
-
-    await cheep; 
-    
-});*/
-
-
-
-//public record Cheep(string Author, string Message, long Timestamp);
