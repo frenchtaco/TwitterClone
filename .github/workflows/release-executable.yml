@@ -37,7 +37,7 @@ jobs:
       run: dotnet publish --configuration Release --runtime osx-x64 --self-contained false
     
     - name: Zip MacOS x64 Executable
-      run: zip -r "Chirp.CLI-$tag-osx-x64.zip" . -x "*.sln" "*.pdb"
+      run: zip -r "Chirp.CLI-$tag-macos-x64.zip" . -x "*.sln" "*.pdb"
 
     - name: Publish for Linux x64
       run: dotnet publish --configuration Release --runtime linux-x64 --self-contained false
@@ -45,9 +45,10 @@ jobs:
     - name: Zip Linux Executable
       run: zip -r "Chirp.CLI-$tag-linux-x64.zip" . -x "*.sln" "*.pdb"
 
-    - name: Upload Executables
-      uses: actions/upload-artifact@v2
+    - name: Upload Release Artifacts
+      uses: softprops/action-gh-release@v1
       with:
-        name: chirp-executables
-        path: |
-          ./publish/*.zip
+        files: |
+          Chirp.CLI-${{ env.tag }}-linux-x64.zip
+          Chirp.CLI-${{ env.tag }}-windows-x64.zip
+          Chirp.CLI-${{ env.tag }}-macos-x64.zip
