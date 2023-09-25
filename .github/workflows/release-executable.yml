@@ -31,7 +31,7 @@ jobs:
       run: dotnet publish --configuration Release --runtime win-x64 --self-contained false
 
     - name: Zip Windows Executable
-      run: zip -r -j "Chirp.CLI-$tag-windows-x64.zip" src/Chirp.CLI/bin/Release/net7.0/win-x64/publish/ -x "*.sln" "*.pdb"
+      run: zip -r "Chirp.CLI-$tag-windows-x64.zip" . -x "*.sln" "*.pdb"
      
     - name: Publish for MacOS x64
       run: dotnet publish --configuration Release --runtime osx-x64 --self-contained false
