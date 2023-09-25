@@ -32,19 +32,19 @@ jobs:
       run: dotnet publish --configuration Release --runtime win-x64 --self-contained true
 
     - name: Zip Windows Executable
-      run: zip -j "Chirp.CLI-$tag-windows-x64.zip" src\Chirp.CLI\bin\Release\net7.0\win-x64\publish\Chirp.CLI.exe -x "*.sln" "*.pdb"
+      run: zip -j "Chirp.CLI-$tag-windows-x64.zip" src/Chirp.CLI/bin/Release/net7.0/win-x64/publish/Chirp.CLI.exe -x "*.sln" "*.pdb"
 
     - name: Publish for MacOS x64
       run: dotnet publish --configuration Release --runtime osx-x64 --self-contained true
 
     - name: Zip MacOS x64 Executable
-      run: zip -j "Chirp.CLI-$tag-macos-x64.zip" src\Chirp.CLI\bin\Release\net7.0\osx-x64\publish\Chirp.CLI.exe -x "*.sln" "*.pdb"
+      run: zip -j "Chirp.CLI-$tag-macos-x64.zip" src/Chirp.CLI/bin/Release/net7.0/osx-x64/publish/Chirp.CLI.exe -x "*.sln" "*.pdb"
 
     - name: Publish for Linux x64
       run: dotnet publish --configuration Release --runtime linux-x64 --self-contained true
 
     - name: Zip Linux Executable
-      run: zip -j "Chirp.CLI-$tag-linux-x64.zip" src\Chirp.CLI\bin\Release\net7.0\linux-x64\publish\Chirp.CLI.exe -x "*.sln" "*.pdb"
+      run: zip -j "Chirp.CLI-$tag-linux-x64.zip" src/Chirp.CLI/bin/Release/net7.0/linux-x64/publish/Chirp.CLI.exe -x "*.sln" "*.pdb"
 
     - name: Upload Release Artifacts
       uses: actions/upload-artifact@v2
