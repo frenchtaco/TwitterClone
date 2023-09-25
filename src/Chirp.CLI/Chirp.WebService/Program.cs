@@ -43,9 +43,19 @@ long timestamp = (long)DateTime.Now.Ticks;
 
 
 
-app.MapPost("/cheep",  () => {
-    var cheep = new Cheep(username, "first test omg crazy", timestamp);
-    database_cheeps.Store(cheep);
+
+
+app.MapPost("/cheep", async (HttpContext context) => {
+    //var message = context.Request.Body.ToString();
+
+    using (StreamReader reader = new StreamReader(context.Request.Body))
+    {
+        string message = await reader.ReadToEndAsync();
+
+        var cheep = new Cheep(username, message, timestamp);
+        database_cheeps.Store(cheep);
+    }
+    
     return Results.Created("/cheeps", "Cheep was stored!");
 });
 
