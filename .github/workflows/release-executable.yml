@@ -4,14 +4,15 @@ on:
   push:
     tags:
       - 'v*'  # This will trigger the workflow for tags like v1.0, v2.0.1, etc
-      #test
 jobs:
   build_test_and_release:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-
+    - name: Set tag
+      run: |
+          echo "tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
@@ -21,30 +22,28 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore 
 
     - name: Test
       run: dotnet test --no-build --verbosity normal
 
     - name: Publish for Windows x64
-      run: dotnet publish --configuration Release --runtime win-x64 --no-self-contained
-    - name: Zip Windows Executable
-      run: zip -r ./publish/chirp-win-x64.zip ./publish/win-x64/
+      run: dotnet publish --configuration Release --runtime win-x64 --self-contained false
 
+    - name: Zip Windows Executable
+      run: zip -r -j "Chirp.CLI-$tag-windows-x64.zip" src/Chirp.CLI/bin/Release/net7.0/win-x64/publish/ -x "*.sln" "*.pdb"
+     
     - name: Publish for MacOS x64
-      run: dotnet publish --configuration Release --runtime osx-x64 --output ./publish/osx-x64 --no-self-contained
+      run: dotnet publish --configuration Release --runtime osx-x64 --self-contained false
+    
     - name: Zip MacOS x64 Executable
-      run: zip -r ./publish/chirp-osx-x64.zip ./publish/osx-x64/
+      run: zip -r -j "Chirp.CLI-$tag-osx-x64.zip" src/Chirp.CLI/bin/Release/net7.0/osx-x64/publish/ -x "*.sln" "*.pdb"
 
     - name: Publish for Linux x64
-      run: dotnet publish --configuration Release --runtime linux-x64 --output ./publish/linux-x64 --no-self-contained
-    - name: Zip Linux Executable
-      run: zip -r ./publish/chirp-linux-x64.zip ./publish/linux-x64/
+      run: dotnet publish --configuration Release --runtime linux-x64 --self-contained false
 
-    - name: Publish for MacOS ARM
-      run: dotnet publish --configuration Release --runtime osx-arm64 --output ./publish/osx-arm64 --no-self-contained
-    - name: Zip MacOS ARM Executable
-      run: zip -r ./publish/chirp-osx-arm64.zip ./publish/osx-arm64/
+    - name: Zip Linux Executable
+      run: zip -r -j "Chirp.CLI-$tag-linux-x64.zip" src/Chirp.CLI/bin/Release/net7.0/linux-x64/publish/ -x "*.sln" "*.pdb"
 
     - name: Upload Executables
       uses: actions/upload-artifact@v2
