@@ -18,9 +18,9 @@ namespace SimpleDB
 
 
         //relative path
-        private static string filename = "data//chirp_cli_db.csv";
-        private static string projectFolder = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName!;
-        private static string file = Path.Combine(projectFolder, filename);
+        private static string file = "/Users/victorlacour1/Desktop/Chirp/data/chirp_cli_db.csv";
+        //private static string projectFolder = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName!;
+        //private static string file = Path.Combine(projectFolder, filename);
         
         //** THIS  CONSTRUCTOR IS SUPPOSED TO BE PRIVATE
         private CSVDatabase()

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "DF/GS62C7s4Dy1gTTA6QCezK2R2TIPhoUWRI1Q15saQdqTKLAJm0rQgS4ptKm57IyCKlvdKqNw17SS6IrfW2PA==",
+  "success": true,
+  "projectFilePath": "/Users/victorlacour1/Desktop/Chirp/src/Chirp.CLI/Chirp.WebService/Chirp.WebService.csproj",
+  "expectedPackageFiles": [
+    "/Users/victorlacour1/.nuget/packages/csvhelper/30.0.1/csvhelper.30.0.1.nupkg.sha512",
+    "/Users/victorlacour1/.nuget/packages/system.commandline/2.0.0-beta4.22272.1/system.commandline.2.0.0-beta4.22272.1.nupkg.sha512"
+  ],
+  "logs": []
+}
