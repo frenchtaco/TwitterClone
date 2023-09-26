@@ -9,5 +9,8 @@ tests/Chirp.CLI.Tests/bin/
 tests/Chirp.CLI.Tests/obj/
 
 
-
+//Webservice
+src/Chirp.WebService/bin/
+src/Chirp.Webservice/obj/
+src/CSVDB/obj/
 .fake

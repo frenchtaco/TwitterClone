@@ -1,31 +1,4 @@
-//namespace App; 
 using SimpleDB;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-
-//using Microsoft.EntityFrameworkCore;
-
-/*public class App
-{
-    public static WebApplication (string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
-        var app = builder.Build();
-
-        app.MapGet("/cheeps", () => "Bonjour Le Monde!");
-
-        app.MapGet("/cheeps", () => new List<string>()
-        {
-            new string("string 1"),
-            new string("string 2"),
-            new string("string 3"),
-        });
-
-        return app; 
-    }
-}*/
-
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
@@ -40,8 +13,6 @@ long timestamp = (long)DateTime.Now.Ticks;
 // curl -X POST -H "Content-Type: application/json" -d "message" http://localhost:5142/cheep
 // or equivalently, 
 // curl -X POST -d "message" http://localhost:5142/cheep
-
-
 app.MapPost("/cheep", async (HttpContext context) => {
     //var message = context.Request.Body.ToString();
 
@@ -64,8 +35,5 @@ app.MapGet("/cheeps", () => {
     return Results.Json(cheep);
 });
 
-
-
 app.Run();
 public record Cheep(string Author, string Message, long Timestamp);
-
