@@ -14,7 +14,7 @@ public class Program
 
     public static void Main(string[] args)
     {
-        Program.CoreProgram(args);
+        Program.CoreProgram(args).Wait(); // Don't delete the .Wait();!!! 
     }
 
     public static async Task CoreProgram(string[] arguments)
@@ -50,9 +50,9 @@ public class Program
         var commandHandler = new CommandHandler();
 
         // Define a handler to process the command line arguments.
-        rootCommand.SetHandler((readOneValue, readAllValue, cheepValue) =>
+        rootCommand.SetHandler(async (readOneValue, readAllValue, cheepValue) =>
         {
-            commandHandler.Fondle(readOneValue, readAllValue, cheepValue);
+            await commandHandler.Fondle(readOneValue, readAllValue, cheepValue);
         }, readone, readall, cheep);
 
         // Invoke the root command to process the command line arguments.
