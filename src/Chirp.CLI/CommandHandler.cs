@@ -29,18 +29,37 @@ namespace CommandHandle
                     HttpResponseMessage response = await client.GetAsync("/cheeps");
 
                     // Check if the response is successful (status code 200).
-                        // Read and print the response content.
-                        string responseBody = await response.Content.ReadAsStringAsync();
-                        var records = JsonSerializer.Deserialize<IEnumerable<Cheep>>(responseBody);
-                        
-                        foreach (var record in records)
-                        {
-                            Console.WriteLine($"Author: {record.Author}, Message: {record.Message}, {DateTimeOffset.FromUnixTimeSeconds(record.Timestamp).LocalDateTime}");
-                        }
+                    // Read and print the response content.
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    var records = JsonSerializer.Deserialize<IEnumerable<Cheep>>(responseBody);
 
-                        //Console.WriteLine(responseBody);
-                        Console.WriteLine("3) Entered try-block; post");
-                   
+                    foreach (var record in records)
+                    {
+                        Console.WriteLine($"Author: {record.Author}, Message: {record.Message}, Date: {DateTimeOffset.FromUnixTimeSeconds(record.Timestamp).LocalDateTime}");
+                    }
+
+                    //Console.WriteLine(responseBody);
+                    Console.WriteLine("3) Entered try-block; post");
+
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine("\nException Caught!");
+                    Console.WriteLine("Message :{0} ", e.Message);
+                }
+            }
+            else if (msg != null)
+            {
+                Console.WriteLine("1) Entered if-statement");
+                try
+                {
+                    Console.WriteLine("2) Entered try-block; pre");
+
+                    var stringContent = new StringContent(msg);
+                    await client.PostAsync("/cheep", stringContent);
+
+                    Console.WriteLine("3) Entered try-block; post");
+
                 }
                 catch (HttpRequestException e)
                 {

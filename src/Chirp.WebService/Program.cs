@@ -7,7 +7,8 @@ var app = builder.Build();
 IDatabaseRepository<Cheep> database_cheeps =  (CSVDatabase<Cheep>)Activator.CreateInstance(typeof(CSVDatabase<Cheep>), nonPublic: true);//because something
 
 var username = Environment.UserName;
-long timestamp = (long)DateTime.Now.Ticks;
+var timestamp = DateTime.Now;
+long unixTime = ((DateTimeOffset)timestamp).ToUnixTimeSeconds();
 
 
 
@@ -22,7 +23,7 @@ app.MapPost("/cheep", async (HttpContext context) => {
     {
         string message = await reader.ReadToEndAsync(); //putting that into a string an doing something asynchronously.
 
-        var cheep = new Cheep(username, message, timestamp); // shoving it into our record.
+        var cheep = new Cheep(username, message, unixTime); // shoving it into our record.
         database_cheeps.Store(cheep); //storing the record in our database.
     }
     
