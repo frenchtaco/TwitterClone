@@ -13,3 +13,4 @@ tests/Chirp.CLI.Tests/obj/
 tests/Chirp.CLI.Tests/bin/
 
 .fake
+.DS_Store
