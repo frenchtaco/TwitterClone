@@ -1,8 +1,10 @@
 using SimpleDB;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-CSVDatabase<Cheep> database_cheeps =  (CSVDatabase<Cheep>)Activator.CreateInstance(typeof(CSVDatabase<Cheep>), nonPublic: true);//because something
+IDatabaseRepository<Cheep> database_cheeps =  (CSVDatabase<Cheep>)Activator.CreateInstance(typeof(CSVDatabase<Cheep>), nonPublic: true);//because something
 
 var username = Environment.UserName;
 long timestamp = (long)DateTime.Now.Ticks;
@@ -31,9 +33,13 @@ app.MapPost("/cheep", async (HttpContext context) => {
 //Get request!
 //app.MapGet("/cheep", () => new Cheep("Billy Bones", "fuckery mockery", (long)DateTime.Now.Ticks));
 app.MapGet("/cheeps", () => {
+    IEnumerable<Cheep> records = database_cheeps.Read();
+    return JsonSerializer.Serialize(records);
+});
+/*app.MapGet("/cheeps", () => {
     var cheep = database_cheeps.Read();
     return Results.Json(cheep);
-});
+});*/
 
 app.Run();
 public record Cheep(string Author, string Message, long Timestamp);

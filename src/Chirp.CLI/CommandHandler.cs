@@ -1,8 +1,10 @@
-
-
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Net.Http.Json;
 
 namespace CommandHandle
 {
@@ -31,7 +33,14 @@ namespace CommandHandle
                     // Check if the response is successful (status code 200).
                         // Read and print the response content.
                         string responseBody = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine("Response: " + responseBody);
+                        var records = JsonSerializer.Deserialize<IEnumerable<Cheep>>(responseBody);
+                        
+                        foreach (var record in records)
+                        {
+                            Console.WriteLine($"Author: {record.Author}, Message: {record.Message}, {DateTimeOffset.FromUnixTimeSeconds(record.Timestamp).LocalDateTime}");
+                        }
+
+                        //Console.WriteLine(responseBody);
                         Console.WriteLine("3) Entered try-block; post");
                    
                 }
