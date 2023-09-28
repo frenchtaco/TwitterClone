@@ -10,43 +10,65 @@ namespace SimpleDB
     {
 
 
-        public static CSVDatabase<T> Instance { get { return lazy.Value; } }
 
         //I think is instance is only made when called which is the meaning of "lazy"
-        private static readonly Lazy<CSVDatabase<T>> lazy = new Lazy<CSVDatabase<T>>(() => 
+        private static readonly Lazy<CSVDatabase<T>> lazy = new Lazy<CSVDatabase<T>>(() =>
         new CSVDatabase<T>());
+        public static CSVDatabase<T> Instance { get { return lazy.Value; } }
 
 
-        //relative path
-        private static string filename = "data//chirp_cli_db.csv";
-        private static string projectFolder = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName!;
-        private static string file = Path.Combine(projectFolder, filename);
-        
+        //path is now 
+        private readonly string database;
+        private static string csvName = "chirp_cli_db.csv";
+
+
         //** THIS  CONSTRUCTOR IS SUPPOSED TO BE PRIVATE
         private CSVDatabase()
         {
-        }
+            this.database = Path.Combine(Path.GetTempPath(), csvName);
+            Console.WriteLine($"CSV Database Path: {this.database}");
 
-        public IEnumerable<T> Read(int? limit = null)
-        {
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
-            using (var reader = new StreamReader(file))
-            using (var csv = new CsvReader(reader, config))
+            if (!(File.Exists(this.database)))
             {
-                var records = csv.GetRecords<T>().ToList();
-                return records;
-            }
-        }
+                try
+                {
+                    using (StreamWriter writer = File.CreateText(this.database))
+                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                    {
+                        csv.WriteHeader<T>();
+                        csv.NextRecord();
+                    }
+                    Console.WriteLine("CSV Database file created successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error creating CSV Database file: {ex.Message}");
+                }
+            }else{
+                    Console.WriteLine("CSV Database file exists.");
+                }
+}
 
-        public void Store(T record)
-        {
-            Console.WriteLine("Your cheep has been stored.");
-            using (var writer = new StreamWriter(file, true))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                csv.WriteRecord(record);
-                writer.Write("\n");
-            }
-        }
+public IEnumerable<T> Read(int? limit = null)
+{
+    var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+    using (var reader = new StreamReader(this.database))
+    using (var csv = new CsvReader(reader, config))
+    {
+        var records = csv.GetRecords<T>().ToList();
+        return records;
+    }
+}
+
+public void Store(T record)
+{
+    Console.WriteLine("Your cheep has been stored.");
+    using (var writer = new StreamWriter(this.database, true))
+    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+    {
+        csv.WriteRecord(record);
+        writer.Write("\n");
+    }
+}
     };
 }
