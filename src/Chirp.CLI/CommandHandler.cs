@@ -3,74 +3,116 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using CommandType;
 
-namespace CommandHandle
+namespace CommandHandle;
+public class CommandHandler
 {
-    public class CommandHandler
+    private readonly HttpClient _client;
+    private static CommandTypes ct;
+
+    public CommandHandler()
     {
-        private readonly HttpClient client;
+        // Create the HttpClient with a base address.
+        _client = new HttpClient();
+        _client.BaseAddress = new Uri("http://localhost:3000"); // Replace with your server's URL
+        _client.DefaultRequestHeaders.Add("Accept", "application/json");
+    }
 
-        public CommandHandler()
+    public async Task Fondle(bool shouldReadSpecific, bool shouldReadAll, string msg)
+    {
+        if (shouldReadAll)
         {
-            // Create the HttpClient with a base address.
-            client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:3000"); // Replace with your server's URL
+            try
+            {
+                await GetAllRequest(_client);
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Error Message: {e.Message}");
+            }
+        } 
+        else if(shouldReadSpecific) 
+        {
+            try
+            {
+                await GetUserCheepsRequest(_client);
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Error Message: {e.Message}");
+            }
         }
-
-        public async Task Fondle(bool shouldReadOne, bool shouldReadAll, string msg)
+        else if (msg != null)
         {
-            if (shouldReadAll)
+            try
             {
-                Console.WriteLine("1) Entered if-statement");
-                try
+                await PostRequest(msg, _client);
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Error Message: {e.Message}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("System.CommandLine input error");
+        }
+    }
+
+    public async Task GetAllRequest(HttpClient client) 
+    {
+        HttpResponseMessage response = await client.GetAsync("/cheeps");
+
+        // Log status code...
+        if(response.IsSuccessStatusCode) 
+        {
+            string responseBody = await response.Content.ReadAsStringAsync();
+            var records = JsonSerializer.Deserialize<IEnumerable<Cheep>>(responseBody);
+
+            if(records != null)
+            {
+                foreach (var record in records)
                 {
-                    Console.WriteLine("2) Entered try-block; pre");
-                    // Make the GET request to the /cheeps endpoint.
-                    HttpResponseMessage response = await client.GetAsync("/cheeps");
-
-                    // Check if the response is successful (status code 200).
-                    // Read and print the response content.
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    var records = JsonSerializer.Deserialize<IEnumerable<Cheep>>(responseBody);
-
-                    foreach (var record in records)
-                    {
-                        Console.WriteLine($"Author: {record.Author}, Message: {record.Message}, Date: {DateTimeOffset.FromUnixTimeSeconds(record.Timestamp).LocalDateTime}");
-                    }
-
-                    //Console.WriteLine(responseBody);
-                    Console.WriteLine("3) Entered try-block; post");
-
-                }
-                catch (HttpRequestException e)
-                {
-                    Console.WriteLine("\nException Caught!");
-                    Console.WriteLine("Message :{0} ", e.Message);
+                    Console.WriteLine($"Author: {record.Author}, Message: {record.Message}, Date: {DateTimeOffset.FromUnixTimeSeconds(record.Timestamp).LocalDateTime}");
                 }
             }
-            else if (msg != null)
+        }
+    }
+
+    public async Task GetUserCheepsRequest(HttpClient client) 
+    {
+        HttpResponseMessage response = await client.GetAsync("/userCheeps");
+
+        // Log status code...
+        if(response.IsSuccessStatusCode) 
+        {
+            string responseBody = await response.Content.ReadAsStringAsync();
+            var records = JsonSerializer.Deserialize<IEnumerable<Cheep>>(responseBody);
+
+            if(records != null)
             {
-                Console.WriteLine("1) Entered if-statement");
-                try
+                foreach (var record in records)
                 {
-                    Console.WriteLine("2) Entered try-block; pre");
-
-                    var stringContent = new StringContent(msg);
-                    await client.PostAsync("/cheep", stringContent);
-
-                    Console.WriteLine("3) Entered try-block; post");
-
-                }
-                catch (HttpRequestException e)
-                {
-                    Console.WriteLine("\nException Caught!");
-                    Console.WriteLine("Message :{0} ", e.Message);
+                    Console.WriteLine($"Author: {record.Author}, Message: {record.Message}, Date: {DateTimeOffset.FromUnixTimeSeconds(record.Timestamp).LocalDateTime}");
                 }
             }
-            else
-            {
-                Console.WriteLine("ERROR IN FONDLE");
-            }
+        }
+    }
+
+    static async Task PostRequest(string msg, HttpClient client)
+    {
+        StringContent stringContent = new StringContent(msg);
+        HttpResponseMessage response = await client.PostAsync("/cheep", stringContent);
+        
+        // Log status code...
+        if(response.IsSuccessStatusCode)
+        {
+            Console.WriteLine($"POST Request was successful with status code: {response.StatusCode}");
+        } 
+        else 
+        {
+            Console.WriteLine($"POST Request was unsuccessful with status code: {response.StatusCode}");
         }
     }
 }

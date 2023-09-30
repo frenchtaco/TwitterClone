@@ -8,5 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSVDB\SimpleDB.csproj"/>
+    <ProjectReference Include="..\Chirp.CLI\Chirp.CLI.csproj"/>
   </ItemGroup>
 </Project>
