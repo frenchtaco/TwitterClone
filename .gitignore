@@ -5,6 +5,8 @@ src/CSVDB/obj/
 src/CSVDB/bin/
 src/Chirp.WebService/bin/
 src/Chirp.Webservice/obj/
+src/Chirp.Razor/bin/
+src/Chirp.Razor/obj/
 
 // Test
 tests/CSVDB.Tests/obj/

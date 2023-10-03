@@ -49,14 +49,24 @@ namespace SimpleDB
                 }
 }
 
-public IEnumerable<T> Read(int? limit = null)
+public IEnumerable<T> Read(int? value = null)
 {
     var config = new CsvConfiguration(CultureInfo.InvariantCulture);
     using (var reader = new StreamReader(this.database))
     using (var csv = new CsvReader(reader, config))
     {
         var records = csv.GetRecords<T>().ToList();
-        return records;
+        var amount = 3;
+
+        if (value != null) {
+            var page = value.GetValueOrDefault();
+            var start = ((page - 1) * 3);
+            return records.GetRange(start, amount);
+        }
+        else 
+        {
+            return records.GetRange(0, 3);
+        }
     }
 }
 
