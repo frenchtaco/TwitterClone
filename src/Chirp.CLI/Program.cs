@@ -30,11 +30,6 @@ public class Program
             description: "Gets and reads all of the cheeps stored in our Chirpin' database."
         );
 
-        var readLatestUser_Option = new Option<bool>(
-            aliases: new[] {"--readall", "-ra"},
-            description: "Gets and reads all of the cheeps stored in our Chirpin' database."
-        );
-
         // Create an option to write a new "cheep" to the database.
         var cheep_Option = new Option<string>(
             aliases: new[] {"--cheep", "-c"},
@@ -45,17 +40,15 @@ public class Program
         {
             readUserSpecific_Option,
             readAll_Option,
-            readLatestUser_Option,
             cheep_Option,
         };
 
         var commandHandler = new CommandHandler();
 
-        rootCommand.SetHandler(async (readLatestValue, readSpecificValue, readAllValue, cheepValue) =>
+        rootCommand.SetHandler(async (readSpecificValue, readAllValue, cheepValue) =>
         {
-
             await commandHandler.Fondle(readSpecificValue, readAllValue, cheepValue);
-        }, readLatestUser_Option, readUserSpecific_Option, readAll_Option, cheep_Option);
+        }, readUserSpecific_Option, readAll_Option, cheep_Option);
 
         var result = await rootCommand.InvokeAsync(arguments);
     }
