@@ -9,7 +9,6 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 
-
 /*
     @Key Information:
         # Curl Commands:
@@ -44,7 +43,6 @@ app.UseHttpsRedirection();
 app.MapGet("/", () => $"Hi there, Kestrel is running on\n\n{string.Join("\n", addressFeature.Addresses.ToArray() )}" );
 
 
-
 // 01. Post Request
 app.MapPost("/cheep", async (PostClientRequest postClient, HttpContext context) => {
     var response = postClient.PostCheep(context, database_cheeps);
@@ -70,7 +68,7 @@ addressFeature = server.Features.Get<IServerAddressesFeature>();
 
 foreach (var address in addressFeature.Addresses)
 {
-    Console.WriteLine("Kestrel is listening on address: " + address);
+    Console.WriteLine("Server is listening on address: " + address);
 }
 
 app.WaitForShutdown();

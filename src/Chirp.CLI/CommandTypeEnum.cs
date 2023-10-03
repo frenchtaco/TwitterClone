@@ -1,3 +1,3 @@
 namespace CommandType;
 
-public enum CommandTypes { ReadOne, ReadAll, Write, Update }
+public enum CommandTypes { Get, Post, Update, Delete }

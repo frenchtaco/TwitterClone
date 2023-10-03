@@ -9,11 +9,9 @@ namespace CommandHandle;
 public class CommandHandler
 {
     private readonly HttpClient _client;
-    private static CommandTypes ct;
 
     public CommandHandler()
     {
-        // Create the HttpClient with a base address.
         _client = new HttpClient();
         _client.BaseAddress = new Uri("http://localhost:3000"); // Replace with your server's URL
         _client.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -106,13 +104,15 @@ public class CommandHandler
         HttpResponseMessage response = await client.PostAsync("/cheep", stringContent);
         
         // Log status code...
+        int statusCode = (int) response.StatusCode;
+
         if(response.IsSuccessStatusCode)
         {
-            Console.WriteLine($"POST Request was successful with status code: {response.StatusCode}");
+            Console.WriteLine($"POST Request was successful with status code: {statusCode}");
         } 
         else 
         {
-            Console.WriteLine($"POST Request was unsuccessful with status code: {response.StatusCode}");
+            Console.WriteLine($"POST Request was unsuccessful with status code: {statusCode}");
         }
     }
 }

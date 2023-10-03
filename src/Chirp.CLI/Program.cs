@@ -1,11 +1,13 @@
 using System.CommandLine;
 using CommandHandle;
+using CommandType;
 
 public class Program
 {
     /*****************************
 
         C.O.R.E P.R.O.G.R.A.M
+    
     
     *****************************/
     public static void Main(string[] args)
@@ -18,12 +20,17 @@ public class Program
         // Create an option to read a single "cheep" from the database.
         // Note: Changed from 'string' to 'bool' as per Æmill's instruction.
         var readUserSpecific_Option = new Option<bool>(
-            aliases: new[] {"--readone", "-ro"},
+            aliases: new[] {"--readspecific", "-rs"},
             description: "Gets and reads a specified cheep in the CHIRPIN' Database.©"
         );
 
         // Create an option to read all "cheeps" from the database.
         var readAll_Option = new Option<bool>(
+            aliases: new[] {"--readall", "-ra"},
+            description: "Gets and reads all of the cheeps stored in our Chirpin' database."
+        );
+
+        var readLatestUser_Option = new Option<bool>(
             aliases: new[] {"--readall", "-ra"},
             description: "Gets and reads all of the cheeps stored in our Chirpin' database."
         );
@@ -38,20 +45,18 @@ public class Program
         {
             readUserSpecific_Option,
             readAll_Option,
+            readLatestUser_Option,
             cheep_Option,
         };
 
-        // Create a new instance of our CommandHandler
         var commandHandler = new CommandHandler();
 
-        // Define a handler to process the command line arguments.
-        rootCommand.SetHandler(async (readOneValue, readAllValue, cheepValue) =>
+        rootCommand.SetHandler(async (readLatestValue, readSpecificValue, readAllValue, cheepValue) =>
         {
-            // Add Enum handler here.
-            await commandHandler.Fondle(readOneValue, readAllValue, cheepValue);
-        }, readUserSpecific_Option, readAll_Option, cheep_Option);
 
-        // Invoke the root command to process the command line arguments.
+            await commandHandler.Fondle(readSpecificValue, readAllValue, cheepValue);
+        }, readLatestUser_Option, readUserSpecific_Option, readAll_Option, cheep_Option);
+
         var result = await rootCommand.InvokeAsync(arguments);
     }
 }
