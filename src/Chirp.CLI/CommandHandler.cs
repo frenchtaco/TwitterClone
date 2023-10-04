@@ -13,7 +13,7 @@ public class CommandHandler
     public CommandHandler()
     {
         _client = new HttpClient();
-        _client.BaseAddress = new Uri("http://localhost:3000"); // Replace with your server's URL
+        _client.BaseAddress = new Uri("https://bdsagroup6chirpremotedb.azurewebsites.net/"); // Replace with your server's URL
         _client.DefaultRequestHeaders.Add("Accept", "application/json");
     }
 

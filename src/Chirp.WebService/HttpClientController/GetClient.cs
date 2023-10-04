@@ -17,7 +17,7 @@ public class GetRequestClient
     {
         _client = client;
         //_logger = logger;
-        _port   = $"http://localhost:{3000}";
+        _port   = $"https://bdsagroup6chirpremotedb.azurewebsites.net/";
     }
 
     // Get Single Cheep:

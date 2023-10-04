@@ -26,10 +26,10 @@ IServerAddressesFeature addressFeature = null;
 // Dependency Injection of Middleware:
 builder.Services.AddControllers();
 builder.Services.AddHttpClient<GetRequestClient>(client => {
-    client.BaseAddress = new Uri($"http://localhost:{port}");
+    client.BaseAddress = new Uri($"https://bdsagroup6chirpremotedb.azurewebsites.net/");
 });
 builder.Services.AddHttpClient<PostClientRequest>(client => {
-    client.BaseAddress = new Uri($"http://localhost:{port}");
+    client.BaseAddress = new Uri($"https://bdsagroup6chirpremotedb.azurewebsites.net/");
 });
 
 
