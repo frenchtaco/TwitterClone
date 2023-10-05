@@ -2,6 +2,8 @@ using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
 using System.IO;
+using System.Linq;
+using System;
 
 namespace SimpleDB
 {
