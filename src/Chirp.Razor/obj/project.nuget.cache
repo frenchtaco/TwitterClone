@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "zijIFDoZnbd7Gb1uQRFvxMof/a35zH9E8T02XC/Q2dS4QnXVJYupvdCn7NEus1Q/NfXSkT+Du2JBpfsKT+EmFA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Bruger\\OneDrive\\Documents\\.ITU\\3.Semester\\Software_Architecture\\Chirp\\src\\Chirp.Razor\\Chirp.Razor.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Bruger\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
+    "C:\\Users\\Bruger\\.nuget\\packages\\system.commandline\\2.0.0-beta4.22272.1\\system.commandline.2.0.0-beta4.22272.1.nupkg.sha512"
+  ],
+  "logs": []
+}
