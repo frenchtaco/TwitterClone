@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="3b2fb246-e1e7-417d-bf3e-d3ce756a293e" name="Bruger@DESKTOP-ISOV1RQ 2023-10-03 14:16:53" runUser="DESKTOP-ISOV1RQ\Bruger" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2023-10-03T14:16:53.4241694+02:00" queuing="2023-10-03T14:16:53.4241698+02:00" start="2023-10-03T14:16:52.4712095+02:00" finish="2023-10-03T14:16:53.4404844+02:00" />
+  <TestSettings name="default" id="cd80b44f-efd2-43ba-aa11-a3ac73b66253">
+    <Deployment runDeploymentRoot="Bruger_DESKTOP-ISOV1RQ_2023-10-03_14_16_53" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="2b05a1d8-057c-4142-ae5a-2cc3971708e2" testId="1b86062a-c4de-d360-877e-48d6bffa3f3c" testName="UnitTest1.TimeStampConversionTest.ConvertUnixTimestampToFormattedString" computerName="DESKTOP-ISOV1RQ" duration="00:00:00.0035566" startTime="2023-10-03T14:16:53.2714894+02:00" endTime="2023-10-03T14:16:53.2715097+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2b05a1d8-057c-4142-ae5a-2cc3971708e2" />
+    <UnitTestResult executionId="cf75b12e-f7e4-4420-8361-601fd88f38ed" testId="69ceb3b2-24ef-a988-a4de-6cb73afc5db7" testName="UnitTest1.KestrelPathTest.KestrelPathTest_Should_Do_Something" computerName="DESKTOP-ISOV1RQ" duration="00:00:00.0601087" startTime="2023-10-03T14:16:53.3254208+02:00" endTime="2023-10-03T14:16:53.3254211+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cf75b12e-f7e4-4420-8361-601fd88f38ed" />
+    <UnitTestResult executionId="76a6f01a-593a-4b38-83c2-0c13c0b72790" testId="1d483ab2-84cd-04d7-699d-9ae8a1f52815" testName="UnitTest1.CommandHandlerTests.Fondle_Should_Call_GetAsync_When_ShouldReadAll_IsTrue" computerName="DESKTOP-ISOV1RQ" duration="00:00:00.0505985" startTime="2023-10-03T14:16:53.3184119+02:00" endTime="2023-10-03T14:16:53.3184123+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="76a6f01a-593a-4b38-83c2-0c13c0b72790" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="UnitTest1.TimeStampConversionTest.ConvertUnixTimestampToFormattedString" storage="c:\users\bruger\onedrive\documents\.itu\3.semester\software_architecture\chirp\tests\chirp.cli.tests\bin\debug\net7.0\chirp.cli.tests.dll" id="1b86062a-c4de-d360-877e-48d6bffa3f3c">
+      <Execution id="2b05a1d8-057c-4142-ae5a-2cc3971708e2" />
+      <TestMethod codeBase="C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\tests\Chirp.CLI.Tests\bin\Debug\net7.0\Chirp.CLI.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="UnitTest1.TimeStampConversionTest" name="ConvertUnixTimestampToFormattedString" />
+    </UnitTest>
+    <UnitTest name="UnitTest1.CommandHandlerTests.Fondle_Should_Call_GetAsync_When_ShouldReadAll_IsTrue" storage="c:\users\bruger\onedrive\documents\.itu\3.semester\software_architecture\chirp\tests\chirp.cli.tests\bin\debug\net7.0\chirp.cli.tests.dll" id="1d483ab2-84cd-04d7-699d-9ae8a1f52815">
+      <Execution id="76a6f01a-593a-4b38-83c2-0c13c0b72790" />
+      <TestMethod codeBase="C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\tests\Chirp.CLI.Tests\bin\Debug\net7.0\Chirp.CLI.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="UnitTest1.CommandHandlerTests" name="Fondle_Should_Call_GetAsync_When_ShouldReadAll_IsTrue" />
+    </UnitTest>
+    <UnitTest name="UnitTest1.KestrelPathTest.KestrelPathTest_Should_Do_Something" storage="c:\users\bruger\onedrive\documents\.itu\3.semester\software_architecture\chirp\tests\chirp.cli.tests\bin\debug\net7.0\chirp.cli.tests.dll" id="69ceb3b2-24ef-a988-a4de-6cb73afc5db7">
+      <Execution id="cf75b12e-f7e4-4420-8361-601fd88f38ed" />
+      <TestMethod codeBase="C:\Users\Bruger\OneDrive\Documents\.ITU\3.Semester\Software_Architecture\Chirp\tests\Chirp.CLI.Tests\bin\Debug\net7.0\Chirp.CLI.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="UnitTest1.KestrelPathTest" name="KestrelPathTest_Should_Do_Something" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1b86062a-c4de-d360-877e-48d6bffa3f3c" executionId="2b05a1d8-057c-4142-ae5a-2cc3971708e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="69ceb3b2-24ef-a988-a4de-6cb73afc5db7" executionId="cf75b12e-f7e4-4420-8361-601fd88f38ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d483ab2-84cd-04d7-699d-9ae8a1f52815" executionId="76a6f01a-593a-4b38-83c2-0c13c0b72790" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 7.0.10)&#xD;
+[xUnit.net 00:00:00.32]   Discovering: Chirp.CLI.Tests&#xD;
+[xUnit.net 00:00:00.35]   Discovered:  Chirp.CLI.Tests&#xD;
+[xUnit.net 00:00:00.35]   Starting:    Chirp.CLI.Tests&#xD;
+[xUnit.net 00:00:00.45]   Finished:    Chirp.CLI.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
