@@ -2,6 +2,8 @@ using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
 using System.IO;
+using System.Linq;
+using System;
 
 namespace SimpleDB
 {
@@ -58,17 +60,28 @@ public IEnumerable<T> Read(int? value = null)
         var records = csv.GetRecords<T>().ToList();
         var amount = 3;
 
-        if (value != null) {
+        if (value != null) 
+        {
             var page = value.GetValueOrDefault();
             var start = ((page - 1) * 3);
+
+            // Check if start is out of bounds
+            if (start >= records.Count)
+                return Enumerable.Empty<T>();
+
+            // If the remaining records are less than amount, adjust the amount
+            if (start + amount > records.Count)
+                amount = records.Count - start;
+
             return records.GetRange(start, amount);
         }
         else 
         {
-            return records.GetRange(0, 3);
+            return records.GetRange(0, Math.Min(3, records.Count));
         }
     }
 }
+
 
 public void Store(T record)
 {
