@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace GetClient;
 
-public class GetRequestClient 
+public class GetRequestClient
 {
     private readonly HttpClient _client;
     private readonly string _port;
@@ -17,7 +17,7 @@ public class GetRequestClient
     {
         _client = client;
         //_logger = logger;
-        _port   = $"https://bdsagroup6chirpremotedb.azurewebsites.net/";
+        _port = $"https://bdsagroup6chirpremotedb.azurewebsites.net/";
     }
 
     // Get Single Cheep:
@@ -29,7 +29,7 @@ public class GetRequestClient
             _stopwatch.Start();
 
             IEnumerable<Cheep> records = database.Read();
-            
+
             _stopwatch.Stop();
             var elapsedTime = _stopwatch.ElapsedMilliseconds;
 
@@ -37,7 +37,7 @@ public class GetRequestClient
             _stopwatch.Reset();
             return JsonSerializer.Serialize(records);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Console.WriteLine(e.Message);
             throw;
@@ -46,16 +46,16 @@ public class GetRequestClient
 
     public async Task<string> GetAllUserCheeps(IDatabaseRepository<Cheep> database)
     {
-        try 
+        try
         {
             _stopwatch.Start();
 
             IEnumerable<Cheep> records = database.Read();
             List<Cheep> retList = new List<Cheep>();
 
-            foreach(Cheep record in records) 
+            foreach (Cheep record in records)
             {
-                if(record.Author == Environment.UserName) 
+                if (record.Author == Environment.UserName)
                 {
                     retList.Add(record);
                 }
@@ -68,7 +68,7 @@ public class GetRequestClient
 
             return JsonSerializer.Serialize(retList);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Console.WriteLine(e.Message);
             throw;

@@ -25,10 +25,12 @@ IServerAddressesFeature addressFeature = null;
 
 // Dependency Injection of Middleware:
 builder.Services.AddControllers();
-builder.Services.AddHttpClient<GetRequestClient>(client => {
+builder.Services.AddHttpClient<GetRequestClient>(client =>
+{
     client.BaseAddress = new Uri($"https://bdsagroup6chirpremotedb.azurewebsites.net/");
 });
-builder.Services.AddHttpClient<PostClientRequest>(client => {
+builder.Services.AddHttpClient<PostClientRequest>(client =>
+{
     client.BaseAddress = new Uri($"https://bdsagroup6chirpremotedb.azurewebsites.net/");
 });
 
@@ -40,26 +42,29 @@ app.UseHttpsRedirection();
 /* ENDPOINTS */
 // Todo: Add MapGroups - [Private and Public]
 // 00. 
-app.MapGet("/", () => $"Hi there, Kestrel is running on\n\n{string.Join("\n", addressFeature.Addresses.ToArray() )}" );
+app.MapGet("/", () => $"Hi there, Kestrel is running on\n\n{string.Join("\n", addressFeature.Addresses.ToArray())}");
 
 
 // 01. Post Request
-app.MapPost("/cheep", async (PostClientRequest postClient, HttpContext context) => {
+app.MapPost("/cheep", async (PostClientRequest postClient, HttpContext context) =>
+{
     var response = postClient.PostCheep(context, database_cheeps);
     return response;
 });
 
-app.MapGet("/cheeps", (GetRequestClient getClient) => {
+app.MapGet("/cheeps", (GetRequestClient getClient) =>
+{
     var response = getClient.GetAllCheeps(database_cheeps);
     return response;
 });
 
-app.MapGet("/userCheeps", (GetRequestClient getClient) => {
+app.MapGet("/userCheeps", (GetRequestClient getClient) =>
+{
     var response = getClient.GetAllUserCheeps(database_cheeps);
     return response;
 });
 
-/* INITIATE BUILD */ 
+/* INITIATE BUILD */
 // @Original Author :: [https://nodogmablog.bryanhogan.net/2022/01/programmatically-determine-what-ports-kestrel-is-running-on/]
 app.Start();
 
