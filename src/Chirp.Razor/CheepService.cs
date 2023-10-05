@@ -18,7 +18,7 @@ public class CheepService : ICheepService
     public List<CheepViewModel> GetCheeps()
     {
         List<CheepViewModel> _cheeps = new();
-        IEnumerable<CheepViewModel> cheeps = database_cheeps.Read();
+        IEnumerable<CheepViewModel> cheeps = database_cheeps.Read(1);
             foreach (CheepViewModel cheep in cheeps)
             {
                 _cheeps.Add(new CheepViewModel(cheep.Author, cheep.Message, UnixTimeStampToDateTimeString(Convert.ToDouble(cheep.Timestamp))));

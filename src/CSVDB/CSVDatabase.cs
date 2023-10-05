@@ -44,41 +44,49 @@ namespace SimpleDB
                 {
                     Console.WriteLine($"Error creating CSV Database file: {ex.Message}");
                 }
-            }else{
-                    Console.WriteLine("CSV Database file exists.");
-                }
-}
-
-public IEnumerable<T> Read(int? value = null)
-{
-    var config = new CsvConfiguration(CultureInfo.InvariantCulture);
-    using (var reader = new StreamReader(this.database))
-    using (var csv = new CsvReader(reader, config))
-    {
-        var records = csv.GetRecords<T>().ToList();
-        var amount = 3;
-
-        if (value != null) {
-            var page = value.GetValueOrDefault();
-            var start = ((page - 1) * 3);
-            return records.GetRange(start, amount);
+            }
+            else
+            {
+                Console.WriteLine("CSV Database file exists.");
+            }
         }
-        else 
+
+        public IEnumerable<T> Read(int? value = null)
         {
-            return records.GetRange(0, 3);
-        }
-    }
-}
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+            using (var reader = new StreamReader(this.database))
+            using (var csv = new CsvReader(reader, config))
+            {
+                var records = csv.GetRecords<T>().ToList();
+                var cheepsPerPage = 32;
 
-public void Store(T record)
-{
-    Console.WriteLine("Your cheep has been stored.");
-    using (var writer = new StreamWriter(this.database, true))
-    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-    {
-        csv.WriteRecord(record);
-        writer.Write("\n");
-    }
-}
+                if (value == null) { value = 1; }
+                var page = value.GetValueOrDefault();
+                var totalCheeps = records.Count;
+                var startCheep = totalCheeps - (page * cheepsPerPage);
+                if (startCheep < 0) { startCheep = 0; }
+                if (totalCheeps - startCheep >= cheepsPerPage)
+                {
+                    return records.GetRange(startCheep, cheepsPerPage);
+                }
+                else
+                {
+                    var cheepsLeft = totalCheeps - startCheep;
+                    return records.GetRange(startCheep, cheepsLeft);
+                }
+                    ;
+            }
+        }
+
+        public void Store(T record)
+        {
+            Console.WriteLine("Your cheep has been stored.");
+            using (var writer = new StreamWriter(this.database, true))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecord(record);
+                writer.Write("\n");
+            }
+        }
     };
 }
