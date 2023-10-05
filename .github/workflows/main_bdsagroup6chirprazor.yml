@@ -56,5 +56,5 @@ jobs:
         with:
           app-name: 'bdsagroup6chirprazor'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0E8BCABD55934CBEB0C2198CB24D60CB }}
+          publish-profile: ${{ secrets.MY_AZURE_PUBLISH_PROFILE }}
           package: .
