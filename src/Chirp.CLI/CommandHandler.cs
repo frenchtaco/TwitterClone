@@ -8,7 +8,7 @@ using CommandType;
 namespace CommandHandle;
 public class CommandHandler
 {
-    private readonly HttpClient _client;
+    public HttpClient _client { get; set; }
 
     public CommandHandler()
     {
@@ -64,6 +64,7 @@ public class CommandHandler
 
         // Log status code...
         if(response.IsSuccessStatusCode) 
+        //Console.WriteLine(response.IsSuccessStatusCode);
         {
             string responseBody = await response.Content.ReadAsStringAsync();
             var records = JsonSerializer.Deserialize<IEnumerable<Cheep>>(responseBody);
@@ -72,6 +73,7 @@ public class CommandHandler
             {
                 foreach (var record in records)
                 {
+                    
                     Console.WriteLine($"Author: {record.Author}, Message: {record.Message}, Date: {DateTimeOffset.FromUnixTimeSeconds(record.Timestamp).LocalDateTime}");
                 }
             }

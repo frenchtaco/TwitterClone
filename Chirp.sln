@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI", "src\Chirp.CLI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDB", "src\CSVDB\SimpleDB.csproj", "{D608374F-026E-4AAD-ADB7-C63D086135C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.WebService", "src\Chirp.WebService\Chirp.WebService.csproj", "{82BFEC42-458F-46AB-BCDE-593BC66EC97B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +28,14 @@ Global
 		{D608374F-026E-4AAD-ADB7-C63D086135C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D608374F-026E-4AAD-ADB7-C63D086135C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D608374F-026E-4AAD-ADB7-C63D086135C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82BFEC42-458F-46AB-BCDE-593BC66EC97B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82BFEC42-458F-46AB-BCDE-593BC66EC97B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82BFEC42-458F-46AB-BCDE-593BC66EC97B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82BFEC42-458F-46AB-BCDE-593BC66EC97B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1AD029B7-96C3-4E52-BACD-8D20F93EE6CF} = {E00892AA-80FB-4C71-87E5-580C3FF3E4F3}
 		{D608374F-026E-4AAD-ADB7-C63D086135C7} = {E00892AA-80FB-4C71-87E5-580C3FF3E4F3}
+		{82BFEC42-458F-46AB-BCDE-593BC66EC97B} = {E00892AA-80FB-4C71-87E5-580C3FF3E4F3}
 	EndGlobalSection
 EndGlobal
