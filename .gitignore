@@ -1,8 +1,8 @@
 // Application
 src/Chirp.CLI/obj/
 src/Chirp.CLI/bin/
-src/CSVDB/obj/
-src/CSVDB/bin/
+src/Chirp.Database/obj/
+src/Chirp.Database/bin/
 src/Chirp.WebService/bin/
 src/Chirp.Webservice/obj/
 src/Chirp.Razor/bin/
