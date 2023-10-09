@@ -16,3 +16,4 @@ tests/Chirp.CLI.Tests/bin/
 
 .fake
 .DS_Store
+.vscode

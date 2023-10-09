@@ -35,10 +35,9 @@ public class Program
                 {
                     var context = services.GetRequiredService<DatabaseContext>();
 
-                    if(!context.Database.EnsureCreated()) {
-                        Console.WriteLine("Undertaking Migration");
-                        context.Database.Migrate();
-                    }
+                    // if(!context.Database.EnsureCreated()) {
+                    //     Console.WriteLine("Migration has not occurred");
+                    // }
 
                     DbInitializer.SeedDatabase(context);
                 }
