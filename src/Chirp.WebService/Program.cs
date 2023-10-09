@@ -4,6 +4,13 @@ using DBContext;
 using Chirpin.Startup;
 using Chirpin.Data;
 
+/*
+    @DESCRIPTION:
+        - This our program entry point. 
+        - The entire Entity Framework Core relies heavily on the 'Fluent Interface' API design pattern used in OOP languages.
+        - 
+
+*/
 
 
 namespace ChirpApp;

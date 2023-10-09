@@ -16,7 +16,7 @@ public class UserTimelineModel : PageModel
         _context = context;
     }
 
-    public IActionResult OnGet()
+    public IActionResult OnPost()
     {
         return Page();
     }
