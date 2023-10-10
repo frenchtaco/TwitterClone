@@ -59,13 +59,3 @@ public class Program
 
     
 }
-
-
-/*
-
- app.UseEndpoints(endpoints =>
-{
-    endpoints.MapRazorPages();
-});
-
-*/

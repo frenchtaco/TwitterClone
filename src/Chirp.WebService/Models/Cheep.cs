@@ -6,6 +6,7 @@ namespace Chirpin.Models
     [Table("Cheeps")]
     public class Cheep
     {
+        [Display(Name = "Cheep ID")]
         [Key]
         public int CheepId { get; set; }
         public required Author Author { get; set; }
