@@ -1,0 +1,14 @@
+﻿@page "/{author}"
+@model Chirp.Razor.Pages.UserTimelineModel
+@{
+    ViewData["Title"] = "Chirp!";
+    Layout = "Shared/_Layout";
+    var routeName = HttpContext.GetRouteValue("author");
+}
+
+<div>
+    <h2> @routeName's Timeline </h2>
+
+    <button> Click me to create a new message </button>
+
+</div>

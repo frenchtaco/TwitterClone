@@ -1,0 +1,24 @@
+﻿@page "/"
+@model Chirp.Razor.Pages.PublicModel
+@{
+    ViewData["Title"] = "Chirp!";
+    Layout = "Shared/_Layout";
+}
+
+<div>
+    <h2> Public Timeline </h2>
+
+    <h1>Authors and Their Cheeps</h1>
+
+    @foreach (var author in Model.Authors)
+    {
+        <h2>@author.Name</h2>
+        <ul>
+            @foreach (var cheep in author.Cheeps)
+            {
+                <li>@cheep.Text - @cheep.TimeStamp.ToString("MM/dd/yyyy")</li>
+            }
+        </ul>
+    }
+    
+</div>
