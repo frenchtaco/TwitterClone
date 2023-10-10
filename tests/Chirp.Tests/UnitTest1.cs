@@ -1,6 +1,6 @@
 namespace UnitTest1
 {
-    public class TimeStampConversionTest
+    public class ChirpinModelsTests
     {
         [Fact]
         public void TestingTimeStampFromModels()
