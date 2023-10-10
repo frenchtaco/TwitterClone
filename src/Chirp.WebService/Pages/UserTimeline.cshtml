@@ -12,3 +12,37 @@
     <button> Click me to create a new message </button>
 
 </div>
+
+<div>
+    <h2> @routeName's Timeline </h2>
+
+    @if (Model.Cheeps.Any())
+    {
+        <ul id="messagelist" class="cheeps">
+            @foreach (var cheep in Model.Cheeps)
+            {
+                <li>
+                    <p>
+                        <strong>
+                            <a href="/@cheep.Author">@cheep.Author</a>
+                        </strong>
+                        @cheep.Text
+                        <small>&mdash; @cheep.TimeStamp</small>
+                    </p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <em>There are no cheeps so far.</em>
+    }
+
+    <div class="pagination">
+        @for (int i = 0; i <= Math.Ceiling((double) Model.totalCheeps / Model.cheepsPerPage) - 1; i++)
+        {
+            <a href="/@routeName/?page=@i">@(i+1)</a>
+        }
+    </div>
+
+</div>

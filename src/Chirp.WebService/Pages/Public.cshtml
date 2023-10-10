@@ -8,17 +8,33 @@
 <div>
     <h2> Public Timeline </h2>
 
-    <h1>Authors and Their Cheeps</h1>
-
-    @foreach (var author in Model.Authors)
+    @if (Model.Cheeps.Any())
     {
-        <h2>@author.Name</h2>
-        <ul>
-            @foreach (var cheep in author.Cheeps)
+        <ul id="messagelist" class="cheeps">
+            @foreach (var cheep in Model.Cheeps)
             {
-                <li>@cheep.Text - @cheep.TimeStamp.ToString("MM/dd/yyyy")</li>
+                <li>
+                    <p>
+                        <strong>
+                            <a href="/@cheep.Author">@cheep.Author</a>
+                        </strong>
+                        @cheep.Text
+                        <small>&mdash; @cheep.TimeStamp</small>
+                    </p>
+                </li>
             }
         </ul>
     }
-    
+    else
+    {
+        <em>There are no cheeps so far.</em>
+    }
+
+    <div class="pagination">
+        @for (int i = 0; i <= Math.Ceiling((double) Model.totalCheeps / Model.cheepsPerPage) - 1; i++)
+        {
+            <a href="/?page=@i">@(i+1)</a>
+        }
+    </div>
+
 </div>
