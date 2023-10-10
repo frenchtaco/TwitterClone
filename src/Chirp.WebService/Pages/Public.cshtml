@@ -4,21 +4,26 @@
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
 }
-
 <div>
     <h2> Public Timeline </h2>
+    @if (Model.Cheeps.Any())
+        @foreach (var cheep in Model.Cheeps)
+        {
+            <ul id="messagelist" class="cheeps">
+                <li>
+                    <p>
+                        <strong>
+                            <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
+                        </strong>
+                        @cheep.Text
+                        <small>&mdash; @cheep.TimeStamp</small>
+                    </p>
+                </li>
 
-    <h1>Authors and Their Cheeps</h1>
-
-    @foreach (var author in Model.Authors)
+            </ul>
+        }
+    else
     {
-        <h2>@author.Name</h2>
-        <ul>
-            @foreach (var cheep in author.Cheeps)
-            {
-                <li>@cheep.Text - @cheep.TimeStamp.ToString("MM/dd/yyyy")</li>
-            }
-        </ul>
+        <em>There are no cheeps so far.</em>
     }
-    
 </div>
