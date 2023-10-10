@@ -29,4 +29,13 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Cheep>().ToTable("Cheeps");
         modelBuilder.Entity<Author>().ToTable("Authors");
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        string databasePath = Path.Combine(Path.GetTempPath(), "chirp.db");
+
+        if(!File.Exists(databasePath)) Console.WriteLine("The database file does NOT exist");
+
+        optionsBuilder.UseSqlite($"Data Source={databasePath}");
+    }
 }

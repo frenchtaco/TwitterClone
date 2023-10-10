@@ -35,9 +35,13 @@ public class Program
                 {
                     var context = services.GetRequiredService<DatabaseContext>();
 
-                    // if(!context.Database.EnsureCreated()) {
-                    //     Console.WriteLine("Migration has not occurred");
-                    // }
+                    if(!context.Database.EnsureCreated()) {
+                        Console.WriteLine("Database was not found so creating a new one");
+                    } 
+                    else 
+                    {
+                       Console.WriteLine("Database already exists"); 
+                    }
 
                     DbInitializer.SeedDatabase(context);
                 }
