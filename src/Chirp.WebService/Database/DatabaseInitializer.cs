@@ -1,5 +1,5 @@
 using System;
-using Chirpin.Models; 
+using Chirpin.Models;
 using DBContext;
 
 namespace Chirpin.Data;
@@ -9,7 +9,7 @@ public static class DbInitializer
     {
         if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
         {
-            Console.WriteLine("SQLite database being seeded with data"); 
+            Console.WriteLine("SQLite database being seeded with data");
 
             var a1 = new Author() { AuthorId = 1, Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
             var a2 = new Author() { AuthorId = 2, Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>() };
@@ -702,12 +702,12 @@ public static class DbInitializer
             chirpContext.Authors.AddRange(authors);
             chirpContext.Cheeps.AddRange(cheeps);
             int numEntriesWritten = chirpContext.SaveChanges();
-            if(numEntriesWritten > 0) Console.WriteLine("Changes successfully written to SQLite Database");
+            if (numEntriesWritten > 0) Console.WriteLine("Changes successfully written to SQLite Database");
         }
-        else 
-        { 
+        else
+        {
             Console.WriteLine("Data base already seeded with data");
             return;
         }
-    } 
+    }
 }
