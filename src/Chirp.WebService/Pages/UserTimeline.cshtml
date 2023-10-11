@@ -9,6 +9,25 @@
 <div>
     <h2> @routeName's Timeline </h2>
 
-    <button> Click me to create a new message </button>
-
+    <ul id="messagelist" class="cheeps">
+    @if (Model.Cheeps.Any())
+    {
+        @foreach (var cheep in Model.Cheeps)
+        {
+            if (cheep.Author.Name.Equals(routeName.ToString()))
+            {
+                <li>
+                        <p>
+                            <strong>
+                                <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
+                                
+                            </strong>
+                            @cheep.Text
+                            <small>&mdash; @cheep.TimeStamp</small>
+                        </p>
+                </li>
+            }
+        }
+    }
+    </ul>
 </div>
