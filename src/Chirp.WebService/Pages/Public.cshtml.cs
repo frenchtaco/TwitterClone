@@ -9,21 +9,36 @@ namespace Chirp.Razor.Pages;
 public class PublicModel : PageModel
 {
     private readonly DatabaseContext _context;
-    public IList<Author> Authors { get; set; } = null!;
-    public IList<Cheep> Cheeps { get; set; } = null!;
-
+    public List<Cheep> Cheeps { get; set; } = null!;
+    public int totalCheeps;
+    public int cheepsPerPage;
 
     public PublicModel(DatabaseContext context)
     {
         _context = context;
     }
 
-    public IActionResult OnGet()
+    public IActionResult OnGet([FromQuery] int page)
     {
-        // Allows access to our Authors and their subsequent Cheeps:
-        Authors = _context.Authors.Include(author => author.Cheeps).ToList();
+        Cheeps = _context.Cheeps.Include(cheep => cheep.Author).ToList();
 
-        Cheeps = _context.Cheeps.Include(cheeps => cheeps.Author).ToList();
+        totalCheeps = Cheeps.Count;
+        cheepsPerPage = 32;
+
+        if (page == 0)
+        {
+            page = 1;
+        }
+
+        if (Cheeps.Count >= page * cheepsPerPage)
+        {
+            Cheeps = Cheeps.GetRange((page - 1) * cheepsPerPage, cheepsPerPage);
+        }
+        else
+        {
+            int cheepsLeft = cheepsPerPage - (page * cheepsPerPage - Cheeps.Count);
+            Cheeps = Cheeps.GetRange((page - 1) * cheepsPerPage, cheepsLeft);
+        }
 
         return Page();
     }
