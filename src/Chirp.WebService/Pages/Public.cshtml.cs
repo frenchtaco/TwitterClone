@@ -9,31 +9,36 @@ public class PublicModel : PageModel
 {
     private readonly DatabaseContext _context;
     public List<Cheep> Cheeps { get; set; } = null!;
-    public int cheepsPerPage;
     public int totalCheeps;
-    public int lastPage;
+    public int cheepsPerPage;
 
     public PublicModel(DatabaseContext context)
     {
         _context = context;
     }
 
-    public IActionResult OnGet([FromQuery] int page)
+    public IActionResult OnGet([FromQuery] int page = 1)
     {
         // Allows access to our Authors and their subsequent Cheeps:
         Cheeps = _context.Cheeps.ToList();
-        
-        if (Cheeps.Count >= page * 32) 
+
+        totalCheeps = Cheeps.Count;
+        cheepsPerPage = 32;
+
+        if (page == 0) 
         {
-            Cheeps = Cheeps.GetRange((page - 1) * 32, 32);
+            page = 1;
+        }
+        
+        if (Cheeps.Count >= page * cheepsPerPage) 
+        {
+            Cheeps = Cheeps.GetRange((page - 1) * cheepsPerPage, cheepsPerPage);
         }
         else 
         {
-            int cheepsLeft = 32 - (page * 32 - Cheeps.Count);
-            Cheeps = Cheeps.GetRange((page - 1) * 32, cheepsLeft);
+            int cheepsLeft = cheepsPerPage - (page * cheepsPerPage - Cheeps.Count);
+            Cheeps = Cheeps.GetRange((page - 1) * cheepsPerPage, cheepsLeft);
         }
-
-        int totalCheeps = Cheeps.Count;
 
         return Page();
     }

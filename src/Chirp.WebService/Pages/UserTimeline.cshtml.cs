@@ -10,8 +10,6 @@ public class UserTimelineModel : PageModel
     public List<Cheep> Cheeps { get; set; } = null!;
     public int cheepsPerPage;
     public int totalCheeps;
-    public int lastPage;
-
     public UserTimelineModel(DatabaseContext context)
     {
         _context = context;
@@ -21,14 +19,17 @@ public class UserTimelineModel : PageModel
     {
         Cheeps = _context.Cheeps.Where(cheep => cheep.Author.Name == author).ToList();
 
-        if (Cheeps.Count >= page * 32) 
+        totalCheeps = Cheeps.Count;
+        cheepsPerPage = 32;
+
+        if (Cheeps.Count >= page * cheepsPerPage) 
         {
-            Cheeps = Cheeps.GetRange((page - 1) * 32, 32);
+            Cheeps = Cheeps.GetRange((page - 1) * cheepsPerPage, cheepsPerPage);
         }
         else 
         {
-            int cheepsLeft = 32 - (page * 32 - Cheeps.Count);
-            Cheeps = Cheeps.GetRange((page - 1) * 32, cheepsLeft);
+            int cheepsLeft = cheepsPerPage - (page * cheepsPerPage - Cheeps.Count);
+            Cheeps = Cheeps.GetRange((page - 1) * cheepsPerPage, cheepsLeft);
         }
 
         return Page();
