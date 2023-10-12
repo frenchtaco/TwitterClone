@@ -1,18 +1,14 @@
-// Application
-src/Chirp.CLI/obj/
-src/Chirp.CLI/bin/
-src/Chirp.Database/obj/
-src/Chirp.Database/bin/
-src/Chirp.WebService/bin/
-src/Chirp.Webservice/obj/
-src/Chirp.Razor/bin/
-src/Chirp.Razor/obj/
-
-// Test
-tests/CSVDB.Tests/obj/
-tests/CSVDB.Tests/bin/
-tests/Chirp.CLI.Tests/obj/
-tests/Chirp.CLI.Tests/bin/
+*/.idea/
+*/bin/
+*/bin/
+bin/
+obj/
+.idea/
+obj
+.vscode/
+.DS_Store
+src/*/bin
+test/*/bin
 
 .fake
 .DS_Store
