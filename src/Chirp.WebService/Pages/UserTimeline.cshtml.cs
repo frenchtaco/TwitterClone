@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DBContext;
 using Chirpin.Models;
+using Microsoft.EntityFrameworkCore;
 namespace Chirp.Razor.Pages;
 
 public class UserTimelineModel : PageModel
@@ -17,7 +18,7 @@ public class UserTimelineModel : PageModel
 
     public IActionResult OnGet(string author, [FromQuery] int page)
     {
-        Cheeps = _context.Cheeps.Where(cheep => cheep.Author != null && cheep.Author.Name == author).ToList();
+        Cheeps = _context.Cheeps.Where(cheep => cheep.Author != null && cheep.Author.Name == author).Include(cheep => cheep.Author).ToList();
 
         totalCheeps = Cheeps.Count;
         cheepsPerPage = 32;
