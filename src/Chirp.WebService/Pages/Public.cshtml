@@ -6,24 +6,22 @@
 }
 <div>
     <h2> Public Timeline </h2>
-
     @if (Model.Cheeps.Any())
-    {
-        <ul id="messagelist" class="cheeps">
-            @foreach (var cheep in Model.Cheeps)
-            {
+        @foreach (var cheep in Model.Cheeps)
+        {
+            <ul id="messagelist" class="cheeps">
                 <li>
                     <p>
                         <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
+                            <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
                         </strong>
                         @cheep.Text
                         <small>&mdash; @cheep.TimeStamp</small>
                     </p>
                 </li>
-            }
-        </ul>
-    }
+
+            </ul>
+        }
     else
     {
         <em>There are no cheeps so far.</em>
@@ -37,3 +35,4 @@
     </div>
 
 </div>
+
