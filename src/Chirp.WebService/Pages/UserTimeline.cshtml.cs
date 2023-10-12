@@ -15,12 +15,17 @@ public class UserTimelineModel : PageModel
         _context = context;
     }
 
-    public IActionResult OnGet(String author, [FromQuery] int page)
+    public IActionResult OnGet(string author, [FromQuery] int page)
     {
-        Cheeps = _context.Cheeps.Where(cheep => cheep.Author.Name == author).ToList();
+        Cheeps = _context.Cheeps.Where(cheep => cheep.Author != null && cheep.Author.Name == author).ToList();
 
         totalCheeps = Cheeps.Count;
         cheepsPerPage = 32;
+
+        if (page == 0) 
+        {
+            page = 1;
+        }
 
         if (Cheeps.Count >= page * cheepsPerPage) 
         {
