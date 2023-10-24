@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Chirpin.Models 
+namespace Chirp.Models 
 {
     [Table("Authors")]
     public class Author

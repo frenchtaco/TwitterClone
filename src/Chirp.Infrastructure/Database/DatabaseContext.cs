@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Chirpin.Models;
+using Chirp.Models;
 
 /*
     @DESCRIPTION:
