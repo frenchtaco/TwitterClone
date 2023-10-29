@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DBContext;
-using Chirpin.Models;
+using Chirp.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Razor.Pages;

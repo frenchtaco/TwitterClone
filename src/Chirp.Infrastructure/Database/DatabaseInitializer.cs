@@ -1,5 +1,5 @@
 using System;
-using Chirpin.Models;
+using Chirp.Models;
 using DBContext;
 
 namespace Chirpin.Data;
