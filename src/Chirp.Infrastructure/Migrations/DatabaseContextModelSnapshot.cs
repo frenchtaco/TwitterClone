@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Chirp.Razor.Migrations
+namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot
@@ -15,9 +15,9 @@ namespace Chirp.Razor.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
 
-            modelBuilder.Entity("Chirpin.Models.Author", b =>
+            modelBuilder.Entity("Chirp.Models.Author", b =>
                 {
                     b.Property<int>("AuthorId")
                         .ValueGeneratedOnAdd()
@@ -36,7 +36,7 @@ namespace Chirp.Razor.Migrations
                     b.ToTable("Authors", (string)null);
                 });
 
-            modelBuilder.Entity("Chirpin.Models.Cheep", b =>
+            modelBuilder.Entity("Chirp.Models.Cheep", b =>
                 {
                     b.Property<int>("CheepId")
                         .ValueGeneratedOnAdd()
@@ -59,9 +59,9 @@ namespace Chirp.Razor.Migrations
                     b.ToTable("Cheeps", (string)null);
                 });
 
-            modelBuilder.Entity("Chirpin.Models.Cheep", b =>
+            modelBuilder.Entity("Chirp.Models.Cheep", b =>
                 {
-                    b.HasOne("Chirpin.Models.Author", "Author")
+                    b.HasOne("Chirp.Models.Author", "Author")
                         .WithMany("Cheeps")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -70,7 +70,7 @@ namespace Chirp.Razor.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("Chirpin.Models.Author", b =>
+            modelBuilder.Entity("Chirp.Models.Author", b =>
                 {
                     b.Navigation("Cheeps");
                 });

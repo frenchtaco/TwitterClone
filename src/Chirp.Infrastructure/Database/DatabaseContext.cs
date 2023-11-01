@@ -20,6 +20,10 @@ public class DatabaseContext : DbContext
     public virtual DbSet<Cheep> Cheeps { get; set; }
     public virtual DbSet<Author> Authors { get; set; }
 
+    public DatabaseContext()
+    {
+    }
+
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {
     }
