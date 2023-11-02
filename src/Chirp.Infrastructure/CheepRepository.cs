@@ -45,7 +45,7 @@ public class CheepRepository : ICheepRepository
     {
         return await context.Cheeps
             .Include(cheep => cheep.Author)
-            .Where(cheep => cheep.Author.Name == author)
+            .Where(cheep => cheep.Author.UserName == author)
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip(page * CheepsPerPage())
             .Take(CheepsPerPage())
@@ -56,7 +56,7 @@ public class CheepRepository : ICheepRepository
     {
         return await context.Cheeps
             .Include(cheep => cheep.Author)
-            .Where(cheep => cheep.Author.Name == author)
+            .Where(cheep => cheep.Author.UserName == author)
             .OrderByDescending(cheep => cheep.TimeStamp)
             .ToListAsync();
     }

@@ -14,12 +14,12 @@
     {
         @foreach (var cheep in Model.Cheeps)
         {
-            if (cheep.Author.Name.Equals(routeName.ToString()))
+            if (cheep.Author.UserName.Equals(routeName.ToString()))
             {
                 <li>
                         <p>
                             <strong>
-                                <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
+                                <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
                                 
                             </strong>
                             @cheep.Text

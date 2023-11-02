@@ -9,10 +9,14 @@ namespace Chirp.Models
     {
         [Display(Name = "Author ID")]
         public int AuthorId { get; set; }
-        public required string Name { get; set; }
+
+        [StringLength(20, MinimumLength=5)]
+        [Display(Name = "Username")]
+        public required override string UserName { get; set; }
+
         [EmailAddress]
-        public override required string Email { get; set; } = null!;
-        public required ICollection<Cheep> Cheeps { get; set;}
+        public override required string Email { get; set; }
+        public ICollection<Cheep> Cheeps { get; set;} = null!;
     }
 }
 
