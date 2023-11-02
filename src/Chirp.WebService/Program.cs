@@ -19,7 +19,7 @@ public class Program
 {
     public static void Main(string[] args) 
     {
-        var server = CreateNewServerBuilder(args).Build();
+        IHost server = CreateNewServerBuilder(args).Build();
 
         CreateDb(server);
 
@@ -58,8 +58,4 @@ public class Program
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-            
-
-
-    
 }

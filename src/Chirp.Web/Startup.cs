@@ -1,7 +1,10 @@
-using DBContext;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 using Chirp.Infrastructure;
 using Chirp.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using Chirp.Models;
+using DBContext;
 
 /*
     @DESCRIPTION:
@@ -22,7 +25,7 @@ using Microsoft.EntityFrameworkCore;
         - For future reference - OAuth, Cookies and JWT Security [https://fusionauth.io/blog/securing-asp-netcore-razor-pages-app-with-oauth]
 */
 
-namespace Chirp.Startup
+namespace Chirp.StartUp
 {
     public class Startup
     {
@@ -35,15 +38,22 @@ namespace Chirp.Startup
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
-
             services.AddDbContext<DatabaseContext>(options => {
                 _ = options.UseSqlite(_configuration.GetConnectionString("DefaultConnection")) ?? throw new InvalidOperationException("Connection string was invalid.");
             });
 
+            services.AddDefaultIdentity<Author>(
+                options => options.SignIn.RequireConfirmedAccount = true
+            )
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<DatabaseContext>();
+
+
+            services.AddRazorPages();
+
+
             // When you request an ICheepRepository in your application, ASP.NET Core's dependency injection system will 
             // create an instance of CheepRepository and provide it to you.
-            
             services.AddScoped<ICheepRepository, CheepRepository>();
             //services.AddScoped<IAuthorRepository, AuthorRepository>();
         }
@@ -52,7 +62,7 @@ namespace Chirp.Startup
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {

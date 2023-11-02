@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 using Chirp.Models;
 
 /*
@@ -15,13 +17,14 @@ using Chirp.Models;
 */
 
 namespace DBContext;
-public class DatabaseContext : DbContext
+public class DatabaseContext : IdentityDbContext<Author>
 {
     public virtual DbSet<Cheep> Cheeps { get; set; }
     public virtual DbSet<Author> Authors { get; set; }
 
     public DatabaseContext()
     {
+        // Must have empty constructor for Compile-Time Migrtion to work.
     }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
@@ -30,6 +33,10 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
+        // Additional Configurations:
+        modelBuilder.Entity<Author>().HasKey(u => u.Id);
         modelBuilder.Entity<Cheep>().ToTable("Cheeps");
         modelBuilder.Entity<Author>().ToTable("Authors");
     }

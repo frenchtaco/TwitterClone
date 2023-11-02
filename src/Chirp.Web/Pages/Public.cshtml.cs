@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+
 using DBContext;
 using Chirp.Models;
-using Microsoft.EntityFrameworkCore;
 using Chirp.Interfaces;
 using Chirp.Infrastructure;
 

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+
 using DBContext;
 using Chirp.Models;
 using Chirp.Interfaces;
 using Chirp.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 namespace Chirp.Razor.Pages;
 
 public class UserTimelineModel : PageModel
