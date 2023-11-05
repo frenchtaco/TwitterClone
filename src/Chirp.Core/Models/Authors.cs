@@ -15,9 +15,7 @@ namespace Chirp.Models
         public required override string UserName { get; set; }
 
         [EmailAddress]
-        public override required string Email { get; set; }
+        public required override string Email { get; set; }
         public ICollection<Cheep> Cheeps { get; set;} = null!;
     }
 }
-
-

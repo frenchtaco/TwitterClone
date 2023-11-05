@@ -20,13 +20,15 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {
+        private readonly ILogger<RegisterConfirmationModel> _logger;
         private readonly UserManager<Author> _userManager;
         private readonly IEmailSender _sender;
 
-        public RegisterConfirmationModel(UserManager<Author> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<Author> userManager, IEmailSender sender, ILogger<RegisterConfirmationModel> logger)
         {
             _userManager = userManager;
             _sender = sender;
+            _logger = logger;
         }
 
         /// <summary>
@@ -51,15 +53,21 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
         {
             if (email == null)
             {
-                return RedirectToPage("/Index");
-            }
-            returnUrl = returnUrl ?? Url.Content("~/");
+                return RedirectToPage("/");
+            } 
+            
+            _logger.LogInformation($"[REG-CONFIRM] The Registration Email was: {email}");
+            returnUrl = returnUrl ?? Url.Content("~/"); // 
 
             var user = await _userManager.FindByEmailAsync(email);
+            //var user = await _userManager.SingleOrDefaultAsync(e => e.Email == email);
             if (user == null)
             {
-                return NotFound($"Unable to load user with email '{email}'.");
+                _logger.LogInformation($"[REG-CONFIRM] The user was NULL with email: '{email}'");
+                return NotFound($"Unable to load user with email: '{email}'.");
             }
+
+            _logger.LogInformation($"[REG-CONFIRM] The loaded username was: '{user}'");
 
             Email = email;
             // Once you add a real email sender, you should remove this code that lets you confirm the account

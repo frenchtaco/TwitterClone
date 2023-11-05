@@ -42,16 +42,34 @@ namespace Chirp.StartUp
                 _ = options.UseSqlite(_configuration.GetConnectionString("DefaultConnection")) ?? throw new InvalidOperationException("Connection string was invalid.");
             });
 
-            services.AddDefaultIdentity<Author>(
-                options => options.SignIn.RequireConfirmedAccount = true
-            )
+            services.AddDefaultIdentity<Author>(options => 
+            {
+                // Sign-in Procedure:
+                options.SignIn.RequireConfirmedAccount = true;
+                options.SignIn.RequireConfirmedEmail = false;
+
+                // Lock Mechanism: [NOT ACTIVE DURING DEVELOPMENT]
+                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Sets the maximum amount of "Lock-Out" time.
+                //options.Lockout.MaxFailedAccessAttempts = 5;                      // Sets the maximum number of failed attempts.
+            
+                // Password:
+                options.Password.RequireDigit = false;                              // Default is: true
+                options.Password.RequireLowercase = false;                          // Default is: true
+                options.Password.RequireNonAlphanumeric = false;                    // Default is: true
+                options.Password.RequireUppercase = false;                          // Default is: true
+                options.Password.RequiredLength = 6;                                // Default is: 6
+                options.Password.RequiredUniqueChars = 1;                           // Default is: 1
+            
+                // Users:
+                options.User.RequireUniqueEmail = true;                             // Default is: true [..this was a massive pain in the ass...]
+            })
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<DatabaseContext>();
 
-
             services.AddRazorPages();
 
-
+            // services.ConfigureApplicationCookie(option => { ... https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.cookies.cookieauthenticationoptions?view=aspnetcore-7.0 ... });
+            
             // When you request an ICheepRepository in your application, ASP.NET Core's dependency injection system will 
             // create an instance of CheepRepository and provide it to you.
             services.AddScoped<ICheepRepository, CheepRepository>();

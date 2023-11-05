@@ -35,8 +35,23 @@ public class DatabaseContext : IdentityDbContext<Author>
     {
         base.OnModelCreating(modelBuilder);
 
-        // Additional Configurations:
-        modelBuilder.Entity<Author>().HasKey(u => u.Id);
+        modelBuilder.Entity<Author>(entity => 
+        {
+            entity.ToTable("Authors");
+            entity.HasKey(a => a.Id);
+            entity.HasIndex(a => a.Email).IsUnique();
+            //entity.Property(a => a.UserName).HasMaxLength(20); (Needs to match with Registration Limit)
+            // ... more config ... 
+        });
+
+        modelBuilder.Entity<Cheep>(entity => 
+        {
+            entity.ToTable("Cheeps");
+            entity.Property(cheep => cheep.Text).HasMaxLength(160);
+        });
+
+
+
         modelBuilder.Entity<Cheep>().ToTable("Cheeps");
         modelBuilder.Entity<Author>().ToTable("Authors");
     }
@@ -44,6 +59,7 @@ public class DatabaseContext : IdentityDbContext<Author>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         string databasePath = Path.Combine(Path.GetTempPath(), "chirp.db");
+        Console.WriteLine("Database Path: " + databasePath);
 
         if(!File.Exists(databasePath)) Console.WriteLine("The database file does NOT exist");
 
