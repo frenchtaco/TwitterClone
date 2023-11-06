@@ -23,11 +23,13 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<Author> _signInManager;
+        private readonly UserManager<Author> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<Author> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<Author> signInManager, UserManager<Author> userManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -79,31 +81,40 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var signInResult = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var user = await _userManager.FindByNameAsync(Input.UserName);
 
-                if (result.Succeeded)
+                // [TODO] Change to switch case:
+                if (signInResult.Succeeded)
                 {
                     _logger.LogInformation($"[LOG-IN] User {Input.UserName} logged in.");
                     return LocalRedirect(returnUrl);
                 }
-                else if (result.RequiresTwoFactor)
+                else if (signInResult.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
-                else if (result.IsLockedOut)
+                else if (signInResult.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    _logger.LogWarning("[LOG-IN] User account locked out of page.");
                     return RedirectToPage("./Lockout");
                 }
-                else if(result.IsNotAllowed)
+                else if(signInResult.IsNotAllowed)
                 {
-                    _logger.LogInformation($"User '{Input.UserName}' is not allowed to sign in.");
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt - User not permitted");
+                    string userNotAllowed_msg = "Invalid Login Attempt - User is not permitted";
+                    _logger.LogInformation($"[LOG-IN] User '{Input.UserName}' is not allowed to sign in.");
+
+                    if(!await _userManager.IsEmailConfirmedAsync(user)) 
+                    {
+                        userNotAllowed_msg += " - Email is NOT confirmed.";
+                    }
+
+                    ModelState.AddModelError(string.Empty, userNotAllowed_msg);
                     return Page();
                 }
                 else
                 {
-                    _logger.LogInformation($"User '{Input.UserName}' login failed: {result}");
+                    _logger.LogInformation($"User '{Input.UserName}' login failed: {signInResult}");
                     ModelState.AddModelError(string.Empty, "Invalid login attempt - Information incorrect");
                     return Page();
                 }

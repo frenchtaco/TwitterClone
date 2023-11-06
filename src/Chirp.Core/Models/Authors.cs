@@ -8,7 +8,7 @@ namespace Chirp.Models
     public class Author : IdentityUser
     {
         [Display(Name = "Author ID")]
-        public int AuthorId { get; set; }
+        public int AuthorId { get; set; }   // [TODO]: Make this 'override' the attribute from 'IdentityUser'
 
         [StringLength(20, MinimumLength=5)]
         [Display(Name = "Username")]

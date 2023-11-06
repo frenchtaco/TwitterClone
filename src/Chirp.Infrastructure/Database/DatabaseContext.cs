@@ -59,7 +59,7 @@ public class DatabaseContext : IdentityDbContext<Author>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         string databasePath = Path.Combine(Path.GetTempPath(), "chirp.db");
-        Console.WriteLine("Database Path: " + databasePath);
+        Console.WriteLine("Database Path: " + databasePath);    // [REMOVE-DEV] 
 
         if(!File.Exists(databasePath)) Console.WriteLine("The database file does NOT exist");
 

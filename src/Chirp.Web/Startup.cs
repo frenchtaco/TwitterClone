@@ -44,9 +44,9 @@ namespace Chirp.StartUp
 
             services.AddDefaultIdentity<Author>(options => 
             {
-                // Sign-in Procedure:
-                options.SignIn.RequireConfirmedAccount = true;
-                options.SignIn.RequireConfirmedEmail = false;
+                // Sign-in Procedure [This has been disabled during Development-Phase]:
+                options.SignIn.RequireConfirmedAccount = false;                     // Default is: true
+                options.SignIn.RequireConfirmedEmail = false;                       // Default is: true
 
                 // Lock Mechanism: [NOT ACTIVE DURING DEVELOPMENT]
                 //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Sets the maximum amount of "Lock-Out" time.
