@@ -38,10 +38,7 @@ public class DatabaseContext : IdentityDbContext<Author>
         modelBuilder.Entity<Author>(entity => 
         {
             entity.ToTable("Authors");
-            entity.HasKey(a => a.Id);
             entity.HasIndex(a => a.Email).IsUnique();
-            //entity.Property(a => a.UserName).HasMaxLength(20); (Needs to match with Registration Limit)
-            // ... more config ... 
         });
 
         modelBuilder.Entity<Cheep>(entity => 
@@ -49,11 +46,6 @@ public class DatabaseContext : IdentityDbContext<Author>
             entity.ToTable("Cheeps");
             entity.Property(cheep => cheep.Text).HasMaxLength(160);
         });
-
-
-
-        modelBuilder.Entity<Cheep>().ToTable("Cheeps");
-        modelBuilder.Entity<Author>().ToTable("Authors");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -62,6 +54,7 @@ public class DatabaseContext : IdentityDbContext<Author>
         Console.WriteLine("Database Path: " + databasePath);    // [REMOVE-DEV] 
 
         if(!File.Exists(databasePath)) Console.WriteLine("The database file does NOT exist");
+        else Console.WriteLine("The database file does exist");
 
         optionsBuilder.UseSqlite($"Data Source={databasePath}");
     }

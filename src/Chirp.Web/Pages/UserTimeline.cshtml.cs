@@ -12,36 +12,28 @@ namespace Chirp.Web.Pages;
 
 public class UserTimelineModel : PageModel
 {
-    private readonly SignInManager<Author> _signInManager;
-    private readonly UserManager<Author> _userManager;
-    private readonly DatabaseContext _context;
+    private readonly ICheepRepository _cheepRepository;
     private readonly ILogger<UserTimelineModel> _logger;
-
     public List<Cheep> Cheeps { get; set; } = null!;
-    private ICheepRepository cheepRepository;
     public int cheepsPerPage;
     public int totalCheeps;
-    public UserTimelineModel(DatabaseContext context, SignInManager<Author> signInManager, UserManager<Author> userManager, ILogger<UserTimelineModel> logger)
+    public UserTimelineModel(ICheepRepository cheepRepository, ILogger<UserTimelineModel> logger)
     {
         // Should "CheepRepository" be changed so it uses DI? 
-        _signInManager = signInManager;
-        _userManager = userManager;
-        _context = context;
+        // If you click on your name - redirect to MyPage
+        // else you go that Users timeline.
         _logger = logger;
         
-        cheepRepository = new CheepRepository(context);
-        cheepsPerPage = cheepRepository.CheepsPerPage();
+        _cheepRepository = cheepRepository;
+        cheepsPerPage = _cheepRepository.CheepsPerPage();
     }
 
     public async Task<IActionResult> OnGet(string author, [FromQuery] int page)
     {
-        if(_signInManager.IsSignedIn(User)) { _logger.LogInformation("User is logged in"); }
-        else { _logger.LogInformation("User is NOT logged in"); }
-
-        IEnumerable<Cheep> cheeps = await cheepRepository.GetCheepsFromAuthor(author, page);
+        IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheepsFromAuthor(author, page);
         Cheeps = cheeps.ToList();
 
-        IEnumerable<Cheep> allCheeps = await cheepRepository.GetAllCheepsFromAuthor(author);
+        IEnumerable<Cheep> allCheeps = await _cheepRepository.GetAllCheepsFromAuthor(author);
         totalCheeps = allCheeps.Count();
 
         return Page();

@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 
 using Chirp.Models;
 
+
 namespace Chirp.Web.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
@@ -59,18 +60,20 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Username")]
             public string UserName { get; set; }
-
+            
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+            
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
+            
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
@@ -95,51 +98,33 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
                 if (existingUserWithUsername != null)
                 {
-                    // Username is already in use, add an error to the model state.
                     ModelState.AddModelError(string.Empty, "The username is already in use.");
                     return Page();
                 }
 
                 if (existingUserWithEmail != null)
                 {
-                    // Email is already in use, add an error to the model state.
                     ModelState.AddModelError(string.Empty, "The email address is already in use.");
                     return Page();
                 }
 
-                var user = CreateUser();
-
-                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                var user = new Author
+                {
+                    UserName = Input.UserName,
+                    Email = Input.Email,
+                    EmailConfirmed = true,
+                };
+                
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation($"[REGISTER] User '{user.UserName}' created a new account with email: {user.Email}.");
+                    _logger.LogInformation($"User {Input.UserName} created a new account with password.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                    // [TODO] Email confirmation bullshit...
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email ",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        _logger.LogInformation("[REGISTER] Registered where 'RequireConfirmedAccount' was true");
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        _logger.LogInformation("[REGISTER] Registered where 'RequireConfirmedAccount' was false");
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)
                 {

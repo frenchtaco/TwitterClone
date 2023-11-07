@@ -11,23 +11,23 @@ namespace Chirp.Web.Pages;
 
 public class PublicModel : PageModel
 {
-    private ICheepRepository cheepRepository;
+    private readonly ICheepRepository _cheepRepository;
     public List<Cheep> Cheeps { get; set; } = null!;
     public int totalCheeps;
     public int cheepsPerPage;
 
-    public PublicModel(DatabaseContext context)
+    public PublicModel(ICheepRepository cheepRepository)
     {
-        cheepRepository = new CheepRepository(context);
+        _cheepRepository = cheepRepository;
         cheepsPerPage = cheepRepository.CheepsPerPage();
     }
 
     public async Task<IActionResult> OnGet([FromQuery] int page)
     {
-        IEnumerable<Cheep> cheeps = await cheepRepository.GetCheeps(page);
+        IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(page);
         Cheeps = cheeps.ToList();
 
-        IEnumerable<Cheep> allCheeps = await cheepRepository.GetAllCheeps();
+        IEnumerable<Cheep> allCheeps = await _cheepRepository.GetAllCheeps();
         totalCheeps = allCheeps.Count();
 
         return Page();
