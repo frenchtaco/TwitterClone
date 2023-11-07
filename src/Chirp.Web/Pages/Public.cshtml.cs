@@ -7,7 +7,7 @@ using Chirp.Models;
 using Chirp.Interfaces;
 using Chirp.Infrastructure;
 
-namespace Chirp.Razor.Pages;
+namespace Chirp.Web.Pages;
 
 public class PublicModel : PageModel
 {

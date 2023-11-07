@@ -25,6 +25,12 @@ using DBContext;
         - For future reference - OAuth, Cookies and JWT Security [https://fusionauth.io/blog/securing-asp-netcore-razor-pages-app-with-oauth]
 */
 
+
+/*
+    if(SignInManager.IsSignedIn)
+
+*/
+
 namespace Chirp.StartUp
 {
     public class Startup
