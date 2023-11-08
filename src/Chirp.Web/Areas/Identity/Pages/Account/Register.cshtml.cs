@@ -20,12 +20,15 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
 using Chirp.Models;
+using Chirp.ADTO;
+using Chirp.Interfaces;
 
 
 namespace Chirp.Web.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
+        private readonly IAuthorRepository _authorRepository;
         private readonly SignInManager<Author> _signInManager;
         private readonly UserManager<Author> _userManager;
         private readonly IUserStore<Author> _userStore;
@@ -34,12 +37,14 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
+            IAuthorRepository authorRepository,
             UserManager<Author> userManager,
             IUserStore<Author> userStore,
             SignInManager<Author> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
+            _authorRepository = authorRepository;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
@@ -112,6 +117,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 {
                     UserName = Input.UserName,
                     Email = Input.Email,
+                    Cheeps = new List<Cheep>(),
                     EmailConfirmed = true,
                 };
                 
@@ -121,7 +127,14 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation($"User {Input.UserName} created a new account with password.");
 
-                    // [TODO] Email confirmation bullshit...
+                    AuthorDTO authorDTO = new(Input.UserName, Input.Email);
+
+                    // [TODO] Debug this further...
+                    if(_authorRepository.GetAuthorByName(Input.UserName) == null) 
+                    {
+                        _logger.LogInformation("Author was null");
+                        _authorRepository.CreateNewAuthor(authorDTO);
+                    } else { _logger.LogInformation("Author was NOT null"); }
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);

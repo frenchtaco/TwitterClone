@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 using Chirp.Models;
 using Chirp.Interfaces;
+using Chirp.CDTO;
 
 namespace Chirp.Web.Pages;
 
@@ -52,12 +53,11 @@ public class PublicModel : PageModel
             return Page();
         }
 
-        var currUser = await _userManager.GetUserAsync(User);
+        var currUser = await _userManager.GetUserAsync(User) ?? throw new Exception("ERROR: User could not be found");
 
-        if(currUser != null)
-        {
-            _logger.LogInformation($"SUCCESS: User {currUser.UserName} located");
-        } else { _logger.LogInformation("ERROR: User could not be found"); }
+        CheepDTO cheepDTO = new(CheepText, currUser.UserName);
+
+        _cheepRepository.CreateCheep(cheepDTO);
 
         int pageNumber = page ?? 1;
 

@@ -91,7 +91,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("[LOG-IN] User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return RedirectToPage("/Public");
                 }
                 else if (result.RequiresTwoFactor)
                 {

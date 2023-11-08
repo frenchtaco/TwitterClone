@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using DBContext;
 using Chirp.Models;
 using Chirp.Interfaces;
-using Chirp.Infrastructure;
 
 namespace Chirp.Web.Pages;
 
