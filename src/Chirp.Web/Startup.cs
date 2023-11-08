@@ -36,6 +36,7 @@ namespace Chirp.StartUp
             services.AddRazorPages();
 
             services.AddScoped<ICheepRepository, CheepRepository>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
