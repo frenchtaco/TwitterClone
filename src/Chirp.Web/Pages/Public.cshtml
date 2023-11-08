@@ -5,12 +5,13 @@
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
+    var numPages = Math.Ceiling((double)Model.totalCheeps / Model.cheepsPerPage);
 }
 <div>
     <div>
     @if(SignInManager.IsSignedIn(User))
     {
-        <form>
+        <form method="post">
             <div id="post-cheep-container">
                 <label asp-for="CheepText" class="form-label">Hey @User.Identity?.Name! What's on your mind?</label>
                 <input asp-for="CheepText" class="form-control" aria-required="true" />
@@ -54,7 +55,7 @@
     }
 
     <div class="pagination">
-        @for (int i = 1; i <= Math.Ceiling((double)Model.totalCheeps / Model.cheepsPerPage); i++)
+        @for (int i = 1; i <= numPages; i++)
         {
             <a href="/?page=@i">@i</a>
         }
