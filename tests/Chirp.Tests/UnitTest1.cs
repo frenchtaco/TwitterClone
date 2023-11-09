@@ -1,5 +1,7 @@
 
 
+using Chirp.Models;
+
 namespace UnitTest1
 {
     public class ChirpinModelsTests
