@@ -44,11 +44,12 @@ namespace Chirp.StartUp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DatabaseContext>(options => {
-                _ = options.UseSqlite(_configuration.GetConnectionString("DefaultConnection")) ?? throw new InvalidOperationException("Connection string was invalid.");
+            services.AddDbContext<DatabaseContext>(options =>
+            {
+                _ = options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")) ?? throw new InvalidOperationException("Connection string was invalid.");
             });
 
-            services.AddDefaultIdentity<Author>(options => 
+            services.AddDefaultIdentity<Author>(options =>
             {
                 // Sign-in Procedure [This has been disabled during Development-Phase]:
                 options.SignIn.RequireConfirmedAccount = false;                     // Default is: true
@@ -57,7 +58,7 @@ namespace Chirp.StartUp
                 // Lock Mechanism: [NOT ACTIVE DURING DEVELOPMENT]
                 //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Sets the maximum amount of "Lock-Out" time.
                 //options.Lockout.MaxFailedAccessAttempts = 5;                      // Sets the maximum number of failed attempts.
-            
+
                 // Password:
                 options.Password.RequireDigit = false;                              // Default is: true
                 options.Password.RequireLowercase = false;                          // Default is: true
@@ -65,7 +66,7 @@ namespace Chirp.StartUp
                 options.Password.RequireUppercase = false;                          // Default is: true
                 options.Password.RequiredLength = 6;                                // Default is: 6
                 options.Password.RequiredUniqueChars = 1;                           // Default is: 1
-            
+
                 // Users:
                 options.User.RequireUniqueEmail = true;                             // Default is: true [..this was a massive pain in the ass...]
             })
@@ -75,7 +76,7 @@ namespace Chirp.StartUp
             services.AddRazorPages();
 
             // services.ConfigureApplicationCookie(option => { ... https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.cookies.cookieauthenticationoptions?view=aspnetcore-7.0 ... });
-            
+
             // When you request an ICheepRepository in your application, ASP.NET Core's dependency injection system will 
             // create an instance of CheepRepository and provide it to you.
             services.AddScoped<ICheepRepository, CheepRepository>();

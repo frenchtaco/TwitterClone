@@ -35,7 +35,7 @@ public class DatabaseContext : IdentityDbContext<Author>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Author>(entity => 
+        modelBuilder.Entity<Author>(entity =>
         {
             entity.ToTable("Authors");
             entity.HasKey(a => a.Id);
@@ -44,7 +44,7 @@ public class DatabaseContext : IdentityDbContext<Author>
             // ... more config ... 
         });
 
-        modelBuilder.Entity<Cheep>(entity => 
+        modelBuilder.Entity<Cheep>(entity =>
         {
             entity.ToTable("Cheeps");
             entity.Property(cheep => cheep.Text).HasMaxLength(160);
@@ -56,13 +56,15 @@ public class DatabaseContext : IdentityDbContext<Author>
         modelBuilder.Entity<Author>().ToTable("Authors");
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        string databasePath = Path.Combine(Path.GetTempPath(), "chirp.db");
-        Console.WriteLine("Database Path: " + databasePath);    // [REMOVE-DEV] 
+    //Beleive this is uneccesary the Dbcontext is configured in Startup.cs
+    /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+     {
+         string databasePath = Path.Combine(Path.GetTempPath(), "chirp.db");
+         Console.WriteLine("Database Path: " + databasePath);    // [REMOVE-DEV] 
 
-        if(!File.Exists(databasePath)) Console.WriteLine("The database file does NOT exist");
+         if(!File.Exists(databasePath)) Console.WriteLine("The database file does NOT exist");
 
-        optionsBuilder.UseSqlite($"Data Source={databasePath}");
-    }
+         optionsBuilder.UseSqlite($"Data Source={databasePath}");
+     }
+     */
 }

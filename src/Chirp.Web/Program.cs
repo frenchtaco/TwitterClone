@@ -17,9 +17,9 @@ using Chirp.StartUp;
 
 namespace Chirp.MainApp;
 
-public class Program 
+public class Program
 {
-    public static void Main(string[] args) 
+    public static void Main(string[] args)
     {
         IHost server = CreateNewServerBuilder(args).Build();
 
@@ -33,24 +33,21 @@ public class Program
         using (var scope = server.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
-                try
-                {
-                    var context = services.GetRequiredService<DatabaseContext>();
+            try
+            {
+                var context = services.GetRequiredService<DatabaseContext>();
 
-                    if(!context.Database.EnsureCreated()) {
-                        Console.WriteLine("Database was not found so creating a new one");
-                    } 
-                    else 
-                    {
-                       Console.WriteLine("Database already exists"); 
-                    }
+                // Apply migrations and create the database if it doesn't exist
+                context.Database.Migrate();
 
-                    DbInitializer.SeedDatabase(context);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Migration and or Database Seeding Error: " + e.Message);
-                }
+                Console.WriteLine("Database connected successfully");
+
+                DbInitializer.SeedDatabase(context);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Migration and or Database Seeding Error: " + e.Message);
+            }
         }
     }
 
