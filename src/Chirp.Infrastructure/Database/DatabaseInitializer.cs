@@ -713,13 +713,8 @@ public static class DbInitializer
             a11.Cheeps = new List<Cheep>() { c656 };
             a12.Cheeps = new List<Cheep>() { c657 };
 
-            Console.WriteLine("Initialized the Cheeps lists");
-
-
             chirpContext.Authors.AddRange(authors);
             chirpContext.Cheeps.AddRange(cheeps);
-
-            Console.WriteLine("Added Range for cheeps and authors");
 
             try
             {
@@ -730,8 +725,6 @@ public static class DbInitializer
 
                 chirpContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [Cheeps] ON");
 
-                Console.WriteLine("IDENTITY_INSERT SHOULD BE SET ON NOW");
-
                 int numEntriesWritten = chirpContext.SaveChanges();
 
                 Console.WriteLine("numEntriesWritten: " + numEntriesWritten + ". And saved changes");
@@ -739,7 +732,7 @@ public static class DbInitializer
 
                 chirpContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [Cheeps] OFF");
 
-                if (numEntriesWritten <= 0)
+                if (numEntriesWritten > 0)
                 {
                     Console.WriteLine("Changes successfully written to Azure SQL Database");
                     return;
