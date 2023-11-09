@@ -6,6 +6,7 @@
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
     var numPages = Math.Ceiling((double)Model.totalCheeps / Model.cheepsPerPage);
+    var currPage = @Model.PageNumber;
 }
 <div>
     <div>
@@ -15,7 +16,8 @@
             <div id="post-cheep-container">
                 <label asp-for="CheepText" class="form-label">Hey @User.Identity?.Name! What's on your mind?</label>
                 <input asp-for="CheepText" class="form-control" aria-required="true" />
-            </div>            
+                <span asp-validation-for="CheepText" class="text-danger"></span>
+            </div>
             <div id="post-cheep-button-wrapper">
                 <button id="post-cheep-button" type="submit" class="w-100 btn btn-lg btn-primary">Post Cheep!</button>
             </div>
@@ -60,5 +62,6 @@
             <a href="/?page=@i">@i</a>
         }
     </div>
-
 </div>
+
+

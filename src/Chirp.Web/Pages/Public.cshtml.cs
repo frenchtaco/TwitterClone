@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Chirp.Models;
 using Chirp.Interfaces;
 using Chirp.CDTO;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Chirp.Web.Pages;
 
@@ -13,21 +15,25 @@ public class PublicModel : PageModel
 {
     private readonly ILogger<PublicModel> _logger;
     private readonly ICheepRepository _cheepRepository;
-    private readonly IAuthorRepository _authorRepository;
     private readonly UserManager<Author> _userManager;
+    
     public List<Cheep> Cheeps { get; set; } = null!;
     public int totalCheeps;
     public int cheepsPerPage;
 
-    public PublicModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository, UserManager<Author> userManager, ILogger<PublicModel> logger)
+    public int PageNumber { get; set; }
+
+    public PublicModel(ICheepRepository cheepRepository, UserManager<Author> userManager, ILogger<PublicModel> logger)
     {
         _cheepRepository = cheepRepository;
-        _authorRepository = authorRepository;
         _userManager = userManager;
         _logger = logger;
 
         cheepsPerPage = cheepRepository.CheepsPerPage();
     }
+
+    [BindProperty, Required(ErrorMessage="Cheep must be between 1-to-160 characters"), StringLength(160, MinimumLength = 1)]
+    public string? CheepText { get; set; } = "";
 
     public async Task<IActionResult> OnGet([FromQuery] int page)
     {        
@@ -40,16 +46,12 @@ public class PublicModel : PageModel
         return Page();
     }
 
-
-    [BindProperty]
-    public string CheepText { get; set; }
-
-    [BindProperty(SupportsGet = true)]
-    public int PageNumber { get; set; } = 1;
     public async Task<IActionResult> OnPostAsync([FromQuery] int? page) 
     {
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid) return Page();
+        if (CheepText == null) 
         {
+            ModelState.AddModelError(string.Empty, "Cheep was too short.");
             return Page();
         }
 

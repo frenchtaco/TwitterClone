@@ -57,7 +57,6 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            _logger.LogInformation("[LOG-IN] Ready login!");
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -86,7 +85,13 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 var user = await _userManager.FindByNameAsync(Input.UserName);
 
-                _logger.LogInformation($"Entered main 'if-statement' and located user is: {user.UserName}");
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "User not found. Ya sure you registered your account?");
+                    return Page();
+                }
+
+                _logger.LogInformation($"[LOG-IN] Entered main 'if-statement' and located user is: {user.UserName}");
                 
                 if (result.Succeeded)
                 {
