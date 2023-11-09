@@ -45,11 +45,21 @@ namespace Chirp.StartUp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DatabaseContext>(options =>
-     options.UseSqlServer(
-         _configuration.GetConnectionString("DefaultConnection"),
-         b => b.MigrationsAssembly("Chirp.Web")
-     )
- );
+                options.UseSqlServer(
+                    _configuration.GetConnectionString("DefaultConnection"),
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.MigrationsAssembly("Chirp.Web");
+                        sqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 10,
+                            maxRetryDelay: TimeSpan.FromSeconds(30),
+                            errorNumbersToAdd: null);
+                    }
+                )
+            );
+
+
+
 
 
             services.AddDefaultIdentity<Author>(options =>
