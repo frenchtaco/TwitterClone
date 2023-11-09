@@ -45,9 +45,12 @@ namespace Chirp.StartUp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DatabaseContext>(options =>
-            {
-                _ = options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")) ?? throw new InvalidOperationException("Connection string was invalid.");
-            });
+     options.UseSqlServer(
+         _configuration.GetConnectionString("DefaultConnection"),
+         b => b.MigrationsAssembly("Chirp.Web")
+     )
+ );
+
 
             services.AddDefaultIdentity<Author>(options =>
             {
