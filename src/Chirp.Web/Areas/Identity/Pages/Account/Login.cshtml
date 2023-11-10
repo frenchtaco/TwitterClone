@@ -1,4 +1,4 @@
-﻿@page "Identity/Account/Login"
+﻿@page
 @model LoginModel
 
 @{
@@ -14,7 +14,7 @@
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="hogsnarfer223" />
+                    <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="username" />
                     <label asp-for="Input.UserName" class="form-label">Username</label>
                     <span asp-validation-for="Input.UserName" class="text-danger"></span>
                 </div>

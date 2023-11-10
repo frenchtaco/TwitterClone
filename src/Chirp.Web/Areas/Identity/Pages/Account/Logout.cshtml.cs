@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 
 using Chirp.Models;
 
-
 namespace Chirp.Web.Areas.Identity.Pages.Account
 {
     public class LogoutModel : PageModel
