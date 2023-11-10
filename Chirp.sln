@@ -6,7 +6,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E00892AA-80F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1C9EFA03-6835-41D8-BC38-7AF6EDE610CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI.Tests", "tests\Chirp.Tests\Chirp.CLI.Tests.csproj", "{C6E4F100-C9F5-4622-AAB4-E00DCC0E565A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Tests", "tests\Chirp.Tests\Chirp.Tests.csproj", "{C6E4F100-C9F5-4622-AAB4-E00DCC0E565A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Core", "src\Chirp.Core\Chirp.Core.csproj", "{D8816755-ACC6-4076-92AC-DCEEED398AA5}"
 EndProject
