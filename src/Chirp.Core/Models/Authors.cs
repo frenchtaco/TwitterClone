@@ -1,12 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Models
 {
     [Table("Authors")]
     public class Author : IdentityUser
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Author ID")]
         public int AuthorId { get; set; }   // [TODO]: Make this 'override' the attribute from 'IdentityUser'
 

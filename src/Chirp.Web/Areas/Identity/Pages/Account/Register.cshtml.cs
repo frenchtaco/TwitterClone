@@ -96,56 +96,55 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (ModelState.IsValid)
+
+            try
             {
-                var existingUserWithUsername = await _userManager.FindByNameAsync(Input.UserName);
-                var existingUserWithEmail = await _userManager.FindByEmailAsync(Input.Email);
-
-                if (existingUserWithUsername != null)
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError(string.Empty, "The username is already in use.");
-                    return Page();
-                }
+                    var existingUserWithUsername = await _userManager.FindByNameAsync(Input.UserName);
+                    var existingUserWithEmail = await _userManager.FindByEmailAsync(Input.Email);
 
-                if (existingUserWithEmail != null)
-                {
-                    ModelState.AddModelError(string.Empty, "The email address is already in use.");
-                    return Page();
-                }
-
-                var user = new Author
-                {
-                    UserName = Input.UserName,
-                    Email = Input.Email,
-                    Cheeps = new List<Cheep>(),
-                    EmailConfirmed = true,
-                };
-                
-                var result = await _userManager.CreateAsync(user, Input.Password);
-
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation($"User {Input.UserName} created a new account with password.");
-
-                    AuthorDTO authorDTO = new(Input.UserName, Input.Email);
-
-                    // [TODO] Debug this further...
-                    if(_authorRepository.GetAuthorByName(Input.UserName) == null) 
+                    if (existingUserWithUsername != null)
                     {
-                        _logger.LogInformation("Author was null");
-                        _authorRepository.CreateNewAuthor(authorDTO);
-                    } else { _logger.LogInformation("Author was NOT null"); }
+                        ModelState.AddModelError(string.Empty, "The username is already in use.");
+                        return Page();
+                    }
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
-                }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    if (existingUserWithEmail != null)
+                    {
+                        ModelState.AddModelError(string.Empty, "The email address is already in use.");
+                        return Page();
+                    }
+
+                    var user = new Author
+                    {
+                        UserName = Input.UserName,
+                        Email = Input.Email,
+                        Cheeps = new List<Cheep>(),
+                        EmailConfirmed = true,
+                    };
+                    
+                    var result = await _userManager.CreateAsync(user, Input.Password);
+
+                    if (result.Succeeded)
+                    {
+                        AuthorDTO authorDTO = new(Input.UserName, Input.Email);
+                        
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        return LocalRedirect(returnUrl);
+                    }
+
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
                 }
             }
-
-            // If we got this far, something failed, redisplay form
+            catch(Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToPage("/Error");
+            }
             return Page();
         }
 
