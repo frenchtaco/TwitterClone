@@ -34,9 +34,11 @@ public class PublicModel : PageModel
     [BindProperty, Required(ErrorMessage="Cheep must be between 1-to-160 characters"), StringLength(160, MinimumLength = 1)]
     public string CheepText { get; set; } = "";
 
-    public async Task<IActionResult> OnGet([FromQuery] int page)
+    public async Task<IActionResult> OnGet([FromQuery] int? page)
     {   
-        IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(page);
+        int pageNumber = page ?? 0;
+        if (pageNumber > 0) pageNumber--;
+        IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(pageNumber);
         Cheeps = cheeps.ToList();
 
         IEnumerable<Cheep> allCheeps = await _cheepRepository.GetAllCheeps();
