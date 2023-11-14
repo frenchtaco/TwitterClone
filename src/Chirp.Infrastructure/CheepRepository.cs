@@ -1,16 +1,25 @@
+using Microsoft.EntityFrameworkCore;
+
 using Chirp.Interfaces;
 using Chirp.Models;
 using DBContext;
-using Microsoft.EntityFrameworkCore;
+using Chirp.CDTO;
+using Chirp.ADTO;
+using Microsoft.Extensions.Logging;
+
 namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository
 {
-    private readonly DatabaseContext context;
+    private readonly ILogger<CheepRepository> _logger;
+    private readonly DatabaseContext _context;
+    private readonly IAuthorRepository _authorRepository;
 
-    public CheepRepository(DatabaseContext _context)
+    public CheepRepository(DatabaseContext context, IAuthorRepository authorRepository, ILogger<CheepRepository> logger)
     {
-        context = _context;
+        _logger = logger;
+        _context = context;
+        _authorRepository = authorRepository;
     }
 
     public int CheepsPerPage() 
@@ -18,14 +27,9 @@ public class CheepRepository : ICheepRepository
         return 32;
     }
 
-    public void CreateCheep(Cheep cheep)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<IEnumerable<Cheep>> GetCheeps(int page)
     {
-        return await context.Cheeps
+        return await _context.Cheeps
             .Include(cheep => cheep.Author)
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip(page * CheepsPerPage())
@@ -35,7 +39,7 @@ public class CheepRepository : ICheepRepository
     
     public async Task<IEnumerable<Cheep>> GetAllCheeps()
     {
-        return await context.Cheeps
+        return await _context.Cheeps
             .Include(cheep => cheep.Author)
             .OrderByDescending(cheep => cheep.TimeStamp)
             .ToListAsync();
@@ -43,7 +47,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task<IEnumerable<Cheep>> GetCheepsFromAuthor(string author, int page)
     {
-        return await context.Cheeps
+        return await _context.Cheeps
             .Include(cheep => cheep.Author)
             .Where(cheep => cheep.Author.UserName == author)
             .OrderByDescending(cheep => cheep.TimeStamp)
@@ -54,10 +58,34 @@ public class CheepRepository : ICheepRepository
 
     public async Task<IEnumerable<Cheep>> GetAllCheepsFromAuthor(string author)
     {
-        return await context.Cheeps
+        return await _context.Cheeps
             .Include(cheep => cheep.Author)
             .Where(cheep => cheep.Author.UserName == author)
             .OrderByDescending(cheep => cheep.TimeStamp)
             .ToListAsync();
+    }
+
+    public async void CreateCheep(CheepDTO cheepDTO)
+    {
+        var author = await _authorRepository.GetAuthorByName(cheepDTO.Author) ?? throw new Exception("Author was NULL");
+        
+        _logger.LogInformation($"[POST] Located author is {author.UserName}");
+
+        Cheep newCheep = new()
+        {
+            Author = author,
+            Text = cheepDTO.Text,
+            TimeStamp = DateTime.UtcNow,
+        };
+
+        if(author.Cheeps == null) 
+        {
+            author.Cheeps = new List<Cheep>();
+            _logger.LogInformation("Authors Cheeps was null");
+        }
+
+        author.Cheeps.Add(newCheep);
+        _context.Cheeps.Add(newCheep);
+        _context.SaveChanges();
     }
 }

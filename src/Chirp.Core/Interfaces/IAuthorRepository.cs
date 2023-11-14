@@ -1,8 +1,11 @@
 using Chirp.Models;
+using Chirp.ADTO;
+
 namespace Chirp.Interfaces;
 
 public interface IAuthorRepository
 {
-    public void CreateNewAuthor(Author author);
-    public Task<Author> GetAuthor(string name); 
+    public void CreateNewAuthor(AuthorDTO authorDTO);
+    public Task<Author> GetAuthorByName(string name); 
+
 }

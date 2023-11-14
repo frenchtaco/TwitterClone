@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 
 using Chirp.Models;
 
-
 namespace Chirp.Web.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
@@ -26,7 +25,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
         private readonly UserManager<Author> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<Author> signInManager, UserManager<Author> userManager, ILogger<LoginModel> logger)
+        public LoginModel(UserManager<Author> userManager, SignInManager<Author> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -81,28 +80,33 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var signInResult = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 var user = await _userManager.FindByNameAsync(Input.UserName);
 
-                // [TODO] Change to switch case:
-                if (signInResult.Succeeded)
+                if (user == null)
                 {
-                    _logger.LogInformation($"[LOG-IN] User {Input.UserName} logged in.");
-                    return LocalRedirect(returnUrl);
+                    ModelState.AddModelError(string.Empty, "User not found. Ya sure you registered your account?");
+                    return Page();
                 }
-                else if (signInResult.RequiresTwoFactor)
+                
+                if (result.Succeeded)
                 {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                    return RedirectToPage("/Public");
                 }
-                else if (signInResult.IsLockedOut)
+                else if (result.RequiresTwoFactor)
                 {
-                    _logger.LogWarning("[LOG-IN] User account locked out of page.");
+                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, Input.RememberMe });
+                }
+                else if (result.IsLockedOut)
+                {
+                    _logger.LogWarning("[LOG-IN] User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
-                else if(signInResult.IsNotAllowed)
+                else if(result.IsNotAllowed)
                 {
-                    string userNotAllowed_msg = "Invalid Login Attempt - User is not permitted";
-                    _logger.LogInformation($"[LOG-IN] User '{Input.UserName}' is not allowed to sign in.");
+                    string userNotAllowed_msg = "User is not allowed";
 
                     if(!await _userManager.IsEmailConfirmedAsync(user)) 
                     {
@@ -110,12 +114,10 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     }
 
                     ModelState.AddModelError(string.Empty, userNotAllowed_msg);
-                    return Page();
                 }
                 else
                 {
-                    _logger.LogInformation($"User '{Input.UserName}' login failed: {signInResult}");
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt - Information incorrect");
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }
             }

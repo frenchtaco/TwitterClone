@@ -35,13 +35,13 @@ public class DatabaseContext : IdentityDbContext<Author>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Author>(entity =>
+
+        // [Try to move all of this to Entities and use Data Annotations]
+        modelBuilder.Entity<Author>(entity => 
+
         {
             entity.ToTable("Authors");
-            entity.HasKey(a => a.Id);
             entity.HasIndex(a => a.Email).IsUnique();
-            //entity.Property(a => a.UserName).HasMaxLength(20); (Needs to match with Registration Limit)
-            // ... more config ... 
         });
 
         modelBuilder.Entity<Cheep>(entity =>
@@ -49,11 +49,6 @@ public class DatabaseContext : IdentityDbContext<Author>
             entity.ToTable("Cheeps");
             entity.Property(cheep => cheep.Text).HasMaxLength(160);
         });
-
-
-
-        modelBuilder.Entity<Cheep>().ToTable("Cheeps");
-        modelBuilder.Entity<Author>().ToTable("Authors");
     }
 
     //Beleive this is uneccesary the Dbcontext is configured in Startup.cs

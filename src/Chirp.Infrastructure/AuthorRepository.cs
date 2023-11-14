@@ -1,24 +1,41 @@
 using Chirp.Interfaces;
 using Chirp.Models;
 using DBContext;
+using Chirp.ADTO;
+using Microsoft.EntityFrameworkCore;
+
 namespace Chirp.Infrastructure;
 
 public class AuthorRepository : IAuthorRepository
 {
-    private readonly DatabaseContext context;
+    private readonly DatabaseContext _context;
 
-    public AuthorRepository(DatabaseContext _context)
+    public AuthorRepository(DatabaseContext context)
     {
-        context = _context;
+        _context = context;
     }
 
-    public void CreateNewAuthor(Author author)
+    public void CreateNewAuthor(AuthorDTO authorDTO)
     {
-        throw new NotImplementedException();
+        Author author = new()
+        {
+            UserName = authorDTO.UserName,
+            Email = authorDTO.Email,
+            Cheeps = new List<Cheep>(),
+            EmailConfirmed = true,
+        };
+
+        _context.Authors.Add(author);
+        _context.SaveChanges();
     }
 
-    public Task<Author> GetAuthor(string name)
+    public async Task<Author> GetAuthorByName(string authorName)
     {
-        throw new NotImplementedException();
+        var author = await _context.Authors
+        .Where(a => a.UserName == authorName)
+        .FirstOrDefaultAsync() ?? null;
+
+        return author;
     }
+
 }

@@ -1,10 +1,36 @@
 ﻿@page "/"
 @model Chirp.Web.Pages.PublicModel
+@inject SignInManager<Author> SignInManager
+@inject UserManager<Author> UserManager
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
+    var numPages = Math.Ceiling((double)Model.totalCheeps / Model.cheepsPerPage);
+    var currPage = @Model.PageNumber;
 }
 <div>
+    <div>
+    @if(SignInManager.IsSignedIn(User))
+    {
+        <form method="post">
+            <div id="post-cheep-container">
+                <label asp-for="CheepText" class="form-label">Hey @User.Identity?.Name! What's on your mind?</label>
+                <input asp-for="CheepText" class="form-control" aria-required="true" />
+                <span asp-validation-for="CheepText" class="text-danger"></span>
+            </div>
+            <div id="post-cheep-button-wrapper">
+                <button id="post-cheep-button" type="submit" class="w-100 btn btn-lg btn-primary">Post Cheep!</button>
+            </div>
+        </form>
+    } 
+    else
+    {
+        <p>Wanna Cheep? Click <a asp-area="Identity" asp-page="/Account/Login">here</a> to log in.</p>
+    }
+    </div>
+
+
+
     <h2> Public Timeline </h2>
 
     @if (Model.Cheeps.Any())
@@ -12,15 +38,17 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                <li>
-                    <p>
-                        <strong>
-                            <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
-                        </strong>
-                        @cheep.Text
-                        <small>&mdash; @cheep.TimeStamp</small>
-                    </p>
-                </li>
+                <div class="cheep-wrapper">
+                    <li>
+                        <p>
+                            <strong>
+                                <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
+                            </strong>
+                            @cheep.Text
+                            <small>&mdash; @cheep.TimeStamp</small>
+                        </p>
+                    </li>
+                </div>
             }
         </ul>
     }
@@ -31,10 +59,13 @@
     }
 
     <div class="pagination">
-        @for (int i = 1; i <= Math.Ceiling((double)Model.totalCheeps / Model.cheepsPerPage); i++)
+        @for (int i = 1; i <= numPages; i++)
         {
             <a href="/?page=@i">@i</a>
         }
     </div>
-
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -6,30 +6,6 @@ using Chirp.Interfaces;
 using Chirp.Models;
 using DBContext;
 
-/*
-    @DESCRIPTION:
-        - The 'Startup.cs' file is an industry standard throughout many C# projects.
-        - The aim of the file is to encapsulate the applicatins services and middleware being injected on start up.
-        - The file is divide into 2 sections:
-                01. Configure Services:
-                    -> Used to configure Depedency Injection
-                02. Configure Middle:
-                    -> Used to inject Middleware into the Request Pipeline - [https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-7.0]
-    
-        - Both of these sections perform Dependecy Injection (DI). 
-            -> The core aim of DI is to "Inversion of Control" a design principle wherein classes are designed to recieve objects rather
-               than instantiate it within the class, allowing for loose coupling between objects.
-            -> The resulting applications are more testable, modular, and maintainable as a result.
-            -> Example: [https://stackoverflow.com/questions/3058/what-is-inversion-of-control].
-
-        - For future reference - OAuth, Cookies and JWT Security [https://fusionauth.io/blog/securing-asp-netcore-razor-pages-app-with-oauth]
-*/
-
-
-/*
-    if(SignInManager.IsSignedIn)
-
-*/
 
 namespace Chirp.StartUp
 {
@@ -64,6 +40,7 @@ namespace Chirp.StartUp
 
             services.AddDefaultIdentity<Author>(options =>
             {
+
                 // Sign-in Procedure [This has been disabled during Development-Phase]:
                 options.SignIn.RequireConfirmedAccount = false;                     // Default is: true
                 options.SignIn.RequireConfirmedEmail = false;                       // Default is: true
@@ -82,18 +59,27 @@ namespace Chirp.StartUp
 
                 // Users:
                 options.User.RequireUniqueEmail = true;                             // Default is: true [..this was a massive pain in the ass...]
+
             })
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<DatabaseContext>();
+            .AddEntityFrameworkStores<DatabaseContext>()
+            .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options => 
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20); // TimeSpan.FromMinutes(5);
+                
+                options.LoginPath = "/Identity/Account/Login";
+                options.LogoutPath = "/Identity/Account/Logout";
+                //options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
 
             services.AddRazorPages();
 
-            // services.ConfigureApplicationCookie(option => { ... https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.cookies.cookieauthenticationoptions?view=aspnetcore-7.0 ... });
 
-            // When you request an ICheepRepository in your application, ASP.NET Core's dependency injection system will 
-            // create an instance of CheepRepository and provide it to you.
             services.AddScoped<ICheepRepository, CheepRepository>();
-            //services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -113,7 +99,7 @@ namespace Chirp.StartUp
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

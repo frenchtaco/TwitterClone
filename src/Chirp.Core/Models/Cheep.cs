@@ -10,6 +10,8 @@ namespace Chirp.Models
         [Key]
         public int CheepId { get; set; }
         public required Author Author { get; set; }
+        
+        [StringLength(160, MinimumLength = 1)]
         public required string Text { get; set; }
         [DataType(DataType.Date)]
         public required DateTime TimeStamp { get; set; }
