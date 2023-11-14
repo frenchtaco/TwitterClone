@@ -38,15 +38,17 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                <li>
-                    <p>
-                        <strong>
-                            <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
-                        </strong>
-                        @cheep.Text
-                        <small>&mdash; @cheep.TimeStamp</small>
-                    </p>
-                </li>
+                <div class="cheep-wrapper">
+                    <li>
+                        <p>
+                            <strong>
+                                <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
+                            </strong>
+                            @cheep.Text
+                            <small>&mdash; @cheep.TimeStamp</small>
+                        </p>
+                    </li>
+                </div>
             }
         </ul>
     }
@@ -64,4 +66,6 @@
     </div>
 </div>
 
-
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

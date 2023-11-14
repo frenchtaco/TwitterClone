@@ -90,17 +90,14 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, "User not found. Ya sure you registered your account?");
                     return Page();
                 }
-
-                _logger.LogInformation($"[LOG-IN] Entered main 'if-statement' and located user is: {user.UserName}");
                 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("[LOG-IN] User logged in.");
                     return RedirectToPage("/Public");
                 }
                 else if (result.RequiresTwoFactor)
                 {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, Input.RememberMe });
                 }
                 else if (result.IsLockedOut)
                 {
@@ -109,8 +106,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 }
                 else if(result.IsNotAllowed)
                 {
-                    string userNotAllowed_msg = "Invalid Login Attempt - User is not permitted";
-                    _logger.LogInformation($"[LOG-IN] User '{Input.UserName}' is not allowed to sign in.");
+                    string userNotAllowed_msg = "User is not allowed";
 
                     if(!await _userManager.IsEmailConfirmedAsync(user)) 
                     {

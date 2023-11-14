@@ -35,6 +35,7 @@ public class DatabaseContext : IdentityDbContext<Author>
     {
         base.OnModelCreating(modelBuilder);
 
+        // [Try to move all of this to Entities and use Data Annotations]
         modelBuilder.Entity<Author>(entity => 
         {
             entity.ToTable("Authors");

@@ -20,7 +20,6 @@ public class PublicModel : PageModel
     public List<Cheep> Cheeps { get; set; } = null!;
     public int totalCheeps;
     public int cheepsPerPage;
-
     public int PageNumber { get; set; }
 
     public PublicModel(ICheepRepository cheepRepository, UserManager<Author> userManager, ILogger<PublicModel> logger)
@@ -33,10 +32,10 @@ public class PublicModel : PageModel
     }
 
     [BindProperty, Required(ErrorMessage="Cheep must be between 1-to-160 characters"), StringLength(160, MinimumLength = 1)]
-    public string? CheepText { get; set; } = "";
+    public string CheepText { get; set; } = "";
 
     public async Task<IActionResult> OnGet([FromQuery] int page)
-    {        
+    {   
         IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(page);
         Cheeps = cheeps.ToList();
 
@@ -48,21 +47,27 @@ public class PublicModel : PageModel
 
     public async Task<IActionResult> OnPostAsync([FromQuery] int? page) 
     {
-        if (!ModelState.IsValid) return Page();
-        if (CheepText == null) 
+        try
         {
-            ModelState.AddModelError(string.Empty, "Cheep was too short.");
-            return Page();
+            if(ModelState.IsValid) {
+                var currUser = await _userManager.GetUserAsync(User) ?? throw new Exception("ERROR: User could not be found");
+
+                CheepDTO cheepDTO = new(CheepText, currUser.UserName);
+
+                _cheepRepository.CreateCheep(cheepDTO);
+
+                int pageNumber = page ?? 1;
+
+                return RedirectToPage("Public", new { page = pageNumber });
+            }
+            // [TODO] Add a handler for "if(!ModelState.IsValid)"
+        }
+        catch(Exception ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+            return RedirectToPage("/Error");
         }
 
-        var currUser = await _userManager.GetUserAsync(User) ?? throw new Exception("ERROR: User could not be found");
-
-        CheepDTO cheepDTO = new(CheepText, currUser.UserName);
-
-        _cheepRepository.CreateCheep(cheepDTO);
-
-        int pageNumber = page ?? 1;
-
-        return RedirectToPage("Public", new { page = pageNumber });
+        return Page();
     }
 }
