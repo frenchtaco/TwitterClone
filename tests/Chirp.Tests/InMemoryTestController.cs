@@ -51,9 +51,9 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
         IEnumerable<Cheep> cheeps = await repository.GetAllCheeps();
 
         Assert.Collection(
-            cheeps,
-            cheep => Assert.Equal("Third cheep", cheep.Text),
+            cheeps.Reverse(),
+            cheep => Assert.Equal("First cheep", cheep.Text),
             cheep => Assert.Equal("Second cheep", cheep.Text),
-            cheep => Assert.Equal("First cheep", cheep.Text));
+            cheep => Assert.Equal("Third cheep", cheep.Text));
     }
 }
