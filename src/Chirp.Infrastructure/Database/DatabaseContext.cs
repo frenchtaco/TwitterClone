@@ -35,28 +35,31 @@ public class DatabaseContext : IdentityDbContext<Author>
     {
         base.OnModelCreating(modelBuilder);
 
+
         // [Try to move all of this to Entities and use Data Annotations]
         modelBuilder.Entity<Author>(entity => 
+
         {
             entity.ToTable("Authors");
             entity.HasIndex(a => a.Email).IsUnique();
         });
 
-        modelBuilder.Entity<Cheep>(entity => 
+        modelBuilder.Entity<Cheep>(entity =>
         {
             entity.ToTable("Cheeps");
             entity.Property(cheep => cheep.Text).HasMaxLength(160);
         });
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        string databasePath = Path.Combine(Path.GetTempPath(), "chirp.db");
-        Console.WriteLine("Database Path: " + databasePath);    // [REMOVE-DEV] 
+    //Beleive this is uneccesary the Dbcontext is configured in Startup.cs
+    /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+     {
+         string databasePath = Path.Combine(Path.GetTempPath(), "chirp.db");
+         Console.WriteLine("Database Path: " + databasePath);    // [REMOVE-DEV] 
 
-        if(!File.Exists(databasePath)) Console.WriteLine("The database file does NOT exist");
-        else Console.WriteLine("The database file does exist");
+         if(!File.Exists(databasePath)) Console.WriteLine("The database file does NOT exist");
 
-        optionsBuilder.UseSqlite($"Data Source={databasePath}");
-    }
+         optionsBuilder.UseSqlite($"Data Source={databasePath}");
+     }
+     */
 }

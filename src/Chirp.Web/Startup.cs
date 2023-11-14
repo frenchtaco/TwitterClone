@@ -20,15 +20,46 @@ namespace Chirp.StartUp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DatabaseContext>(options => {
-                _ = options.UseSqlite(_configuration.GetConnectionString("DefaultConnection")) ?? throw new InvalidOperationException("Connection string was invalid.");
-            });
+            services.AddDbContext<DatabaseContext>(options =>
+                options.UseSqlServer(
+                    _configuration.GetConnectionString("DefaultConnection"),
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.MigrationsAssembly("Chirp.Web");
+                        sqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 10,
+                            maxRetryDelay: TimeSpan.FromSeconds(30),
+                            errorNumbersToAdd: null);
+                    }
+                )
+            );
 
-            services.AddDefaultIdentity<Author>(options => 
+
+
+
+
+            services.AddDefaultIdentity<Author>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = false;                  
-                options.SignIn.RequireConfirmedEmail = false;                       
-                options.User.RequireUniqueEmail = true;                             
+
+                // Sign-in Procedure [This has been disabled during Development-Phase]:
+                options.SignIn.RequireConfirmedAccount = false;                     // Default is: true
+                options.SignIn.RequireConfirmedEmail = false;                       // Default is: true
+
+                // Lock Mechanism: [NOT ACTIVE DURING DEVELOPMENT]
+                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Sets the maximum amount of "Lock-Out" time.
+                //options.Lockout.MaxFailedAccessAttempts = 5;                      // Sets the maximum number of failed attempts.
+
+                // Password:
+                options.Password.RequireDigit = false;                              // Default is: true
+                options.Password.RequireLowercase = false;                          // Default is: true
+                options.Password.RequireNonAlphanumeric = false;                    // Default is: true
+                options.Password.RequireUppercase = false;                          // Default is: true
+                options.Password.RequiredLength = 6;                                // Default is: 6
+                options.Password.RequiredUniqueChars = 1;                           // Default is: 1
+
+                // Users:
+                options.User.RequireUniqueEmail = true;                             // Default is: true [..this was a massive pain in the ass...]
+
             })
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
@@ -45,6 +76,7 @@ namespace Chirp.StartUp
             });
 
             services.AddRazorPages();
+
 
             services.AddScoped<ICheepRepository, CheepRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
