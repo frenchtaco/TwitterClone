@@ -19,7 +19,8 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
 
         using var context = new DatabaseContext(_contextOptions);
 
-        if (context.Database.EnsureCreated())
+        context.Database.EnsureCreated(); //Can use template below to create a view for later queries.
+        /*if (context.Database.EnsureCreated())
         {
             using var viewCommand = context.Database.GetDbConnection().CreateCommand();
             viewCommand.CommandText = @"
@@ -27,7 +28,7 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
                 SELECT Text
                 FROM Cheeps;";
             viewCommand.ExecuteNonQuery();
-        }
+        }*/
         
         context.AddRange(
             new Cheep { CheepId = 1, Author = new Author() { AuthorId = 1, Email = "author1@id.com", UserName = "AuthorName1"}, Text = "First cheep", TimeStamp = DateTime.Now },
