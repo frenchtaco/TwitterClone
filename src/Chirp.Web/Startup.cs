@@ -5,19 +5,17 @@ using Chirp.Infrastructure;
 using Chirp.Interfaces;
 using Chirp.Models;
 using DBContext;
-using Microsoft.Data.SqlClient;
-
 
 namespace Chirp.StartUp
 {
     public class Startup
     {
-        public IConfiguration _configuration { get; }
+        private IConfiguration _configuration { get; set; }
+        private IWebHostEnvironment _env { get; set; }
 
-
-
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
+            _env    = env;
             _configuration = configuration;
         }
 
@@ -49,11 +47,20 @@ namespace Chirp.StartUp
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
 
-
-            SqlConnectionStringBuilder sqlConnectionString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("DefaultConnection"));
             services.AddDbContext<DatabaseContext>(options =>
             {
-                options.UseSqlServer(sqlConnectionString.ConnectionString);
+                if(_env.IsDevelopment())
+                {
+                    Console.WriteLine("ENVIRONMENT == DEVELOPMENT");
+                    string databasePath = Path.Combine(Path.GetTempPath(), "chirp.db");
+                    options.UseSqlite($"Data Source={databasePath}");
+                }
+                else if(_env.IsProduction())
+                {
+                    Console.WriteLine("ENVIRONMENT == PRODUCTION");
+                    string connectionString = _configuration.GetConnectionString("DefaultConnection") ?? throw new Exception("'ConnectionString' could not be located");
+                    options.UseSqlServer(connectionString);
+                }
             });
 
             services.ConfigureApplicationCookie(options =>
@@ -74,9 +81,9 @@ namespace Chirp.StartUp
             services.AddScoped<IAuthorRepository, AuthorRepository>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
             }

@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 using DBContext;
-using Chirp.Models;
 using Chirp.Data;
 using Chirp.StartUp;
 
