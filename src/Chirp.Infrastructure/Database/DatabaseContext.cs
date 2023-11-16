@@ -59,6 +59,5 @@ public class DatabaseContext : IdentityDbContext<Author>
         base.OnConfiguring(optionsBuilder);
 
         optionsBuilder.UseSqlServer(@"Server=tcp:chirpdb.database.windows.net,1433;Initial Catalog=chirpdb;Persist Security Info=False;User ID=chirpadmin;Password=E1k2m3m4v5;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-
     }
 }
