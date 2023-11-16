@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-
 using Chirp.Infrastructure;
 using Chirp.Interfaces;
 using Chirp.Models;
 using DBContext;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 namespace Chirp.StartUp
@@ -49,6 +49,20 @@ namespace Chirp.StartUp
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
 
+
+            _ = services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = "GitHub";
+            })
+            .AddCookie()
+            .AddGitHub(o =>
+            {
+                o.ClientId = _configuration["authentication.github.clientId"];
+                o.ClientSecret = _configuration["authentication.github.clientSecret"];
+                o.CallbackPath = "/signin-github";
+            });
 
             SqlConnectionStringBuilder sqlConnectionString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("DefaultConnection"));
             services.AddDbContext<DatabaseContext>(options =>
