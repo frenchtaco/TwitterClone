@@ -7,6 +7,9 @@ using DBContext;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
+//WHEN IMPLEMENTING GITHUB, WRITE THIS IN TERMINAL IF GIVES YOU A NO CLIENT ID ERR
+//dotnet user-secrets set "authentication.github.clientId" "<YOUR_CLIENTID>"
+//dotnet user-secrets set "authentication.github.clientSecret" "<YOUR_CLIENTSECRET>"
 
 namespace Chirp.StartUp
 {
