@@ -31,9 +31,9 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
         }*/
         
         context.AddRange(
-            new Cheep { CheepId = 1, Author = new Author() { AuthorId = 1, Email = "author1@id.com", UserName = "AuthorName1"}, Text = "First cheep", TimeStamp = DateTime.Now },
-            new Cheep { CheepId = 2, Author = new Author() { AuthorId = 2, Email = "author2@id.com", UserName = "AuthorName2"},Text = "Second cheep", TimeStamp = DateTime.Now },
-            new Cheep { CheepId = 3, Author = new Author() { AuthorId = 3, Email = "author3@id.com", UserName = "AuthorName3"},Text = "Third cheep", TimeStamp = DateTime.Now });
+            new Cheep { CheepId = 1, Author = new Author() { Email = "author1@id.com", UserName = "AuthorName1"}, Text = "First cheep", TimeStamp = DateTime.Now },
+            new Cheep { CheepId = 2, Author = new Author() { Email = "author2@id.com", UserName = "AuthorName2"}, Text = "Second cheep", TimeStamp = DateTime.Now },
+            new Cheep { CheepId = 3, Author = new Author() { Email = "author3@id.com", UserName = "AuthorName3"}, Text = "Third cheep", TimeStamp = DateTime.Now });
         context.SaveChanges();
         
     }
