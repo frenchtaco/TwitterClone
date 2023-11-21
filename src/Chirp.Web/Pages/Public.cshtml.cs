@@ -39,12 +39,14 @@ public class PublicModel : PageModel
     [BindProperty, Required(ErrorMessage="Cheep must be between 1-to-160 characters"), StringLength(160, MinimumLength = 1)]
     public string CheepText { get; set; } = "";
 
-    public async Task<IActionResult> OnGet([FromQuery] int? page)
+    public async Task<IActionResult> OnGet([FromQuery] int? page = 0)
     {   
         int pgNum = page ?? 0;
         
         IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(pgNum);
         Cheeps = cheeps.ToList();
+
+        _logger.LogInformation($"[ON-GET] Number of Cheeps: {Cheeps?.Count}");
 
         IEnumerable<Cheep> allCheeps = await _cheepRepository.GetAllCheeps();
         totalCheeps = allCheeps.Count();
@@ -67,6 +69,10 @@ public class PublicModel : PageModel
 
     public async Task<IActionResult> OnPostCheep([FromQuery] int? page = 0) 
     {
+        ModelState.Clear();
+        
+        int pgNum = page ?? 0;
+
         try
         {
             if(ModelState.IsValid) {
@@ -76,7 +82,11 @@ public class PublicModel : PageModel
 
                 await _cheepRepository.CreateCheep(cheepDTO);
 
-                return RedirectToPage("Public", new { page });
+                return RedirectToPage("Public", new { pgNum });
+            }
+            else if(!ModelState.IsValid)
+            {
+                //... iterate over model states
             }
         }
         catch(Exception ex)
