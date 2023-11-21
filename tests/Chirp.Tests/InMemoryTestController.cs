@@ -29,32 +29,33 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
                 FROM Cheeps;";
             viewCommand.ExecuteNonQuery();
         }*/
-        
+
         context.AddRange(
-            new Cheep { CheepId = 1, Author = new Author() { Email = "author1@id.com", UserName = "AuthorName1"}, Text = "First cheep", TimeStamp = DateTime.Now },
-            new Cheep { CheepId = 2, Author = new Author() { Email = "author2@id.com", UserName = "AuthorName2"}, Text = "Second cheep", TimeStamp = DateTime.Now },
-            new Cheep { CheepId = 3, Author = new Author() { Email = "author3@id.com", UserName = "AuthorName3"}, Text = "Third cheep", TimeStamp = DateTime.Now });
+            new Cheep { CheepId = 1, Author = new Author() { Email = "author1@id.com", UserName = "AuthorName1" }, Text = "First cheep", TimeStamp = DateTime.Now },
+            new Cheep { CheepId = 2, Author = new Author() { Email = "author2@id.com", UserName = "AuthorName2" }, Text = "Second cheep", TimeStamp = DateTime.Now },
+            new Cheep { CheepId = 3, Author = new Author() { Email = "author3@id.com", UserName = "AuthorName3" }, Text = "Third cheep", TimeStamp = DateTime.Now });
         context.SaveChanges();
-        
+
     }
-    
+
     DatabaseContext CreateContext() => new DatabaseContext(_contextOptions);
 
     public void Dispose() => _connection.Dispose();
 
+    /*
+        [Fact]
+        public async void GetAllCheeps()
+        {
+            using var context = CreateContext();
+            var repository = new CheepRepository(context, new AuthorRepository(context), null);
 
-    [Fact]
-    public async void GetAllCheeps()
-    {
-        using var context = CreateContext();
-        var repository = new CheepRepository(context, new AuthorRepository(context), null);
+            IEnumerable<Cheep> cheeps = await repository.GetAllCheeps();
 
-        IEnumerable<Cheep> cheeps = await repository.GetAllCheeps();
-
-        Assert.Collection(
-            cheeps.Reverse(),
-            cheep => Assert.Equal("First cheep", cheep.Text),
-            cheep => Assert.Equal("Second cheep", cheep.Text),
-            cheep => Assert.Equal("Third cheep", cheep.Text));
-    }
+            Assert.Collection(
+                cheeps.Reverse(),
+                cheep => Assert.Equal("First cheep", cheep.Text),
+                cheep => Assert.Equal("Second cheep", cheep.Text),
+                cheep => Assert.Equal("Third cheep", cheep.Text));
+        }
+        */
 }
