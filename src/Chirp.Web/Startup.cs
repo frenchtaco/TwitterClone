@@ -62,8 +62,8 @@ namespace Chirp.StartUp
             .AddCookie()
             .AddGitHub(o =>
             {
-                o.ClientId = _configuration["authentication.github.clientId"];
-                o.ClientSecret = _configuration["authentication.github.clientSecret"];
+                o.ClientId = _configuration["authentication.github.clientIdLocal"];
+                o.ClientSecret = _configuration["authentication.github.clientSecretLocal"];
                 o.CallbackPath = "/signin-github";
             });
 
