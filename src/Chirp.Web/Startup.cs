@@ -16,14 +16,12 @@ namespace Chirp.StartUp
 {
     public class Startup
     {
-        private readonly ILogger<Startup> _logger;
         private IConfiguration _configuration { get; set; }
         private IWebHostEnvironment _env { get; set; }
 
-        public Startup(ILogger<Startup> logger, IWebHostEnvironment env, IConfiguration configuration)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
-            _env = env;
-            _logger = logger;
+
             _env = env;
             _configuration = configuration;
         }
@@ -75,7 +73,7 @@ namespace Chirp.StartUp
             }
             catch (Exception exception)
             {
-                _logger.LogInformation($"exception {exception.Message}");
+
             }
 
             SqlConnectionStringBuilder sqlConnectionString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("DefaultConnection"));
