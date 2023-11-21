@@ -16,11 +16,13 @@ namespace Chirp.StartUp
 {
     public class Startup
     {
+        private readonly ILogger<Startup> _logger;
         private IConfiguration _configuration { get; set; }
         private IWebHostEnvironment _env { get; set; }
 
-        public Startup(IWebHostEnvironment env, IConfiguration configuration)
+        public Startup(ILogger<Startup> logger, IWebHostEnvironment env, IConfiguration configuration)
         {
+            _logger = logger;
             _env    = env;
             _configuration = configuration;
         }
@@ -54,21 +56,26 @@ namespace Chirp.StartUp
             .AddDefaultTokenProviders();
 
 
-
-            _ = services.AddAuthentication(options =>
+            try
             {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = "GitHub";
-            })
-            .AddCookie()
-            .AddGitHub(o =>
-            {//updated ID and SecretID!
-                o.ClientId = _configuration["authentication.github.clientIdAzure"];
-                o.ClientSecret = _configuration["authentication.github.clientSecretAzure"];
-                o.CallbackPath = "/signin-github";
-            });
-
+                _ = services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = "GitHub";
+                })
+                .AddCookie()
+                .AddGitHub(o =>
+                {//updated ID and SecretID!
+                    o.ClientId = _configuration["authentication.github.clientIdAzure"];
+                    o.ClientSecret = _configuration["authentication.github.clientSecretAzure"];
+                    o.CallbackPath = "/signin-github";
+                });
+            } catch(Exception exception)
+            {
+                _logger.LogInformation($"exception {exception.Message}");
+            }
+            
             SqlConnectionStringBuilder sqlConnectionString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("DefaultConnection"));
 
             services.AddDbContext<DatabaseContext>(options =>
