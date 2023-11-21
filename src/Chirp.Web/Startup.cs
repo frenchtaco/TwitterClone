@@ -21,7 +21,7 @@ namespace Chirp.StartUp
 
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
-            _env    = env;
+            _env = env;
             _configuration = configuration;
         }
 
@@ -56,30 +56,30 @@ namespace Chirp.StartUp
 
 
             _ = services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = "GitHub";
-            })
-            .AddCookie()
-            .AddGitHub(o =>
-            {//updated ID and SecretID!
-                o.ClientId = _configuration["authentication.github.clientIdAzure"];
-                o.ClientSecret = _configuration["authentication.github.clientSecretAzure"];
-                o.CallbackPath = "/signin-github";
-            });
+ {
+     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+     options.DefaultChallengeScheme = "GitHub";
+ })
+ .AddCookie()
+ .AddGitHub(o =>
+ {
+     o.ClientId = _configuration["Authentication:GitHub:ClientIdAzure"];
+     o.ClientSecret = _configuration["Authentication:GitHub:ClientSecretAzure"];
+     o.CallbackPath = "/signin-github";
+ });
 
             SqlConnectionStringBuilder sqlConnectionString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("DefaultConnection"));
 
             services.AddDbContext<DatabaseContext>(options =>
             {
-                if(_env.IsDevelopment())
+                if (_env.IsDevelopment())
                 {
                     Console.WriteLine("ENVIRONMENT == DEVELOPMENT");
                     string databasePath = Path.Combine(Path.GetTempPath(), "chirp.db");
                     options.UseSqlite($"Data Source={databasePath}");
                 }
-                else if(_env.IsProduction())
+                else if (_env.IsProduction())
                 {
                     Console.WriteLine("ENVIRONMENT == PRODUCTION");
                     string connectionString = _configuration.GetConnectionString("DefaultConnection") ?? throw new Exception("'ConnectionString' could not be located");
