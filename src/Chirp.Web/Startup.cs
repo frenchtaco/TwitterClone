@@ -1,10 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-
 using Chirp.Infrastructure;
 using Chirp.Interfaces;
 using Chirp.Models;
 using DBContext;
+
+using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
+//WHEN IMPLEMENTING GITHUB, WRITE THIS IN TERMINAL IF GIVES YOU A NO CLIENT ID ERR
+//dotnet user-secrets set "authentication.github.clientId" "<YOUR_CLIENTID>"
+//dotnet user-secrets set "authentication.github.clientSecret" "<YOUR_CLIENTSECRET>"
 
 namespace Chirp.StartUp
 {
@@ -46,6 +52,24 @@ namespace Chirp.StartUp
             })
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
+
+
+
+            _ = services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = "GitHub";
+            })
+            .AddCookie()
+            .AddGitHub(o =>
+            {//updated ID and SecretID
+                o.ClientId = _configuration["authentication.github.clientIdAzure"];
+                o.ClientSecret = _configuration["authentication.github.clientSecretAzure"];
+                o.CallbackPath = "/signin-github";
+            });
+
+            SqlConnectionStringBuilder sqlConnectionString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("DefaultConnection"));
 
             services.AddDbContext<DatabaseContext>(options =>
             {
