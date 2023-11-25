@@ -66,7 +66,7 @@ public class PublicModel : PageModel
         IEnumerable<Cheep> allCheeps = await _cheepRepository.GetAllCheeps();
         totalCheeps = allCheeps.Count();
 
-        Dictionary<int, AuthorCheepOpinion> AuthorOpinionOfCheeps = new Dictionary<int, AuthorCheepOpinion>();
+        AuthorOpinionOfCheeps = new Dictionary<int, AuthorCheepOpinion>();
 
         if(_signInManager.IsSignedIn(User))
         {

@@ -705,7 +705,6 @@ public static class DbInitializer
             
             foreach(Cheep cheep in cheeps)
             {
-
                 CheepLikeDis newCheepLikeDisSchema = new CheepLikeDis
                 {
                     Cheep = cheep,
@@ -721,14 +720,25 @@ public static class DbInitializer
             bool allHave = true;
             foreach(Cheep c in cheeps)
             {
-                if(c.LikesAndDislikes == null || c.LikesAndDislikes == null)
+                if(c.LikesAndDislikes == null)
                 {
                     allHave = false;
                     break;
                 }
             }
 
-            Console.WriteLine($"[DATA INITIALIZATION] Test results for 'allHave' {allHave}");
+            bool allInit = true;
+            foreach(Cheep c in cheeps)
+            {
+                if(c.LikesAndDislikes.Likes == null || c.LikesAndDislikes.Dislikes == null)
+                {
+                    allInit = false;
+                    break;
+                }
+            }
+
+            Console.WriteLine($"[DATA INITIALIZATION] Test all Cheeps have the 'CheepLikeDis' variable: {allHave}");
+            Console.WriteLine($"[DATA INITIALIZATION] Test if all Cheeps have 'Likes' and 'Dislikes' HashSet initialized: {allInit}");
 
             chirpContext.SaveChanges();
         }

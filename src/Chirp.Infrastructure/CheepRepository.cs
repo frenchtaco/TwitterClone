@@ -92,6 +92,7 @@ public class CheepRepository : ICheepRepository
         {
             var author = await _authorRepository.GetAuthorByName(cheepDTO.Author) ?? throw new Exception("Author was NULL");
 
+            // 01. Create new Cheep:
             Cheep newCheep = new()
             {
                 Author = author,
@@ -99,11 +100,11 @@ public class CheepRepository : ICheepRepository
                 TimeStamp = DateTime.UtcNow,
             };
 
-            // Link Author to Cheep:
+            //02. Link Author to Cheep:
             author.Cheeps ??= new List<Cheep>();
             author.Cheeps.Add(newCheep);
 
-            // Update Context:
+            //03. Update Context:
             _context.Cheeps.Add(newCheep);
             _context.CheepLikeDis.Add(_likeDisRepository.CreateLikeDisSchema(newCheep));
 

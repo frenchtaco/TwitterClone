@@ -100,15 +100,15 @@ public class LikeDisRepository : ILikeDisRepository
 
             if(cheepLikeDisSchema != null)
             {
-                if(cheepLikeDisSchema.Likes == null) throw new Exception("'Likes' hashset is NULL");
-                if(cheepLikeDisSchema.Dislikes == null) throw new Exception("'Dislikes' hashset is NULL");
+                // [TODO] Test without this:
+                cheepLikeDisSchema.Likes ??= new HashSet<Author>();
+                cheepLikeDisSchema.Dislikes ??= new HashSet<Author>();
 
-
-                if(cheepLikeDisSchema.Likes.Contains(author))
+                if(cheepLikeDisSchema.Likes.Any() || cheepLikeDisSchema.Likes.Contains(author))
                 {
                     return AuthorCheepOpinion.LIKES;
                 } 
-                else if(cheepLikeDisSchema.Dislikes.Contains(author))
+                else if(cheepLikeDisSchema.Dislikes.Any() || cheepLikeDisSchema.Dislikes.Contains(author))
                 {
                     return AuthorCheepOpinion.DISLIKES;
                 }

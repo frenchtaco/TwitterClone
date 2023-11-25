@@ -5,8 +5,9 @@
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    var numPages     = Math.Ceiling((double)Model.totalCheeps / Model.cheepsPerPage);
-    var username     = User.Identity?.Name;
+    var numPages       = Math.Ceiling((double)Model.totalCheeps / Model.cheepsPerPage);
+    var username       = User.Identity?.Name;
+    var authorOpinions = @Model.AuthorOpinionOfCheeps;
 }
 
 <div>
@@ -90,6 +91,18 @@
                                         </form>
                                         
                                         @* ###Author Opinion of Cheeps### *@
+                                        @if(authorOpinions != null && authorOpinions.Count != 0)
+                                        {
+                                            <p>Author Opinion of Cheep: @authorOpinions.GetValueOrDefault(cheep.CheepId)</p>
+                                        }
+                                        else if(authorOpinions == null)
+                                        {
+                                            <p>Authors opinions are NULL</p>
+                                        } 
+                                        else if(authorOpinions.Count == 0)
+                                        {
+                                            <p>Author has an opinion count of ZERO</p>
+                                        }
                                         
                                 } 
                                 catch(Exception ex)
