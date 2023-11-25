@@ -38,9 +38,14 @@ public class Program
                 // Apply migrations and create the database if it doesn't exist
                 context.Database.Migrate();
 
-                Console.WriteLine("Database connected successfully");
-
                 DbInitializer.SeedDatabase(context);
+
+                int numAuthors  = context.Authors.Count();
+                int numCheeps   = context.Cheeps.Count();
+                int numOpinions = context.CheepLikeDis.Count();
+
+                Console.WriteLine($"Num. Authors: {numAuthors} \n Num. Cheeps: {numCheeps} \n Num. Opinions: {numOpinions}");
+
             }
             catch (Exception e)
             {

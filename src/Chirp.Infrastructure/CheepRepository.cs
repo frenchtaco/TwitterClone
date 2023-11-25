@@ -4,7 +4,6 @@ using Chirp.Interfaces;
 using Chirp.Models;
 using DBContext;
 using Chirp.CDTO;
-using Chirp.ADTO;
 using Microsoft.Extensions.Logging;
 
 namespace Chirp.Infrastructure;
@@ -14,12 +13,14 @@ public class CheepRepository : ICheepRepository
     private readonly ILogger<CheepRepository> _logger;
     private readonly DatabaseContext _context;
     private readonly IAuthorRepository _authorRepository;
+    private readonly ILikeDisRepository _likeDisRepository;
 
-    public CheepRepository(DatabaseContext context, IAuthorRepository authorRepository, ILogger<CheepRepository> logger)
+    public CheepRepository(DatabaseContext context, IAuthorRepository authorRepository, ILikeDisRepository likeDisRepository, ILogger<CheepRepository> logger)
     {
         _logger = logger;
         _context = context;
         _authorRepository = authorRepository;
+        _likeDisRepository = likeDisRepository;
     }
 
     public int CheepsPerPage()
@@ -37,6 +38,7 @@ public class CheepRepository : ICheepRepository
             .ToListAsync();
     }
 
+    // [TODO] Change to return an integer as its only used as a way to calculate pagination.
     public async Task<IEnumerable<Cheep>> GetAllCheeps()
     {
         return await _context.Cheeps
@@ -56,10 +58,12 @@ public class CheepRepository : ICheepRepository
             .ToListAsync();
     }
 
+    // [TODO] Same as above, make it return an integer as its only used to calculate pagination.
     public async Task<IEnumerable<Cheep>> GetAllCheepsFromAuthor(string author)
     {
         return await _context.Cheeps
             .Include(cheep => cheep.Author)
+            .Include(cheep => cheep.CheepId)
             .Where(cheep => cheep.Author.UserName == author)
             .OrderByDescending(cheep => cheep.TimeStamp)
             .ToListAsync();
@@ -75,13 +79,18 @@ public class CheepRepository : ICheepRepository
             .ToListAsync();
     }
 
+    public async Task<Cheep?> GetCheepById(int CheepId)
+    {
+        return await _context.Cheeps
+            .Where(c => c.CheepId == CheepId)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task CreateCheep(CheepDTO cheepDTO)
     {
         try
         {
             var author = await _authorRepository.GetAuthorByName(cheepDTO.Author) ?? throw new Exception("Author was NULL");
-
-            _logger.LogInformation($"[POST] Located author is {author.UserName}");
 
             Cheep newCheep = new()
             {
@@ -90,19 +99,22 @@ public class CheepRepository : ICheepRepository
                 TimeStamp = DateTime.UtcNow,
             };
 
-            if (author.Cheeps == null)
-            {
-                author.Cheeps = new List<Cheep>();
-                _logger.LogInformation("Authors Cheeps was null");
-            }
-
+            // Link Author to Cheep:
+            author.Cheeps ??= new List<Cheep>();
             author.Cheeps.Add(newCheep);
+
+            // Update Context:
             _context.Cheeps.Add(newCheep);
+            _context.CheepLikeDis.Add(_likeDisRepository.CreateLikeDisSchema(newCheep));
+
+            // Finalize Changes:
             await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
-            throw new Exception($"[POST] Error Occurred: {ex.Message}");
+            throw new Exception(
+                $"File: CheepRepository.cs - Method: 'CreateCheep()' - Stack Trace: {ex.StackTrace}"
+            );
         }
     }
 }

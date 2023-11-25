@@ -39,53 +39,70 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                <div class="cheep-wrapper">
-                    <li>
-                        @if(SignInManager.IsSignedIn(User) && username != null && username != cheep.Author.UserName)
-                        {
-                            var user = Model.SignedInAuthor;
-                            @* [PACK INTO PARTIAL #1] *@
-                            try
-                            {
-                                <form method="post" asp-page-handler="Follow">
-                                    @Html.AntiForgeryToken()
-                                    @if(user.Following.Any() && user.Following.Contains<Author>(cheep.Author))
-                                    {
-                                        <input type="hidden" asp-for="IsFollow" value="false" />
-                                        <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
-                                        <button type="submit" class="following-button" OnClientClick="return false;">
-                                            <img id="unfollow" src="/images/unfollow.svg" alt="Unfollow"></img>
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <input type="hidden" asp-for="IsFollow" value="true" />
-                                        <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
-                                        <button type="submit" class="following-button" OnClientClick="return false;">
-                                            <img id="follow" src="/images/follow.svg" alt="Follow"></img>
-                                        </button>
-                                    }
-                                </form>
-                            } 
-                            catch(Exception ex)
-                            {
-                                <p>Exception Message: @ex.Message</p>
+                <li>
+                    <div class="cheep-wrapper">
+                        @* If the user does NOT have a Profile Picture, put the default in its place. *@
+                        <div class="cheep-profilpicture-wrapper">
+                            <img src="/images/blank.png" alt="Profile Picture">
+                        </div>
+                        <div class="cheep-text-wrapper">
+                            <p>
+                                <strong>
+                                    <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
+                                </strong>
+                                @cheep.Text
+                                <small>&mdash; @cheep.TimeStamp</small>
+                            </p>
+                        </div>
+                        <div class="cheep-util-wrapper">
+                            @if(SignInManager.IsSignedIn(User) && username != null && username != cheep.Author.UserName)
+                            {                            
+                                var user = Model.SignedInAuthor;
+                                @* [PACK INTO PARTIAL #1] *@
+                                try
+                                {
+                                        <form id="followForm" method="post" asp-page-handler="Follow">
+                                            @Html.AntiForgeryToken()
+                                            @if(user.Following.Any() && user.Following.Contains<Author>(cheep.Author))
+                                            {
+                                                <input type="hidden" asp-for="IsFollow" value="false" />
+                                                <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
+                                                <button type="submit" class="following-button" >
+                                                    <img id="unfollow" src="/images/unfollow.svg" alt="Unfollow"></img>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <input type="hidden" asp-for="IsFollow" value="true" />
+                                                <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
+                                                <button type="submit" class="following-button" >
+                                                    <img id="follow" src="/images/follow.svg" alt="Follow"></img>
+                                                </button>
+                                            }
+                                        </form>
+                                        <form id="likeDis" method="post" asp-page-handler="DislikeOrLike">
+                                           <button type="submit" name="likeDis" value="like" class="like-button" >
+                                                <img src="/images/thumbup.svg" alt="Like"></img>
+                                            </button>
+                                            <button type="submit" name="likeDis" value="dislike" class="dislike-button" >
+                                                <img src="/images/thumbdown.svg" alt="Dislike"></img>
+                                            </button>
+                                        </form>
+                                        
+                                        @* ###Author Opinion of Cheeps### *@
+                                        
+                                } 
+                                catch(Exception ex)
+                                {
+                                    <p>Exception Message: @ex.Message</p>
+                                }
                             }
-                        }
-
-                        <p>
-                            <strong>
-                                <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
-                            </strong>
-                            @cheep.Text
-                            <small>&mdash; @cheep.TimeStamp</small>
-                        </p>
-                    </li>
-                </div>
+                        </div>
+                    </div>
+                </li>
             }
         </ul>
     }
-
     else
     {
         <em>There are no cheeps so far.</em>

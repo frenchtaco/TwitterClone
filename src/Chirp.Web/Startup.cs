@@ -54,7 +54,7 @@ namespace Chirp.StartUp
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
 
-
+            /*
             try
             {
                 _ = services.AddAuthentication(options =>
@@ -75,6 +75,7 @@ namespace Chirp.StartUp
             {
 
             }
+            */
 
             SqlConnectionStringBuilder sqlConnectionString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("DefaultConnection"));
 
@@ -107,9 +108,9 @@ namespace Chirp.StartUp
 
             services.AddRazorPages();
 
-
             services.AddScoped<ICheepRepository, CheepRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<ILikeDisRepository, LikeDisRepository>();
         }
 
         public void Configure(IApplicationBuilder app)

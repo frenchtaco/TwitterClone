@@ -228,23 +228,43 @@ li.topic {
   min-height: 20px;
 }
 
-.following-button
+/* USER TIMELINE */
+.user-time-line-header-container
+{
+  display: flex;
+}
+
+/* CHEEP CONTENT MAIN WRAPPER */
+
+
+
+/* PROFILE PICTURE */
+div.page ul.cheeps li .cheep-wrapper .cheep-profilpicture-wrapper img
+{
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+}
+
+/* UTIL */
+div.page ul.cheeps li .cheep-wrapper .cheep-util-wrapper 
+{
+  display: flex;
+  padding: 3px;
+  background-color: #ce8181;
+}
+
+/* UTIL - LIKE / DISLIKE */
+div.page ul.cheeps li .cheep-wrapper .cheep-util-wrapper form button
 {
   background: none;
   border: none;
   padding: 0;
 }
 
-div.page ul.cheeps li .following-button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-}
-
-
-
-.user-time-line-header-container
+/* UTIL - FOLLOW / UNFOLLOW */
+div.page ul.cheeps li .cheep-wrapper .cheep-util-wrapper form .following-button img
 {
-  display: flex;
-  background: #cc6e6ead;
+  object-fit: contain;
+  display: center;
 }
