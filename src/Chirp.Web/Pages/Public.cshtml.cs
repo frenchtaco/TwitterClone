@@ -91,6 +91,9 @@ public class PublicModel : PageModel
             }
         }
 
+        // [TEST]
+        
+
         return Page();
     }
 
@@ -171,13 +174,15 @@ public class PublicModel : PageModel
             _logger.LogInformation("Like / Dislike method was called");
             if(ModelState.IsValid) {
                 if(_signInManager.IsSignedIn(User))
-                {
-                    // ... handle logic ... 
+                {   
+                    _logger.LogInformation($"Target Author UserName: {TargetAuthorUserName}");
+
                     var likeDislikeValue = Request.Form["likeDis"];
                     if(string.IsNullOrEmpty(likeDislikeValue)) _logger.LogInformation("String was NULL / Empty");
 
                     if(likeDislikeValue == "like")
                     {
+                        
                         _logger.LogInformation("Like was clicked");
                     }
                     else if(likeDislikeValue == "dislike")

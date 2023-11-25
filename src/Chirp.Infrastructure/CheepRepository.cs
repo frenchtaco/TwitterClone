@@ -88,6 +88,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task CreateCheep(CheepDTO cheepDTO)
     {
+        _logger.LogInformation($"[BEFORE] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas{_context.CheepLikeDis.Count()}");
         try
         {
             var author = await _authorRepository.GetAuthorByName(cheepDTO.Author) ?? throw new Exception("Author was NULL");
@@ -108,7 +109,7 @@ public class CheepRepository : ICheepRepository
             _context.Cheeps.Add(newCheep);
             _context.CheepLikeDis.Add(_likeDisRepository.CreateLikeDisSchema(newCheep));
 
-            // Finalize Changes:
+            //04. Save the changes:
             await _context.SaveChangesAsync();
         }
         catch (Exception ex)
@@ -117,5 +118,6 @@ public class CheepRepository : ICheepRepository
                 $"File: CheepRepository.cs - Method: 'CreateCheep()' - Stack Trace: {ex.StackTrace}"
             );
         }
+        _logger.LogInformation($"[AFTER] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas{_context.CheepLikeDis.Count()}");
     }
 }

@@ -38,6 +38,8 @@ public class LikeDisRepository : ILikeDisRepository
         Author author = await _authorRepository.GetAuthorByName(AuthorName);
         CheepLikeDis cheepOpinionSchema = await GetCheepLikeDis(CheepId);       // [TODO] Add measure to check existance / validity.
 
+        // cheepOpinionSchema ??= CreateLikeDisSchema();
+
         AuthorCheepOpinion aco = await GetAuthorCheepOpinion(CheepId, AuthorName);
 
         string testPrint = "";
@@ -95,7 +97,7 @@ public class LikeDisRepository : ILikeDisRepository
     {
         try 
         {
-            var author = await _authorRepository.GetAuthorByName(AuthorName) ?? throw new Exception($"File:' LikeDisRepository.cs' - Method: 'GetAuthorCheepOpinion()' - Message: Could not find an Author with UserName {AuthorName}");
+            var author = await _authorRepository.GetAuthorByName(AuthorName) ?? throw new Exception($"Could not find an Author with UserName {AuthorName}");
             var cheepLikeDisSchema = await GetCheepLikeDis(CheepId);   
 
             if(cheepLikeDisSchema != null)
@@ -119,8 +121,7 @@ public class LikeDisRepository : ILikeDisRepository
             } 
             else
             {
-                _logger.LogInformation("[ERROR] Variable 'cheepLikeDisSchema' was NULL");
-                throw new Exception("Variable 'cheepLikeDisSchema' was NULL");
+                throw new Exception("[ERROR] Variable 'cheepLikeDisSchema' was NULL");
             }
         } 
         catch(Exception ex)

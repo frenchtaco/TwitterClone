@@ -82,6 +82,7 @@
                                             }
                                         </form>
                                         <form id="likeDis" method="post" asp-page-handler="DislikeOrLike">
+                                            <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
                                            <button type="submit" name="likeDis" value="like" class="like-button" >
                                                 <img src="/images/thumbup.svg" alt="Like"></img>
                                             </button>
@@ -90,7 +91,7 @@
                                             </button>
                                         </form>
                                         
-                                        @* ###Author Opinion of Cheeps### *@
+                                        @* ###Author Opinion of Cheeps### [TODO] --- Make it so it only changes the CSS of this specific Cheeps Thumbup / Thumbdown*@ 
                                         @if(authorOpinions != null && authorOpinions.Count != 0)
                                         {
                                             <p>Author Opinion of Cheep: @authorOpinions.GetValueOrDefault(cheep.CheepId)</p>
