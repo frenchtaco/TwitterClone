@@ -75,15 +75,16 @@
                                             else
                                             {
                                                 <input type="hidden" asp-for="IsFollow" value="true" />
-                                                <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
+                                                <input type="hidden" asp-for="TargetAuthorUserName" value="@username" />
                                                 <button type="submit" class="following-button" >
                                                     <img id="follow" src="/images/follow.svg" alt="Follow"></img>
                                                 </button>
                                             }
                                         </form>
                                         <form id="likeDis" method="post" asp-page-handler="DislikeOrLike">
-                                            <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
-                                           <button type="submit" name="likeDis" value="like" class="like-button" >
+                                            <input type="hidden" asp-for="TargetCheepId" value="@cheep.CheepId" />
+                                            <input type="hidden" asp-for="TargetAuthorUserName" value="@username" />
+                                            <button type="submit" name="likeDis" value="like" class="like-button" >
                                                 <img src="/images/thumbup.svg" alt="Like"></img>
                                             </button>
                                             <button type="submit" name="likeDis" value="dislike" class="dislike-button" >

@@ -33,62 +33,14 @@ public class LikeDisRepository : ILikeDisRepository
         );
     }
 
-    public async Task GiveOpinionOfCheep(bool IsLike, int CheepId, string AuthorName) // [TODO] Combine both LikeCheep and DislikeCheep and just make them pass an additional variable.
-    {
-        Author author = await _authorRepository.GetAuthorByName(AuthorName);
-        CheepLikeDis cheepOpinionSchema = await GetCheepLikeDis(CheepId);       // [TODO] Add measure to check existance / validity.
-
-        // cheepOpinionSchema ??= CreateLikeDisSchema();
-
-        AuthorCheepOpinion aco = await GetAuthorCheepOpinion(CheepId, AuthorName);
-
-        string testPrint = "";
-
-        switch(aco)
-        {
-            // Case .01: They Liked it but now they don't:
-            case AuthorCheepOpinion.LIKES:  
-                if(!IsLike)
-                {
-                    cheepOpinionSchema.Likes.Remove(author);
-                    cheepOpinionSchema.Dislikes.Add(author);
-                } 
-                _logger.LogInformation($"Author {author.UserName} 'Likes' this Cheep");
-                break;
-            // Case .02: They Disliked it but now they do like it:
-            case AuthorCheepOpinion.DISLIKES:
-                if(IsLike)
-                {
-                    cheepOpinionSchema.Dislikes.Remove(author);
-                    cheepOpinionSchema.Likes.Add(author);
-                } 
-                _logger.LogInformation($"Author {author.UserName} 'Dislikes' this Cheep");
-                break;
-            // Case .03: They did neither and now they either Like or Dislike:
-            case AuthorCheepOpinion.NEITHER:
-                if(IsLike)
-                {
-                    cheepOpinionSchema.Likes.Add(author);
-                    testPrint += "Author was added to 'Likes'";
-                } 
-                else 
-                {
-                    cheepOpinionSchema.Dislikes.Add(author);
-                    testPrint += "Author was added to 'Dislikes'";
-                }
-
-                _logger.LogInformation($"Author {author.UserName} has NO opinion of this Cheep");
-                break;
-        }
-
-        await _context.SaveChangesAsync();
-    }
-
+    
 
     public async Task<CheepLikeDis?> GetCheepLikeDis(int CheepId)
     {
         return await _context.CheepLikeDis
             .Include(cld => cld.Cheep)
+            .Include(cld => cld.Likes)
+            .Include(cld => cld.Dislikes)
             .Where(cld => cld.CheepId == CheepId)
             .FirstOrDefaultAsync();
     }
@@ -102,16 +54,15 @@ public class LikeDisRepository : ILikeDisRepository
 
             if(cheepLikeDisSchema != null)
             {
-                // [TODO] Test without this:
-                cheepLikeDisSchema.Likes ??= new HashSet<Author>();
-                cheepLikeDisSchema.Dislikes ??= new HashSet<Author>();
-
-                if(cheepLikeDisSchema.Likes.Any() || cheepLikeDisSchema.Likes.Contains(author))
+                _logger.LogInformation($"Cheep {CheepId} --> 'Likes': {cheepLikeDisSchema.Likes.Count} ### 'Dislikes': {cheepLikeDisSchema.Dislikes.Count}");
+                if(cheepLikeDisSchema.Likes.Contains(author))
                 {
+                    _logger.LogInformation($"Author {author.UserName} was located in 'Likes'");
                     return AuthorCheepOpinion.LIKES;
                 } 
-                else if(cheepLikeDisSchema.Dislikes.Any() || cheepLikeDisSchema.Dislikes.Contains(author))
+                else if(cheepLikeDisSchema.Dislikes.Contains(author))
                 {
+                    _logger.LogInformation($"Author {author.UserName} was located in 'Dislikes'");
                     return AuthorCheepOpinion.DISLIKES;
                 }
                 else

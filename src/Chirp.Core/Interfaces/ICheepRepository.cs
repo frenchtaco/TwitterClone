@@ -11,4 +11,5 @@ public interface ICheepRepository
     public Task<IEnumerable<Cheep>> GetAllCheeps();
     public Task<IEnumerable<Cheep>> GetAllCheepsFromAuthor(string author);
     public Task<IEnumerable<Cheep>> GetTop4FromAuthor(string author);
+    public Task GiveOpinionOfCheep(bool IsLike, int CheepId, string AuthorName);
 }

@@ -5,6 +5,7 @@ using Chirp.Models;
 using DBContext;
 using Chirp.CDTO;
 using Microsoft.Extensions.Logging;
+using Enums.ACO;
 
 namespace Chirp.Infrastructure;
 
@@ -79,11 +80,11 @@ public class CheepRepository : ICheepRepository
             .ToListAsync();
     }
 
-    public async Task<Cheep?> GetCheepById(int CheepId)
+    public async Task<Cheep> GetCheepById(int CheepId)
     {
         return await _context.Cheeps
             .Where(c => c.CheepId == CheepId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync() ?? throw new Exception("File: 'CheepRepository.cs' - Method: 'GetCheepById' - Message: 'Cheep couldn't be located with CheepId and was NULL'");
     }
 
     public async Task CreateCheep(CheepDTO cheepDTO)
@@ -119,5 +120,77 @@ public class CheepRepository : ICheepRepository
             );
         }
         _logger.LogInformation($"[AFTER] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas{_context.CheepLikeDis.Count()}");
+    }
+
+    public async Task GiveOpinionOfCheep(bool IsLike, int CheepId, string AuthorName) // [TODO] Combine both LikeCheep and DislikeCheep and just make them pass an additional variable.
+    {
+        try
+        {
+            Author author = await _authorRepository.GetAuthorByName(AuthorName);
+            CheepLikeDis? cheepOpinionSchema = await _likeDisRepository.GetCheepLikeDis(CheepId);       // [TODO] Add measure to check existance / validity.
+
+            // [TODO] Make this nicer - This is just an additional "fail-safe" incase it goes wrong.
+            if(cheepOpinionSchema == null)
+            {
+                Cheep cheep = await GetCheepById(CheepId);
+                cheepOpinionSchema ??= _likeDisRepository.CreateLikeDisSchema(cheep);
+                _context.CheepLikeDis.Add(cheepOpinionSchema);
+            }
+
+            AuthorCheepOpinion aco = await _likeDisRepository.GetAuthorCheepOpinion(CheepId, AuthorName);
+
+            string testPrint = "";
+
+            switch(aco)
+            {
+
+                // Case .01: They Liked it but now they don't:
+                case AuthorCheepOpinion.LIKES:  
+                    if(!IsLike)
+                    {
+                        cheepOpinionSchema.Likes.Remove(author);
+                        cheepOpinionSchema.Dislikes.Add(author);
+                        testPrint += "Author was added to 'Dislikes' and removed from 'Likes'";
+                    } else { testPrint += "Author already in 'Likes'"; }
+                    _logger.LogInformation($"Author {author.UserName} 'Likes' this Cheep");
+                    break;
+
+                // Case .02: They Disliked it but now they do like it:
+                case AuthorCheepOpinion.DISLIKES:
+                    if(IsLike)
+                    {
+                        cheepOpinionSchema.Dislikes.Remove(author);
+                        cheepOpinionSchema.Likes.Add(author);
+                        testPrint += "Author was added to 'Likes' and removed from 'Dislikes'";
+                    } else { testPrint += "Author already in 'Dislikes'"; }
+                    _logger.LogInformation($"Author {author.UserName} 'Dislikes' this Cheep");
+                    break;
+                    
+                // Case .03: They did neither and now they either Like or Dislike:
+                case AuthorCheepOpinion.NEITHER:
+                    if(IsLike)
+                    {
+                        cheepOpinionSchema.Likes.Add(author);
+                        testPrint += "Author was added to 'Likes'";
+                    } 
+                    else 
+                    {
+                        cheepOpinionSchema.Dislikes.Add(author);
+                        testPrint += "Author was added to 'Dislikes'";
+                    }
+
+                    _logger.LogInformation($"Author {author.UserName} had NO opinion of this Cheep");
+                    break;
+            }
+
+            _logger.LogInformation(testPrint);
+            _logger.LogInformation($"[SIZE TEST] Size of Cheep {CheepId}'s 'Like' HashSet: {cheepOpinionSchema.Likes.Count()} and 'Dislikes' HashSet: {cheepOpinionSchema.Dislikes.Count()}");
+
+            await _context.SaveChangesAsync();
+        }
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 }

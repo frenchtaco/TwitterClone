@@ -37,6 +37,8 @@ public class PublicModel : PageModel
     public bool IsFollow { get; set; } = false;
     [BindProperty]
     public string TargetAuthorUserName { get; set; } = null!;
+    [BindProperty]
+    public int TargetCheepId { get; set; }
 
     public PublicModel(
         ILogger<PublicModel> logger, 
@@ -76,9 +78,27 @@ public class PublicModel : PageModel
 
                 if(Cheeps.Any())
                 {
+                    int testCounter = 0;
                     foreach (var cheep in Cheeps)
                     {
                         var opinion = await _likeDisRepository.GetAuthorCheepOpinion(cheep.CheepId, SignedInAuthor.UserName);
+                        if(testCounter < 10) 
+                        {
+                            string authorOpinion = "";
+                            switch(opinion)
+                            {
+                                case AuthorCheepOpinion.LIKES:
+                                    authorOpinion += $"Author {SignedInAuthor.UserName} 'Likes' Cheep {cheep.CheepId}";
+                                    break;
+                                case AuthorCheepOpinion.DISLIKES:
+                                    authorOpinion += $"Author {SignedInAuthor.UserName} 'Dislikes' Cheep {cheep.CheepId}";
+                                    break;
+                                case AuthorCheepOpinion.NEITHER:
+                                    authorOpinion += $"Author {SignedInAuthor.UserName} 'Neither Like nor Dislikes' of Cheep {cheep.CheepId}";
+                                    break;
+                            }
+                            _logger.LogInformation(authorOpinion);
+                        }
                         AuthorOpinionOfCheeps.Add(cheep.CheepId, opinion);
                     }
                 }
@@ -176,21 +196,21 @@ public class PublicModel : PageModel
                 if(_signInManager.IsSignedIn(User))
                 {   
                     _logger.LogInformation($"Target Author UserName: {TargetAuthorUserName}");
+                    _logger.LogInformation($"Target Cheep Id: {TargetCheepId}");
 
                     var likeDislikeValue = Request.Form["likeDis"];
                     if(string.IsNullOrEmpty(likeDislikeValue)) _logger.LogInformation("String was NULL / Empty");
 
                     if(likeDislikeValue == "like")
                     {
-                        
                         _logger.LogInformation("Like was clicked");
+                        await _cheepRepository.GiveOpinionOfCheep(true, TargetCheepId, TargetAuthorUserName);
                     }
                     else if(likeDislikeValue == "dislike")
                     {
                         _logger.LogInformation("Dislike was clicked");
+                        await _cheepRepository.GiveOpinionOfCheep(false, TargetCheepId, TargetAuthorUserName);
                     }
-
-                    var dev = await _cheepRepository.GetCheepsFromAuthor(User.Identity?.Name, (int) page);
                 } 
 
                 return RedirectToPage("Public", new { page });
