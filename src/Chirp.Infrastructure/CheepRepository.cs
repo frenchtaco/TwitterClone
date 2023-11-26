@@ -40,18 +40,17 @@ public class CheepRepository : ICheepRepository
     }
 
     // [TODO] Change to return an integer as its only used as a way to calculate pagination.
-    public async Task<IEnumerable<Cheep>> GetAllCheeps()
+    public async Task<int> GetTotalNumberOfCheeps()
     {
         return await _context.Cheeps
-            .Include(cheep => cheep.Author)
-            .OrderByDescending(cheep => cheep.TimeStamp)
-            .ToListAsync();
+            .CountAsync();
     }
 
     public async Task<IEnumerable<Cheep>> GetCheepsFromAuthor(string author, int page)
     {
         return await _context.Cheeps
             .Include(cheep => cheep.Author)
+            .Include(cheep => cheep.CheepId)
             .Where(cheep => cheep.Author.UserName == author)
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip(page * CheepsPerPage())
@@ -60,14 +59,11 @@ public class CheepRepository : ICheepRepository
     }
 
     // [TODO] Same as above, make it return an integer as its only used to calculate pagination.
-    public async Task<IEnumerable<Cheep>> GetAllCheepsFromAuthor(string author)
+    public async Task<int> GetTotalNumberOfAuthorCheeps(string author)
     {
         return await _context.Cheeps
-            .Include(cheep => cheep.Author)
-            .Include(cheep => cheep.CheepId)
             .Where(cheep => cheep.Author.UserName == author)
-            .OrderByDescending(cheep => cheep.TimeStamp)
-            .ToListAsync();
+            .CountAsync();
     }
 
     public async Task<IEnumerable<Cheep>> GetTop4FromAuthor(string author)
@@ -151,8 +147,12 @@ public class CheepRepository : ICheepRepository
                         cheepOpinionSchema.Likes.Remove(author);
                         cheepOpinionSchema.Dislikes.Add(author);
                         testPrint += "Author was added to 'Dislikes' and removed from 'Likes'";
-                    } else { testPrint += "Author already in 'Likes'"; }
-                    _logger.LogInformation($"Author {author.UserName} 'Likes' this Cheep");
+                    } 
+                    else 
+                    {
+                        cheepOpinionSchema.Likes.Remove(author);
+                        testPrint += "Author already in 'Likes', so removed them from this Cheeps 'Likes'"; 
+                    }
                     break;
 
                 // Case .02: They Disliked it but now they do like it:
@@ -162,7 +162,12 @@ public class CheepRepository : ICheepRepository
                         cheepOpinionSchema.Dislikes.Remove(author);
                         cheepOpinionSchema.Likes.Add(author);
                         testPrint += "Author was added to 'Likes' and removed from 'Dislikes'";
-                    } else { testPrint += "Author already in 'Dislikes'"; }
+                    } 
+                    else 
+                    { 
+                        cheepOpinionSchema.Dislikes.Remove(author);
+                        testPrint += "Author already in 'Dislikes', so removed them from this Cheeps 'Dislikes'"; 
+                    }
                     _logger.LogInformation($"Author {author.UserName} 'Dislikes' this Cheep");
                     break;
                     
@@ -173,7 +178,7 @@ public class CheepRepository : ICheepRepository
                         cheepOpinionSchema.Likes.Add(author);
                         testPrint += "Author was added to 'Likes'";
                     } 
-                    else 
+                    else
                     {
                         cheepOpinionSchema.Dislikes.Add(author);
                         testPrint += "Author was added to 'Dislikes'";

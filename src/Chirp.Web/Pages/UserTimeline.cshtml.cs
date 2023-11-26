@@ -47,11 +47,10 @@ public class UserTimelineModel : PageModel
             IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheepsFromAuthor(author, page);
             Cheeps = cheeps.ToList();
 
-            // 02. All the Authors Cheeps - [TODO] Change this to be more efficient, no need to get all Cheeps everytime:
-            IEnumerable<Cheep> allCheeps = await _cheepRepository.GetAllCheepsFromAuthor(author);
-            totalCheeps = allCheeps.Count();
+            // 02. All the Authors Cheeps:
+            totalCheeps = await _cheepRepository.GetTotalNumberOfAuthorCheeps(author);
 
-            // 03. Followers
+            // 03. Followers:
             IEnumerable<Author> followers = await _authorRepository.GetAuthorFollowers(author);
             Followers = followers.ToList();
 
@@ -64,12 +63,12 @@ public class UserTimelineModel : PageModel
             {
                 TimelineUser = await _authorRepository.GetAuthorByName(author);
                 SignedInUser = await _authorRepository.GetAuthorByName(signedInUser);
-                _logger.LogInformation("[USERTIMELINE] User was signed in");
             }
         }
         catch(Exception ex)
         {
-            TempData["ErrorMessage"] = ex.StackTrace;
+            string errorMessage = $"File: 'UserTimeline.cshtml.cs' - Method: 'OnGet' - Message: {ex.Message} - Stack Trace: {ex.StackTrace}";
+            TempData["ErrorMessage"] = errorMessage;
             return RedirectToPage("/Error");
         }
 

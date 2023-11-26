@@ -33,8 +33,6 @@ public class LikeDisRepository : ILikeDisRepository
         );
     }
 
-    
-
     public async Task<CheepLikeDis?> GetCheepLikeDis(int CheepId)
     {
         return await _context.CheepLikeDis
@@ -57,12 +55,10 @@ public class LikeDisRepository : ILikeDisRepository
                 _logger.LogInformation($"Cheep {CheepId} --> 'Likes': {cheepLikeDisSchema.Likes.Count} ### 'Dislikes': {cheepLikeDisSchema.Dislikes.Count}");
                 if(cheepLikeDisSchema.Likes.Contains(author))
                 {
-                    _logger.LogInformation($"Author {author.UserName} was located in 'Likes'");
                     return AuthorCheepOpinion.LIKES;
                 } 
                 else if(cheepLikeDisSchema.Dislikes.Contains(author))
                 {
-                    _logger.LogInformation($"Author {author.UserName} was located in 'Dislikes'");
                     return AuthorCheepOpinion.DISLIKES;
                 }
                 else
