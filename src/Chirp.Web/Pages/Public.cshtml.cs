@@ -10,6 +10,7 @@ using Chirp.FDTO;
 using Enums.ACO;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using Chirp.ODTO;
 
 namespace Chirp.Web.Pages;
 
@@ -26,9 +27,9 @@ public class PublicModel : PageModel
     // 02. Variables:
     public List<Cheep> Cheeps { get; set; } = null!;
     public Author SignedInAuthor { get; set; } = null!;
-    public Dictionary<int, AuthorCheepOpinion>? AuthorOpinionOfCheeps { get; set; }
-    public int totalCheeps;
-    public int cheepsPerPage;
+    public Dictionary<int, CO_AuthorOpinion_DTO> AuthorOpinionOfCheeps { get; set; }
+    public Dictionary<int, CO_Schema_DTO> CheepLikesAndDislikes { get; set; }
+    public int TotalCheeps, CheepsPerPage;
 
     // 03. Bind properties:
     [BindProperty, Required(ErrorMessage="Cheep must be between 1-to-160 characters"), StringLength(160, MinimumLength = 1)]
@@ -55,7 +56,7 @@ public class PublicModel : PageModel
         _userManager = userManager;
         _signInManager = signInManager;
 
-        cheepsPerPage = cheepRepository.CheepsPerPage();
+        CheepsPerPage = cheepRepository.CheepsPerPage();
     }
 
     public async Task<IActionResult> OnGet([FromQuery] int? page = 0)
@@ -67,20 +68,20 @@ public class PublicModel : PageModel
 
         int allCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
 
-        AuthorOpinionOfCheeps = new Dictionary<int, AuthorCheepOpinion>();
-
+        // CASE #1: A User is signed in:
         if(_signInManager.IsSignedIn(User))
         {
+            AuthorOpinionOfCheeps = new Dictionary<int, CO_AuthorOpinion_DTO>();
             try
             {
                 SignedInAuthor = await _authorRepository.GetAuthorByName(User.Identity?.Name);
 
                 if(Cheeps.Any())
                 {
-                    foreach (var cheep in Cheeps)
+                    foreach (Cheep cheep in Cheeps)
                     {
-                        var opinion = await _likeDisRepository.GetAuthorCheepOpinion(cheep.CheepId, SignedInAuthor.UserName);
-                        AuthorOpinionOfCheeps.Add(cheep.CheepId, opinion);
+                        CO_AuthorOpinion_DTO co_Info = await _likeDisRepository.GetAuthorCheepOpinion(cheep.CheepId, SignedInAuthor.UserName);
+                        AuthorOpinionOfCheeps.Add(cheep.CheepId, co_Info);
                     }
                 }
             }
@@ -90,9 +91,27 @@ public class PublicModel : PageModel
                 TempData["ErrorMessage"] = exceptionInfo;
                 return RedirectToPage("/Error");
             }
-        }
+        } 
+        // CASE #2: No User is signed in:
+        else
+        {
+            CheepLikesAndDislikes = new Dictionary<int, CO_Schema_DTO>();
 
-        // [TEST]
+            try
+            {
+                foreach(Cheep cheep in Cheeps)
+                {
+                    CO_Schema_DTO LikesAndDislikes = await _likeDisRepository.GetCheepLikesAndDislikes(cheep.CheepId);
+                    CheepLikesAndDislikes.Add(cheep.CheepId, LikesAndDislikes);
+                }
+            }
+            catch(Exception ex)
+            {
+                string exceptionInfo = $"File: Public.cshtml.cs \n\n Method: 'OnGet()' \n\n Message: {ex.Message} \n\n Stack Trace: {ex.StackTrace}";
+                TempData["ErrorMessage"] = exceptionInfo;
+                return RedirectToPage("/Error");
+            }
+        }
         
 
         return Page();
@@ -138,7 +157,7 @@ public class PublicModel : PageModel
             if(ModelState.IsValid) {
                 if(_signInManager.IsSignedIn(User))
                 {
-                    FollowersDTO followersDTO = new(User.Identity.Name, TargetAuthorUserName);  // [TODO] Remove warning but we still want it to be caught by exception.
+                    FollowersDTO followersDTO = new(User.Identity.Name, TargetAuthorUserName);
 
                     if(IsFollow) 
                     {
@@ -172,12 +191,11 @@ public class PublicModel : PageModel
 
         try
         {
-            _logger.LogInformation("Like / Dislike method was called");
             if(ModelState.IsValid) {
                 if(_signInManager.IsSignedIn(User))
                 {   
                     var likeDislikeValue = Request.Form["likeDis"];
-                    if(string.IsNullOrEmpty(likeDislikeValue)) _logger.LogInformation("String was NULL / Empty");
+                    if(string.IsNullOrEmpty(likeDislikeValue)) throw new Exception("File: 'Public.cshtml.cs' - Method: 'OnPostDislikeOrLike()' - Message: Value retrieved from Request Form was NULL");
 
                     if(likeDislikeValue == "like")
                     {

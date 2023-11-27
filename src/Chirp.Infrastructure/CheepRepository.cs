@@ -6,6 +6,7 @@ using DBContext;
 using Chirp.CDTO;
 using Microsoft.Extensions.Logging;
 using Enums.ACO;
+using Chirp.ODTO;
 
 namespace Chirp.Infrastructure;
 
@@ -50,7 +51,6 @@ public class CheepRepository : ICheepRepository
     {
         return await _context.Cheeps
             .Include(cheep => cheep.Author)
-            .Include(cheep => cheep.CheepId)
             .Where(cheep => cheep.Author.UserName == author)
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip(page * CheepsPerPage())
@@ -133,11 +133,11 @@ public class CheepRepository : ICheepRepository
                 _context.CheepLikeDis.Add(cheepOpinionSchema);
             }
 
-            AuthorCheepOpinion aco = await _likeDisRepository.GetAuthorCheepOpinion(CheepId, AuthorName);
+            CO_AuthorOpinion_DTO CODTO = await _likeDisRepository.GetAuthorCheepOpinion(CheepId, AuthorName);
 
             string testPrint = "";
 
-            switch(aco)
+            switch(CODTO.AuthorCheepOpinion)
             {
 
                 // Case .01: They Liked it but now they don't:

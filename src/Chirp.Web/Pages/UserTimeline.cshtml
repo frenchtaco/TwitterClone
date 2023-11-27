@@ -6,9 +6,9 @@
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
     var routeName = HttpContext.GetRouteValue("author")?.ToString();
-    var username  = User.Identity?.Name;
-    var SIU = Model.SignedInUser;   // 01. SignedInUser
-    var TLU = Model.TimelineUser;   // 02. TimelineUser
+    string? username  = User.Identity?.Name;
+    Author? SIU = Model.SignedInUser;   // 01. SignedInUser
+    Author? TLU = Model.TimelineUser;   // 02. TimelineUser
 }
 
 <div class="user-time-line-container">
@@ -78,7 +78,7 @@
             {
                 @if(SignInManager.IsSignedIn(User) && follow.UserName.Equals(User.Identity?.Name))
                 {
-                    <h5><a href="/@User.Identity?.Name">Your Genius Cheeps</a></h5>
+                    <h5>Your Cheep</h5>
                 }
                 else
                 {
@@ -105,7 +105,7 @@
         }
         else
         {
-            @if(routeName == username)
+            @if(routeName.Equals(username))
             {
                 <em>You currently aren't Following anyone.</em>
             } 
@@ -123,6 +123,10 @@
         {
             @foreach (var follower in Model.Followers)
             {
+                // [TODO] Create simple author books with details on User:
+                //        - Number of Cheeps
+                //        - Number of Followers
+                //        - Picture
                 <h5>
                     <a href="/@follower.UserName">@follower.UserName</a>
                 </h5>
@@ -136,7 +140,7 @@
             } 
             else
             {
-                <em>@routeName currently has no Followers. Haha.</em>
+                <em>@routeName currently has no Followers.</em>
             }
         }
     </ul>

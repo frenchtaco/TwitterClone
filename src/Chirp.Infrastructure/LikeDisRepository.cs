@@ -4,6 +4,7 @@ using Chirp.Models;
 using DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Chirp.ODTO;
 
 namespace Chirp.Infrastructure;
 
@@ -43,32 +44,43 @@ public class LikeDisRepository : ILikeDisRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<AuthorCheepOpinion> GetAuthorCheepOpinion(int CheepId, string AuthorName)
+    // [FIX] Have to make a method that gets the Cheep Info when the user is NOT signed in.
+    public async Task<CO_Schema_DTO> GetCheepLikesAndDislikes(int CheepId)
+    {
+        var cld = await GetCheepLikeDis(CheepId) ?? throw new Exception("File: 'LikeDisRepository' - Method: 'GetNumCheepLikesDis' - Message: CheepLikeDisSchema could not be located with CheepId");
+        return new CO_Schema_DTO(cld, cld.Likes.Count, cld.Dislikes.Count);
+    }
+
+    public async Task<CO_AuthorOpinion_DTO> GetAuthorCheepOpinion(int CheepId, string AuthorName)
     {
         try 
         {
             var author = await _authorRepository.GetAuthorByName(AuthorName) ?? throw new Exception($"Could not find an Author with UserName {AuthorName}");
-            var cheepLikeDisSchema = await GetCheepLikeDis(CheepId);   
+            var co_Info = await GetCheepLikesAndDislikes(CheepId);
 
-            if(cheepLikeDisSchema != null)
+            CheepLikeDis co_Schema = co_Info.CheepOpinionSchema;
+            int c_NumLikes         = co_Info.NumLikes;
+            int c_NumDislikes      = co_Info.NumDislikes;
+
+            if(co_Schema != null)
             {
-                _logger.LogInformation($"Cheep {CheepId} --> 'Likes': {cheepLikeDisSchema.Likes.Count} ### 'Dislikes': {cheepLikeDisSchema.Dislikes.Count}");
-                if(cheepLikeDisSchema.Likes.Contains(author))
+                _logger.LogInformation($"Cheep {CheepId} --> 'Likes': {co_Schema.Likes.Count} ### 'Dislikes': {co_Schema.Dislikes.Count}");
+                if(co_Schema.Likes.Contains(author))
                 {
-                    return AuthorCheepOpinion.LIKES;
+                    return new CO_AuthorOpinion_DTO(AuthorCheepOpinion.LIKES, c_NumLikes, c_NumDislikes);
                 } 
-                else if(cheepLikeDisSchema.Dislikes.Contains(author))
+                else if(co_Schema.Dislikes.Contains(author))
                 {
-                    return AuthorCheepOpinion.DISLIKES;
+                    return new CO_AuthorOpinion_DTO(AuthorCheepOpinion.DISLIKES, c_NumLikes, c_NumDislikes);
                 }
                 else
                 {
-                    return AuthorCheepOpinion.NEITHER;
+                    return new CO_AuthorOpinion_DTO(AuthorCheepOpinion.NEITHER, c_NumLikes, c_NumDislikes);
                 }
             } 
             else
             {
-                throw new Exception("[ERROR] Variable 'cheepLikeDisSchema' was NULL");
+                throw new Exception("[ERROR] Variable 'co_Schema' was NULL");
             }
         } 
         catch(Exception ex)

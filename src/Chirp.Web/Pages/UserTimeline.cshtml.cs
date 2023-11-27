@@ -63,6 +63,8 @@ public class UserTimelineModel : PageModel
             {
                 TimelineUser = await _authorRepository.GetAuthorByName(author);
                 SignedInUser = await _authorRepository.GetAuthorByName(signedInUser);
+
+                
             }
         }
         catch(Exception ex)
