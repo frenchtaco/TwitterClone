@@ -6,6 +6,8 @@
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
     var routeName = HttpContext.GetRouteValue("author")?.ToString();
+    var UserFollowersAndTheirCheeps = @Model.FollowersAndTheirCheeps;
+    var TLUFollower = @Model.Followers;
     string? username  = User.Identity?.Name;
     Author? SIU = Model.SignedInUser;   // 01. SignedInUser
     Author? TLU = Model.TimelineUser;   // 02. TimelineUser
@@ -72,26 +74,24 @@
 
     <h3> Following </h3>
     <ul class="cheeps"> @* Change class name to something more universal. Was just given same name as above *@
-        @if (Model.Following.Any())
+        @if (TLUFollower.Any())
         {
-            @foreach (var follow in Model.Following)
+            @foreach (var follower in TLUFollower)
             {
-                @if(SignInManager.IsSignedIn(User) && follow.UserName.Equals(User.Identity?.Name))
+                List<Cheep>? currFollowerCheep = UserFollowersAndTheirCheeps.GetValueOrDefault(follower);
+
+                @if(SignInManager.IsSignedIn(User) && follower.UserName.Equals(User.Identity?.Name))
                 {
                     <h5>Your Cheep</h5>
                 }
                 else
                 {
-                    <h5><a href="/@follow.UserName">@follow.UserName</a></h5>
+                    <h5><a href="/@follower.UserName">@follower.UserName</a></h5>
                 }
 
-                @*[TODO] Fix this! Part of ugly part*@
-                var followersCheepTask = await Model.GetTop4CheepsFromFollower(follow.UserName);
-                var followersCheep = followersCheepTask.ToList();
-
-                @if(followersCheep.Any())
+                @if(currFollowerCheep != null && currFollowerCheep.Any())
                 {
-                    @foreach (var cheep in followersCheep)
+                    @foreach (var cheep in currFollowerCheep)
                     {
                         <li>
                             <p>
@@ -101,6 +101,7 @@
                         </li>
                     }
                 }
+
             }
         }
         else
