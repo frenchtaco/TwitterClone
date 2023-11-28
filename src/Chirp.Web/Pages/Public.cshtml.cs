@@ -27,8 +27,8 @@ public class PublicModel : PageModel
     // 02. Variables:
     public List<Cheep> Cheeps { get; set; } = null!;
     public Author SignedInAuthor { get; set; } = null!;
-    public Dictionary<int, CO_AuthorOpinion_DTO> AuthorOpinionOfCheeps { get; set; }
-    public Dictionary<int, CO_Schema_DTO> CheepLikesAndDislikes { get; set; }
+    public Dictionary<int, CheepOpinionDTO> AuthorOpinionOfCheeps { get; set; }
+    public Dictionary<int, CheepOpinionDTO> CheepLikesAndDislikes { get; set; }
     public int TotalCheeps, CheepsPerPage;
 
     // 03. Bind properties:
@@ -66,12 +66,12 @@ public class PublicModel : PageModel
         IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(pgNum);
         Cheeps = cheeps.ToList();
 
-        int allCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
+        TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
 
         // CASE #1: A User is signed in:
         if(_signInManager.IsSignedIn(User))
         {
-            AuthorOpinionOfCheeps = new Dictionary<int, CO_AuthorOpinion_DTO>();
+            AuthorOpinionOfCheeps = new Dictionary<int, CheepOpinionDTO>();
             try
             {
                 SignedInAuthor = await _authorRepository.GetAuthorByName(User.Identity?.Name);
@@ -80,7 +80,7 @@ public class PublicModel : PageModel
                 {
                     foreach (Cheep cheep in Cheeps)
                     {
-                        CO_AuthorOpinion_DTO co_Info = await _likeDisRepository.GetAuthorCheepOpinion(cheep.CheepId, SignedInAuthor.UserName);
+                        CheepOpinionDTO co_Info = await _likeDisRepository.GetAuthorCheepOpinion(cheep.CheepId, SignedInAuthor.UserName);
                         AuthorOpinionOfCheeps.Add(cheep.CheepId, co_Info);
                     }
                 }
@@ -95,13 +95,13 @@ public class PublicModel : PageModel
         // CASE #2: No User is signed in:
         else
         {
-            CheepLikesAndDislikes = new Dictionary<int, CO_Schema_DTO>();
+            CheepLikesAndDislikes = new Dictionary<int, CheepOpinionDTO>();
 
             try
             {
                 foreach(Cheep cheep in Cheeps)
                 {
-                    CO_Schema_DTO LikesAndDislikes = await _likeDisRepository.GetCheepLikesAndDislikes(cheep.CheepId);
+                    CheepOpinionDTO LikesAndDislikes = await _likeDisRepository.GetCheepLikesAndDislikes(cheep.CheepId);
                     CheepLikesAndDislikes.Add(cheep.CheepId, LikesAndDislikes);
                 }
             }

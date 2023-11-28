@@ -123,17 +123,9 @@ public class CheepRepository : ICheepRepository
         try
         {
             Author author = await _authorRepository.GetAuthorByName(AuthorName);
-            CheepLikeDis? cheepOpinionSchema = await _likeDisRepository.GetCheepLikeDis(CheepId);       // [TODO] Add measure to check existance / validity.
+            CheepOpinionDTO CODTO = await _likeDisRepository.GetAuthorCheepOpinion(CheepId, AuthorName);
 
-            // [TODO] Make this nicer - This is just an additional "fail-safe" incase it goes wrong.
-            if(cheepOpinionSchema == null)
-            {
-                Cheep cheep = await GetCheepById(CheepId);
-                cheepOpinionSchema ??= _likeDisRepository.CreateLikeDisSchema(cheep);
-                _context.CheepLikeDis.Add(cheepOpinionSchema);
-            }
-
-            CO_AuthorOpinion_DTO CODTO = await _likeDisRepository.GetAuthorCheepOpinion(CheepId, AuthorName);
+            // [!BEWARE!] Potential need for Fail-Safe
 
             string testPrint = "";
 
@@ -144,13 +136,13 @@ public class CheepRepository : ICheepRepository
                 case AuthorCheepOpinion.LIKES:  
                     if(!IsLike)
                     {
-                        cheepOpinionSchema.Likes.Remove(author);
-                        cheepOpinionSchema.Dislikes.Add(author);
+                        CODTO.CheepOpinionSchema.Likes.Remove(author);
+                        CODTO.CheepOpinionSchema.Dislikes.Add(author);
                         testPrint += "Author was added to 'Dislikes' and removed from 'Likes'";
                     } 
                     else 
                     {
-                        cheepOpinionSchema.Likes.Remove(author);
+                        CODTO.CheepOpinionSchema.Likes.Remove(author);
                         testPrint += "Author already in 'Likes', so removed them from this Cheeps 'Likes'"; 
                     }
                     break;
@@ -159,13 +151,13 @@ public class CheepRepository : ICheepRepository
                 case AuthorCheepOpinion.DISLIKES:
                     if(IsLike)
                     {
-                        cheepOpinionSchema.Dislikes.Remove(author);
-                        cheepOpinionSchema.Likes.Add(author);
+                        CODTO.CheepOpinionSchema.Dislikes.Remove(author);
+                        CODTO.CheepOpinionSchema.Likes.Add(author);
                         testPrint += "Author was added to 'Likes' and removed from 'Dislikes'";
                     } 
                     else 
                     { 
-                        cheepOpinionSchema.Dislikes.Remove(author);
+                        CODTO.CheepOpinionSchema.Dislikes.Remove(author);
                         testPrint += "Author already in 'Dislikes', so removed them from this Cheeps 'Dislikes'"; 
                     }
                     _logger.LogInformation($"Author {author.UserName} 'Dislikes' this Cheep");
@@ -175,12 +167,12 @@ public class CheepRepository : ICheepRepository
                 case AuthorCheepOpinion.NEITHER:
                     if(IsLike)
                     {
-                        cheepOpinionSchema.Likes.Add(author);
+                        CODTO.CheepOpinionSchema.Likes.Add(author);
                         testPrint += "Author was added to 'Likes'";
                     } 
                     else
                     {
-                        cheepOpinionSchema.Dislikes.Add(author);
+                        CODTO.CheepOpinionSchema.Dislikes.Add(author);
                         testPrint += "Author was added to 'Dislikes'";
                     }
 
@@ -189,7 +181,7 @@ public class CheepRepository : ICheepRepository
             }
 
             _logger.LogInformation(testPrint);
-            _logger.LogInformation($"[SIZE TEST] Size of Cheep {CheepId}'s 'Like' HashSet: {cheepOpinionSchema.Likes.Count()} and 'Dislikes' HashSet: {cheepOpinionSchema.Dislikes.Count()}");
+            _logger.LogInformation($"[SIZE TEST] Size of Cheep {CheepId}'s 'Like' HashSet: {CODTO.CheepOpinionSchema.Likes.Count()} and 'Dislikes' HashSet: {CODTO.CheepOpinionSchema.Dislikes.Count()}");
 
             await _context.SaveChangesAsync();
         }

@@ -6,8 +6,13 @@
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
     var routeName = HttpContext.GetRouteValue("author")?.ToString();
+
     var UserFollowersAndTheirCheeps = @Model.FollowersAndTheirCheeps;
-    var TLUFollower = @Model.Followers;
+    var TLU_Followers = @Model.Followers;
+    var CheepLikesAndDislikes = Model.CheepLikesAndDislikes;
+    var AuthorOpinionOfCheeps = Model.AuthorOpinionOfCheeps;
+    var SignedInUser = SignInManager.IsSignedIn(User);
+
     string? username  = User.Identity?.Name;
     Author? SIU = Model.SignedInUser;   // 01. SignedInUser
     Author? TLU = Model.TimelineUser;   // 02. TimelineUser
@@ -48,20 +53,27 @@
         }
     </div>
     <ul id="messagelist" class="cheeps">
-    @if (Model.Cheeps.Any())
+    @if (Model.TLU_Cheeps.Any())
     {
-        @foreach (var cheep in Model.Cheeps)
+        @foreach (var cheep in Model.TLU_Cheeps)
         {
-            if (cheep.Author.UserName.Equals(routeName))
+            @if (cheep.Author.UserName.Equals(routeName))
             {
                 <li>
-                    <p>
-                        <strong>
-                            <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
-                        </strong>
-                        @cheep.Text
-                        <small>&mdash; @cheep.TimeStamp</small>
-                    </p>
+                    <div class="cheep-text-wrapper">
+                        <p>
+                            <strong>
+                                <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
+                            </strong>
+                            @cheep.Text
+                            <small>&mdash; @cheep.TimeStamp</small>
+                        </p>
+                    </div>
+
+                    @* <div class="display-number-of-likes-dislikes">
+                        <p>Number of Likes: @cheepNumLikes</p>
+                        <p>Number of Dislikes: @cheepNumDislikes</p>
+                    </div> *@
                 </li>
             }
         }
@@ -74,15 +86,15 @@
 
     <h3> Following </h3>
     <ul class="cheeps"> @* Change class name to something more universal. Was just given same name as above *@
-        @if (TLUFollower.Any())
+        @if (TLU_Followers.Any())
         {
-            @foreach (var follower in TLUFollower)
+            @foreach (var follower in TLU_Followers)
             {
                 List<Cheep>? currFollowerCheep = UserFollowersAndTheirCheeps.GetValueOrDefault(follower);
 
-                @if(SignInManager.IsSignedIn(User) && follower.UserName.Equals(User.Identity?.Name))
+                @if(SignedInUser && follower.UserName.Equals(username))
                 {
-                    <h5>Your Cheep</h5>
+                    <h5>Your Cheeps</h5>
                 }
                 else
                 {
@@ -94,10 +106,52 @@
                     @foreach (var cheep in currFollowerCheep)
                     {
                         <li>
-                            <p>
-                                @cheep.Text
-                                <small>&mdash; @cheep.TimeStamp</small>
-                            </p>
+                            <div class="cheep-text-wrapper">
+                                <p>
+                                    @cheep.Text
+                                    <small>&mdash; @cheep.TimeStamp</small>
+                                </p>
+                            </div>
+
+                            <div class="cheep-util-wrapper">
+
+                                @if(SignedInUser && SIU.UserName != TLU.UserName)
+                                {
+                                    var co_Info = AuthorOpinionOfCheeps.GetValueOrDefault(cheep.CheepId);
+                                    var currAuthorOpinion    = co_Info.AuthorCheepOpinion;
+                                    int cheepNumLikes        = co_Info.NumLikes;
+                                    int cheepNumDislikes     = co_Info.NumDislikes;
+
+                                    <div class="form-like-and-dislike">
+                                        <form id="likeDis" method="post" asp-page-handler="DislikeOrLike">
+                                            <input type="hidden" asp-for="TargetCheepId" value="@cheep.CheepId" />
+                                            <input type="hidden" asp-for="TargetAuthorUserName" value="@username" />
+                                            <button type="submit" name="likeDis" value="like" class="like-button" style="@(currAuthorOpinion == Enums.ACO.AuthorCheepOpinion.DISLIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
+                                                <img src="/images/thumbup.svg" alt="Like"></img>
+                                            </button>
+                                            <button type="submit" name="likeDis" value="dislike" class="dislike-button" style="@(currAuthorOpinion == Enums.ACO.AuthorCheepOpinion.LIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
+                                                <img src="/images/thumbdown.svg" alt="Dislike"></img>
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <div class="display-number-of-likes-dislikes">
+                                        <p>Number of Likes: @cheepNumLikes</p>
+                                        <p>Number of Dislikes: @cheepNumDislikes</p>
+                                    </div>
+                                }
+                                else if(!SignedInUser)
+                                {
+                                    var currCheep = CheepLikesAndDislikes.GetValueOrDefault(cheep.CheepId);
+                                    int cheepNumLikes    = currCheep.NumLikes;
+                                    int cheepNumDislikes = currCheep.NumDislikes;
+
+                                    <div class="display-number-of-likes-dislikes">
+                                        <p>Number of Likes: @cheepNumLikes</p>
+                                        <p>Number of Dislikes: @cheepNumDislikes</p>
+                                    </div>
+                                }
+                            </div>
                         </li>
                     }
                 }
@@ -120,7 +174,7 @@
 
     <h3> Followers </h3>
     <ul class="cheeps">
-        @if (Model.Followers.Any())
+        @if (TLU_Followers.Any())
         {
             @foreach (var follower in Model.Followers)
             {

@@ -23,17 +23,24 @@ public class UserTimelineModel : PageModel
     private readonly ILogger<UserTimelineModel> _logger;
 
     // .02 Variables:
-    public Dictionary<int, CO_AuthorOpinion_DTO> AuthorOpinionOfCheeps = null!;
-    public Dictionary<int, CO_Schema_DTO> CheepLikesAndDislikes = null!;
+    public Dictionary<int, CheepOpinionDTO> AuthorOpinionOfCheeps = null!;
+    public Dictionary<int, CheepOpinionDTO> CheepLikesAndDislikes = null!;
     public Dictionary<Author, List<Cheep>> FollowersAndTheirCheeps { get; set; } = null!;
-    public List<Cheep> Cheeps { get; set; } = null!;
+    public List<Cheep> TLU_Cheeps { get; set; } = null!;
     public List<Author> Followers { get; set; } = null!;
     public List<Author> Following { get; set; } = null!;
     public Author SignedInUser { get; set; } = null!;
     public Author TimelineUser { get; set; } = null!;
     public int cheepsPerPage;
     public int totalCheeps;
-    public UserTimelineModel(UserManager<Author> userManager, SignInManager<Author> signInManager, IAuthorRepository authorRepository, ICheepRepository cheepRepository, ILikeDisRepository likeDisRepository, ILogger<UserTimelineModel> logger)
+    public UserTimelineModel(
+        UserManager<Author> userManager, 
+        SignInManager<Author> signInManager, 
+        IAuthorRepository authorRepository, 
+        ICheepRepository cheepRepository, 
+        ILikeDisRepository likeDisRepository, 
+        ILogger<UserTimelineModel> logger
+        )
     {
         _logger = logger;
 
@@ -48,6 +55,8 @@ public class UserTimelineModel : PageModel
 
     public async Task<IActionResult> OnGet(string author, [FromQuery] int page)
     {
+        ModelState.Clear();
+
         try
         {
             // 00. Variables:
@@ -55,7 +64,7 @@ public class UserTimelineModel : PageModel
 
             // 01. Cheeps:
             IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheepsFromAuthor(author, page);
-            Cheeps = cheeps.ToList();
+            TLU_Cheeps = cheeps.ToList();
 
             // 02. All the Authors Cheeps:
             totalCheeps = await _cheepRepository.GetTotalNumberOfAuthorCheeps(author);
@@ -68,44 +77,73 @@ public class UserTimelineModel : PageModel
             IEnumerable<Author> following = await _authorRepository.GetAuthorFollowing(author);
             Following = following.ToList();
 
-            // 05. Signed In User:
-            if(_signInManager.IsSignedIn(User) && signedInUser != null && author != signedInUser)
-            {
-                AuthorOpinionOfCheeps = new Dictionary<int, CO_AuthorOpinion_DTO>();
+            FollowersAndTheirCheeps = new Dictionary<Author, List<Cheep>>();
+            AuthorOpinionOfCheeps   = new Dictionary<int, CheepOpinionDTO>();
+            CheepLikesAndDislikes   = new Dictionary<int, CheepOpinionDTO>();
 
-                TimelineUser = await _authorRepository.GetAuthorByName(author);
-                SignedInUser = await _authorRepository.GetAuthorByName(signedInUser);
+            // 05. Retrieve info on Signed-In User (if any) and the Timeline User.
+            bool IsUserSignedIn = _signInManager.IsSignedIn(User);
+            TimelineUser        = await _authorRepository.GetAuthorByName(author);
+            if(IsUserSignedIn) { SignedInUser = await _authorRepository.GetAuthorByName(signedInUser); }
+
+            // 06. Stats on User Timeline User Cheeps: 
+            if(TLU_Cheeps.Any())
+            {
+                FollowersAndTheirCheeps.Add(TimelineUser, TLU_Cheeps);
+
+                if(IsUserSignedIn)
+                {
+                    foreach (Cheep cheep in TLU_Cheeps)
+                    {
+                        CheepOpinionDTO co_Info = await _likeDisRepository.GetAuthorCheepOpinion(cheep.CheepId, SignedInUser.UserName);
+                        AuthorOpinionOfCheeps.Add(cheep.CheepId, co_Info);
+                    }
+                } 
+                else if(!IsUserSignedIn)
+                {
+                    foreach (Cheep cheep in TLU_Cheeps)
+                    {
+                        CheepOpinionDTO co_CheepLikesAndDislikes = await _likeDisRepository.GetCheepLikesAndDislikes(cheep.CheepId);
+                        CheepLikesAndDislikes.Add(cheep.CheepId, co_CheepLikesAndDislikes);
+                    }
+                }
+            }
+
+            // 06. Signed In User:
+            if(IsUserSignedIn)
+            {
+                AuthorOpinionOfCheeps ??= new Dictionary<int, CheepOpinionDTO>();
 
                 if(Followers.Any())
                 {
                     foreach (Author follower in Followers)
                     {
-                        var followerCheeps = await GetTop4CheepsFromFollower(follower.UserName);
-                        FollowersAndTheirCheeps.Add(follower, followerCheeps.ToList());
+                        var followerCheeps = await _cheepRepository.GetTop4FromAuthor(follower.UserName);
+                        if(!FollowersAndTheirCheeps.ContainsKey(follower)) FollowersAndTheirCheeps.Add(follower, followerCheeps.ToList());
 
                         foreach (Cheep followerCheep in followerCheeps)
                         {
-                            CO_AuthorOpinion_DTO co_Info = await _likeDisRepository.GetAuthorCheepOpinion(followerCheep.CheepId, follower.UserName);
-                            AuthorOpinionOfCheeps.Add(followerCheep.CheepId, co_Info);
+                            CheepOpinionDTO co_Info = await _likeDisRepository.GetAuthorCheepOpinion(followerCheep.CheepId, follower.UserName);
+                            if(!AuthorOpinionOfCheeps.ContainsKey(followerCheep.CheepId)) AuthorOpinionOfCheeps.Add(followerCheep.CheepId, co_Info);
                         }
                     }
                 }
             } 
-            else
+            else if(!IsUserSignedIn)
             {
-                CheepLikesAndDislikes = new Dictionary<int, CO_Schema_DTO>();
+                CheepLikesAndDislikes ??= new Dictionary<int, CheepOpinionDTO>();
 
                 if(Followers.Any())
                 {
                     foreach (Author follower in Followers)
                     {
-                        var followerCheeps = await GetTop4CheepsFromFollower(follower.UserName);
-                        FollowersAndTheirCheeps.Add(follower, followerCheeps.ToList());
+                        var followerCheeps = await _cheepRepository.GetTop4FromAuthor(follower.UserName);
+                        if(!FollowersAndTheirCheeps.ContainsKey(follower)) FollowersAndTheirCheeps.Add(follower, followerCheeps.ToList());
 
                         foreach (Cheep followerCheep in followerCheeps)
                         {
-                            CO_Schema_DTO co_CheepLikesAndDislikes = await _likeDisRepository.GetCheepLikesAndDislikes(followerCheep.CheepId);
-                            CheepLikesAndDislikes.Add(followerCheep.CheepId, co_CheepLikesAndDislikes);
+                            CheepOpinionDTO co_CheepLikesAndDislikes = await _likeDisRepository.GetCheepLikesAndDislikes(followerCheep.CheepId);
+                            if(!CheepLikesAndDislikes.ContainsKey(followerCheep.CheepId)) CheepLikesAndDislikes.Add(followerCheep.CheepId, co_CheepLikesAndDislikes);
                         }
                     }
                 }
@@ -125,6 +163,8 @@ public class UserTimelineModel : PageModel
     public bool IsFollow { get; set; }
     [BindProperty]
     public string TargetAuthorUserName { get; set; } = null!;
+    [BindProperty]
+    public int TargetCheepId { get; set; }
     public async Task<IActionResult> OnPostFollow([FromQuery] int? page = 0)
     {
         ModelState.Clear();
@@ -162,9 +202,42 @@ public class UserTimelineModel : PageModel
         return RedirectToPage("UserTimeline", new { page });
     }
 
-    // [TODO] Change this and clean up. Simplist solution - but ugly af.
-    public async Task<IEnumerable<Cheep>> GetTop4CheepsFromFollower(string author)
+    public async Task<IActionResult> OnPostDislikeOrLike([FromQuery] int? page = 0)
     {
-        return await _cheepRepository.GetTop4FromAuthor(author);
+        ModelState.Clear();
+
+        try
+        {
+            if(ModelState.IsValid) {
+                if(_signInManager.IsSignedIn(User))
+                {   
+                    var likeDislikeValue = Request.Form["likeDis"];
+                    if(string.IsNullOrEmpty(likeDislikeValue)) throw new Exception("File: 'Public.cshtml.cs' - Method: 'OnPostDislikeOrLike()' - Message: Value retrieved from Request Form was NULL");
+
+                    if(likeDislikeValue == "like")
+                    {
+                        await _cheepRepository.GiveOpinionOfCheep(true, TargetCheepId, TargetAuthorUserName);
+                    }
+                    else if(likeDislikeValue == "dislike")
+                    {
+                        await _cheepRepository.GiveOpinionOfCheep(false, TargetCheepId, TargetAuthorUserName);
+                    }
+                } 
+
+                return RedirectToPage("Public", new { page });
+            } 
+            else if(!ModelState.IsValid)
+            {
+                throw new Exception("ModelState was invalid");
+            }
+        }
+        catch(Exception ex)
+        {
+            string exceptionInfo = "File: Public.cshtml.cs \n Method: 'OnPostDislikeOrLike()' \n Stack Trace: \n";
+            TempData["ErrorMessage"] = exceptionInfo += ex.StackTrace;
+            return RedirectToPage("/Error");
+        }
+
+        return RedirectToPage("Public", new { page });
     }
 }
