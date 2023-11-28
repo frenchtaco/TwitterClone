@@ -67,7 +67,9 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
+            _logger.LogInformation("Loading external authentication schemes.");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
 
             ReturnUrl = returnUrl;
         }
@@ -83,6 +85,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                _logger.LogInformation($"Login attempt for user {Input.UserName} resulted in: {result}");
+
                 var user = await _userManager.FindByNameAsync(Input.UserName);
 
                 if (user == null)
@@ -90,7 +94,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, "User not found. Ya sure you registered your account?");
                     return Page();
                 }
-                
+
                 if (result.Succeeded)
                 {
                     return RedirectToPage("/Public");
@@ -104,11 +108,11 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     _logger.LogWarning("[LOG-IN] User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
-                else if(result.IsNotAllowed)
+                else if (result.IsNotAllowed)
                 {
                     string userNotAllowed_msg = "User is not allowed";
 
-                    if(!await _userManager.IsEmailConfirmedAsync(user)) 
+                    if (!await _userManager.IsEmailConfirmedAsync(user))
                     {
                         userNotAllowed_msg += " - Email is NOT confirmed.";
                     }
