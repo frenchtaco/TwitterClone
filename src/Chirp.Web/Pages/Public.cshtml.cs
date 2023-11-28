@@ -27,8 +27,7 @@ public class PublicModel : PageModel
     // 02. Variables:
     public List<Cheep> Cheeps { get; set; } = null!;
     public Author SignedInAuthor { get; set; } = null!;
-    public Dictionary<int, CheepOpinionDTO> AuthorOpinionOfCheeps { get; set; }
-    public Dictionary<int, CheepOpinionDTO> CheepLikesAndDislikes { get; set; }
+    public Dictionary<int, CheepOpinionDTO> CheepOpinionsInfo { get; set; }
     public int TotalCheeps, CheepsPerPage;
 
     // 03. Bind properties:
@@ -67,12 +66,13 @@ public class PublicModel : PageModel
         Cheeps = cheeps.ToList();
 
         TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
+        CheepOpinionsInfo = new Dictionary<int, CheepOpinionDTO>();
 
-        // CASE #1: A User is signed in:
-        if(_signInManager.IsSignedIn(User))
+        bool IsUserSignedIn = _signInManager.IsSignedIn(User);
+
+        try
         {
-            AuthorOpinionOfCheeps = new Dictionary<int, CheepOpinionDTO>();
-            try
+            if(IsUserSignedIn)
             {
                 SignedInAuthor = await _authorRepository.GetAuthorByName(User.Identity?.Name);
 
@@ -81,39 +81,26 @@ public class PublicModel : PageModel
                     foreach (Cheep cheep in Cheeps)
                     {
                         CheepOpinionDTO co_Info = await _likeDisRepository.GetAuthorCheepOpinion(cheep.CheepId, SignedInAuthor.UserName);
-                        AuthorOpinionOfCheeps.Add(cheep.CheepId, co_Info);
+                        CheepOpinionsInfo.Add(cheep.CheepId, co_Info);
                     }
                 }
             }
-            catch(Exception ex)
-            {
-                string exceptionInfo = $"File: Public.cshtml.cs \n\n Method: 'OnGet()' \n\n Message: {ex.Message} \n\n Stack Trace: {ex.StackTrace}";
-                TempData["ErrorMessage"] = exceptionInfo;
-                return RedirectToPage("/Error");
-            }
-        } 
-        // CASE #2: No User is signed in:
-        else
-        {
-            CheepLikesAndDislikes = new Dictionary<int, CheepOpinionDTO>();
-
-            try
+            else if(!IsUserSignedIn)
             {
                 foreach(Cheep cheep in Cheeps)
                 {
                     CheepOpinionDTO LikesAndDislikes = await _likeDisRepository.GetCheepLikesAndDislikes(cheep.CheepId);
-                    CheepLikesAndDislikes.Add(cheep.CheepId, LikesAndDislikes);
+                    CheepOpinionsInfo.Add(cheep.CheepId, LikesAndDislikes);
                 }
             }
-            catch(Exception ex)
-            {
-                string exceptionInfo = $"File: Public.cshtml.cs \n\n Method: 'OnGet()' \n\n Message: {ex.Message} \n\n Stack Trace: {ex.StackTrace}";
-                TempData["ErrorMessage"] = exceptionInfo;
-                return RedirectToPage("/Error");
-            }
+        } 
+        catch(Exception ex)
+        {
+            string exceptionInfo = $"File: Public.cshtml.cs \n\n Method: 'OnGet()' \n\n Message: {ex.Message} \n\n Stack Trace: {ex.StackTrace}";
+            TempData["ErrorMessage"] = exceptionInfo;
+            return RedirectToPage("/Error");
         }
         
-
         return Page();
     }
 

@@ -9,8 +9,9 @@
 
     var UserFollowersAndTheirCheeps = @Model.FollowersAndTheirCheeps;
     var TLU_Followers = @Model.Followers;
-    var CheepLikesAndDislikes = Model.CheepLikesAndDislikes;
-    var AuthorOpinionOfCheeps = Model.AuthorOpinionOfCheeps;
+    var TLU_Following = @Model.Following;
+    var TLU_Cheeps    = @Model.TLU_Cheeps;
+    var CheepOpinionsInfo = Model.CheepOpinionsInfo;
     var SignedInUser = SignInManager.IsSignedIn(User);
 
     string? username  = User.Identity?.Name;
@@ -55,27 +56,29 @@
     <ul id="messagelist" class="cheeps">
     @if (Model.TLU_Cheeps.Any())
     {
-        @foreach (var cheep in Model.TLU_Cheeps)
+        @foreach (var cheep in TLU_Cheeps)
         {
-            @if (cheep.Author.UserName.Equals(routeName))
-            {
-                <li>
-                    <div class="cheep-text-wrapper">
-                        <p>
-                            <strong>
-                                <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
-                            </strong>
-                            @cheep.Text
-                            <small>&mdash; @cheep.TimeStamp</small>
-                        </p>
-                    </div>
+            <li>
+                <div class="cheep-text-wrapper">
+                    <p>
+                        <strong>
+                            <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
+                        </strong>
+                        @cheep.Text
+                        <small>&mdash; @cheep.TimeStamp</small>
+                    </p>
+                </div>
 
-                    @* <div class="display-number-of-likes-dislikes">
-                        <p>Number of Likes: @cheepNumLikes</p>
-                        <p>Number of Dislikes: @cheepNumDislikes</p>
-                    </div> *@
-                </li>
-            }
+                <div class="cheep-util-wrapper">
+                    @{
+                        var co_Info = CheepOpinionsInfo.GetValueOrDefault(cheep.CheepId);
+                        int cheepNumLikes        = co_Info.NumLikes;
+                        int cheepNumDislikes     = co_Info.NumDislikes;
+                    }
+                    <p>Number of Likes: @cheepNumLikes</p>
+                    <p>Number of Dislikes: @cheepNumDislikes</p>
+                </div>
+            </li>
         }
     }
     else
@@ -86,9 +89,9 @@
 
     <h3> Following </h3>
     <ul class="cheeps"> @* Change class name to something more universal. Was just given same name as above *@
-        @if (TLU_Followers.Any())
+        @if (TLU_Following.Any())
         {
-            @foreach (var follower in TLU_Followers)
+            @foreach (var follower in TLU_Following)
             {
                 List<Cheep>? currFollowerCheep = UserFollowersAndTheirCheeps.GetValueOrDefault(follower);
 
@@ -114,13 +117,15 @@
                             </div>
 
                             <div class="cheep-util-wrapper">
-
-                                @if(SignedInUser && SIU.UserName != TLU.UserName)
-                                {
-                                    var co_Info = AuthorOpinionOfCheeps.GetValueOrDefault(cheep.CheepId);
+                                @{
+                                    var co_Info = CheepOpinionsInfo.GetValueOrDefault(cheep.CheepId);
                                     var currAuthorOpinion    = co_Info.AuthorCheepOpinion;
                                     int cheepNumLikes        = co_Info.NumLikes;
                                     int cheepNumDislikes     = co_Info.NumDislikes;
+                                }
+
+                                @if(SignedInUser && SIU.UserName != TLU.UserName)
+                                {
 
                                     <div class="form-like-and-dislike">
                                         <form id="likeDis" method="post" asp-page-handler="DislikeOrLike">
@@ -134,23 +139,12 @@
                                             </button>
                                         </form>
                                     </div>
-
-                                    <div class="display-number-of-likes-dislikes">
-                                        <p>Number of Likes: @cheepNumLikes</p>
-                                        <p>Number of Dislikes: @cheepNumDislikes</p>
-                                    </div>
                                 }
-                                else if(!SignedInUser)
-                                {
-                                    var currCheep = CheepLikesAndDislikes.GetValueOrDefault(cheep.CheepId);
-                                    int cheepNumLikes    = currCheep.NumLikes;
-                                    int cheepNumDislikes = currCheep.NumDislikes;
 
-                                    <div class="display-number-of-likes-dislikes">
-                                        <p>Number of Likes: @cheepNumLikes</p>
-                                        <p>Number of Dislikes: @cheepNumDislikes</p>
-                                    </div>
-                                }
+                                <div class="display-number-of-likes-dislikes">
+                                    <p>Number of Likes: @cheepNumLikes</p>
+                                    <p>Number of Dislikes: @cheepNumDislikes</p>
+                                </div>
                             </div>
                         </li>
                     }
@@ -176,7 +170,7 @@
     <ul class="cheeps">
         @if (TLU_Followers.Any())
         {
-            @foreach (var follower in Model.Followers)
+            @foreach (var follower in TLU_Followers)
             {
                 // [TODO] Create simple author books with details on User:
                 //        - Number of Cheeps
@@ -202,7 +196,7 @@
 </div>
 
     <div class="pagination">
-        @for (int i = 1; i <= Math.Ceiling((double) Model.totalCheeps / Model.cheepsPerPage) - 1; i++)
+        @for (int i = 1; i <= Math.Ceiling((double) Model.TotalCheeps / Model.CheepsPerPage) - 1; i++)
         {
             <a href="/@routeName/?page=@i">@i</a>
         }

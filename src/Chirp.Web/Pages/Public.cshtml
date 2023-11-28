@@ -7,8 +7,7 @@
     Layout = "Shared/_Layout";
     var numPages       = Math.Ceiling((double)Model.TotalCheeps / Model.CheepsPerPage);
     var username       = User.Identity?.Name;
-    var authorOpinions = @Model.AuthorOpinionOfCheeps;
-    var cheepLikesAndDislikes = @Model.CheepLikesAndDislikes;
+    var CheepOpinionInfo = @Model.CheepOpinionsInfo;
 }
 
 <div>
@@ -57,17 +56,20 @@
                         </div>
 
                         <div class="cheep-util-wrapper">
+                            @{
+                                var co_Info = CheepOpinionInfo.GetValueOrDefault(cheep.CheepId);
+                                int cheepNumLikes        = co_Info.NumLikes;
+                                int cheepNumDislikes     = co_Info.NumDislikes;
+                            }
+
+
                             @if(SignInManager.IsSignedIn(User) && username != cheep.Author.UserName)
                             {
                                 var user = Model.SignedInAuthor;
-                                
+                                var authorOpinionOfCheep = co_Info.AuthorCheepOpinion;
+
                                 try
                                 {
-                                    var co_Info = authorOpinions.GetValueOrDefault(cheep.CheepId);
-                                    var authorOpinionOfCheep = co_Info.AuthorCheepOpinion;
-                                    int cheepNumLikes        = co_Info.NumLikes;
-                                    int cheepNumDislikes     = co_Info.NumDislikes;
-
                                     <form id="followForm" method="post" asp-page-handler="Follow">
                                         @Html.AntiForgeryToken()
                                         @if(user.Following.Any() && user.Following.Contains<Author>(cheep.Author))
@@ -98,11 +100,6 @@
                                             <img src="/images/thumbdown.svg" alt="Dislike"></img>
                                         </button>
                                     </form>
-
-                                    <div class="display-number-of-likes-dislikes">
-                                        <p>Number of Likes: @cheepNumLikes</p>
-                                        <p>Number of Dislikes: @cheepNumDislikes</p>
-                                    </div>
                                 } 
                                 catch(Exception ex)
                                 {
@@ -110,17 +107,10 @@
                                 }
 
                             }
-                            else if(!SignInManager.IsSignedIn(User))
-                            {
-                                var currCheep = cheepLikesAndDislikes.GetValueOrDefault(cheep.CheepId);
-                                int cheepNumLikes    = currCheep.NumLikes;
-                                int cheepNumDislikes = currCheep.NumDislikes;
-
-                                <div class="display-number-of-likes-dislikes">
-                                    <p>Number of Likes: @cheepNumLikes</p>
-                                    <p>Number of Dislikes: @cheepNumDislikes</p>
-                                </div>
-                            }
+                            <div class="display-number-of-likes-dislikes">
+                                <p>Number of Likes: @cheepNumLikes</p>
+                                <p>Number of Dislikes: @cheepNumDislikes</p>
+                            </div>
 
                         </div>
                     </div>
