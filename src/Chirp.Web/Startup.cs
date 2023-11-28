@@ -16,18 +16,31 @@ namespace Chirp.StartUp
 {
     public class Startup
     {
-        private IConfiguration _configuration { get; set; }
-        private IWebHostEnvironment _env { get; set; }
+        private IConfiguration _configuration { get; }
+        private IWebHostEnvironment _env { get; }
+        private ILogger _logger; // Logger instance
 
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
-
             _env = env;
             _configuration = configuration;
-        }
 
+            // Create a logger manually
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder
+                    .AddConsole()
+                    .AddDebug();
+            });
+
+            _logger = loggerFactory.CreateLogger<Startup>();
+        }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpsRedirection(options =>
+    {
+        options.HttpsPort = 5232; // The port your HTTPS development server will use
+    });
             services.AddDefaultIdentity<Author>(options =>
             {
 
@@ -65,15 +78,31 @@ namespace Chirp.StartUp
                 })
                 .AddCookie()
                 .AddGitHub(o =>
-                {//updated ID and SecretID!
-                    o.ClientId = _configuration["Authentication:GitHub:ClientIdAzure"];
-                    o.ClientSecret = _configuration["Authentication:GitHub:ClientSecretAzure"];
-                    o.CallbackPath = "/signin-github";
+                {
+
+
+                    if (_env.IsDevelopment())
+                    {
+                        // Commented out the logging statement
+                        _logger.LogInformation("Using GitHub Local Configuration");
+                        o.ClientId = _configuration["Authentication:GitHub:ClientIdLocal"];
+                        _logger.LogInformation($"Configuring GitHub authentication with Client ID: {o.ClientId}");
+                        o.ClientSecret = _configuration["GitHub:ClientSecretLocal"];
+                        o.CallbackPath = "/signin-github";
+                    }
+                    else if (_env.IsProduction())
+                    {
+                        // Commented out the logging statement
+                        _logger.LogInformation("Using GitHub Azure Configuration");
+                        o.ClientId = _configuration["Authentication:GitHub:ClientIdAzure"];
+                        o.ClientSecret = _configuration["GitHub:ClientSecretAzure"];
+                        o.CallbackPath = "/signin-github";
+                    }
                 });
             }
             catch (Exception exception)
             {
-
+                _logger.LogError(exception, "An error occurred while setting up GitHub authentication.");
             }
 
             SqlConnectionStringBuilder sqlConnectionString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("DefaultConnection"));
