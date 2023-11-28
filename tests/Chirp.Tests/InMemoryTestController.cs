@@ -3,6 +3,7 @@ using DBContext;
 using Microsoft.EntityFrameworkCore;
 using Chirp.Infrastructure;
 using SQLitePCL;
+using Chirp.CDTO;
 
 public class InMemoryTestController //Inspired by https://learn.microsoft.com/en-us/ef/core/testing/testing-without-the-database
 {
@@ -30,18 +31,28 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
             viewCommand.ExecuteNonQuery();
         }*/
 
-        context.AddRange(Enumerable.Range(1, 64).Select(i =>
+        var authorRepository = new AuthorRepository(null, context);
+        var cheepRepository = new CheepRepository(context, authorRepository, null);
+
+        context.Authors.AddRange(Enumerable.Range(1, 64).Select(i =>
+            new Author
+            {
+                UserName = $"AuthorName{i}",
+                Email = $"author{i}@id.com",
+                Cheeps = new List<Cheep>(),
+                Followers = new HashSet<Author>(),
+                Following = new HashSet<Author>()
+            }));
+        context.SaveChanges();
+
+        /*context.Cheeps.AddRange(Enumerable.Range(1, 64).Select(async i =>
             new Cheep
             {
                 CheepId = i,
-                Author = new Author()
-                {
-                    Email = $"author{i}@id.com",
-                    UserName = $"AuthorName{i}"
-                },
+                Author = await repository.GetAuthorByName($"AuthorName{i}"),
                 Text = $"{i}. cheep",
                 TimeStamp = DateTime.Now.AddSeconds(i)
-            }));
+            }));*/
         context.SaveChanges();
 
     }
@@ -50,39 +61,55 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
 
     public void Dispose() => _connection.Dispose();
 
-    
-        [Fact]
-        public async void GetAllCheeps()
+    public async Task InitializeDB(CheepRepository cheepRepository)
+    {
+        for (int i = 1; i <= 64; i++)
         {
-            using var context = CreateContext();
-            var repository = new CheepRepository(context, new AuthorRepository(null, context), null);
-
-            IEnumerable<Cheep> cheeps = await repository.GetAllCheeps();
-
-            Assert.Equal(64, cheeps.Count());
+            CheepDTO cheep = new CheepDTO($"{i}. cheep", $"AuthorName{i}");
+            await cheepRepository.CreateCheep(cheep);
         }
+    }
 
-        [Fact]
-        public async void GetCheeps()
-        {
-            using var context = CreateContext();
-            var repository = new CheepRepository(context, new AuthorRepository(null, context), null);
+    [Fact]
+    public async void GetAllCheeps()
+    {
+        using var context = CreateContext();
+        var authorRepository = new AuthorRepository(null, context);
+        var cheepRepository = new CheepRepository(context, authorRepository, null);
 
-            IEnumerable<Cheep> _cheeps = await repository.GetCheeps(0);
-            List<Cheep> cheeps = _cheeps.ToList();
+        await InitializeDB(cheepRepository);
+        IEnumerable<Cheep> cheeps = await cheepRepository.GetAllCheeps();
 
-            Assert.Equal(32, _cheeps.Count());
-            Assert.Equal("64. cheep", cheeps[0].Text);
-            Assert.Equal("33. cheep", cheeps[31].Text);
-        }
+        Assert.Equal(64, cheeps.Count());
+    }
 
-        [Fact]
-        public async void Follow()
-        {
-            using var context = CreateContext();
-            var repository = new AuthorRepository(null, context), null;
+    [Fact]
+    public async void GetCheeps()
+    {
+        using var context = CreateContext();
+        var authorRepository = new AuthorRepository(null, context);
+        var cheepRepository = new CheepRepository(context, authorRepository, null);
 
-            Author currentAuthor = repository.GetAuthorByName(AuthorName12);
-            
-        }
+        IEnumerable<Cheep> _cheeps = await cheepRepository.GetCheeps(0);
+        List<Cheep> cheeps = _cheeps.ToList();
+
+        Assert.Equal(32, _cheeps.Count());
+        Assert.Equal("64. cheep", cheeps[0].Text);
+        Assert.Equal("33. cheep", cheeps[31].Text);
+    }
+
+    [Fact]
+    public async void TestFollowing()
+    {
+        using var context = CreateContext();
+        var authorRepository = new AuthorRepository(null, context);
+        var cheepRepository = new CheepRepository(context, authorRepository, null);
+
+        Author currentAuthor = await authorRepository.GetAuthorByName("AuthorName12");
+        Author targetAuthor = await authorRepository.GetAuthorByName("AuthorName13");
+
+        //FollowersDTO followerDTO = new FollowersDTO(targetAuthor.UserName, author13.UserName);
+
+
+    }
 }
