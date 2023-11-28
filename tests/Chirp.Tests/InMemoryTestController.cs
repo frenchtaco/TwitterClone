@@ -30,10 +30,18 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
             viewCommand.ExecuteNonQuery();
         }*/
 
-        context.AddRange(
-            new Cheep { CheepId = 1, Author = new Author() { Email = "author1@id.com", UserName = "AuthorName1" }, Text = "First cheep", TimeStamp = DateTime.Now },
-            new Cheep { CheepId = 2, Author = new Author() { Email = "author2@id.com", UserName = "AuthorName2" }, Text = "Second cheep", TimeStamp = DateTime.Now },
-            new Cheep { CheepId = 3, Author = new Author() { Email = "author3@id.com", UserName = "AuthorName3" }, Text = "Third cheep", TimeStamp = DateTime.Now });
+        context.AddRange(Enumerable.Range(1, 64).Select(i =>
+            new Cheep
+            {
+                CheepId = i,
+                Author = new Author()
+                {
+                    Email = $"author{i}@id.com",
+                    UserName = $"AuthorName{i}"
+                },
+                Text = $"{i}. cheep",
+                TimeStamp = DateTime.Now.AddSeconds(i)
+            }));
         context.SaveChanges();
 
     }
@@ -42,20 +50,39 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
 
     public void Dispose() => _connection.Dispose();
 
-    /*
+    
         [Fact]
         public async void GetAllCheeps()
         {
             using var context = CreateContext();
-            var repository = new CheepRepository(context, new AuthorRepository(context), null);
+            var repository = new CheepRepository(context, new AuthorRepository(null, context), null);
 
             IEnumerable<Cheep> cheeps = await repository.GetAllCheeps();
 
-            Assert.Collection(
-                cheeps.Reverse(),
-                cheep => Assert.Equal("First cheep", cheep.Text),
-                cheep => Assert.Equal("Second cheep", cheep.Text),
-                cheep => Assert.Equal("Third cheep", cheep.Text));
+            Assert.Equal(64, cheeps.Count());
         }
-        */
+
+        [Fact]
+        public async void GetCheeps()
+        {
+            using var context = CreateContext();
+            var repository = new CheepRepository(context, new AuthorRepository(null, context), null);
+
+            IEnumerable<Cheep> _cheeps = await repository.GetCheeps(0);
+            List<Cheep> cheeps = _cheeps.ToList();
+
+            Assert.Equal(32, _cheeps.Count());
+            Assert.Equal("64. cheep", cheeps[0].Text);
+            Assert.Equal("33. cheep", cheeps[31].Text);
+        }
+
+        [Fact]
+        public async void Follow()
+        {
+            using var context = CreateContext();
+            var repository = new AuthorRepository(null, context), null;
+
+            Author currentAuthor = repository.GetAuthorByName(AuthorName12);
+            
+        }
 }

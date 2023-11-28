@@ -19,7 +19,7 @@ namespace UnitTest1
             string output = c1.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss");
 
             // Assert
-            Assert.Equal("2023-08-01 13:14:37", output);
+            Assert.Equal("2023-08-01 13.14.37", output);
         }
         [Fact]
         public void TestingAuthorAndCheepRelations()
