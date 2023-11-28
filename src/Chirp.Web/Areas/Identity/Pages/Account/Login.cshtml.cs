@@ -55,6 +55,31 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
+        public async Task<IActionResult> OnGetExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            _logger.LogInformation("OnGetExternalLoginCallback reached");
+            returnUrl = returnUrl ?? Url.Content("~/");
+            if (remoteError != null)
+            {
+                ErrorMessage = $"Error from external provider: {remoteError}";
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+            }
+
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                _logger.LogInformation("info == null redirect to ./Login");
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+            }
+
+            // Here you can log the external login info details
+            _logger.LogInformation($"External login info: Provider={info.ProviderDisplayName}, ProviderKey={info.ProviderKey}");
+
+            // Rest of your external login handling
+            return Page();
+        }
+
+
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
@@ -68,7 +93,9 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             _logger.LogInformation("Loading external authentication schemes.");
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
 
 
             ReturnUrl = returnUrl;
@@ -79,6 +106,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            _logger.LogInformation("OnPostAsync reached after github login");
 
             if (ModelState.IsValid)
             {

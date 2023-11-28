@@ -79,13 +79,14 @@ namespace Chirp.StartUp
                 .AddCookie()
                 .AddGitHub(o =>
                 {
-                    _logger.LogInformation($"Configuring GitHub authentication with Client ID: {o.ClientId}");
+
+
                     if (_env.IsDevelopment())
                     {
                         // Commented out the logging statement
                         _logger.LogInformation("Using GitHub Local Configuration");
-                        Console.WriteLine("Using GitHub Local Configuration");
                         o.ClientId = _configuration["Authentication:GitHub:ClientIdLocal"];
+                        _logger.LogInformation($"Configuring GitHub authentication with Client ID: {o.ClientId}");
                         o.ClientSecret = _configuration["GitHub:ClientSecretLocal"];
                         o.CallbackPath = "/signin-github";
                     }
@@ -94,7 +95,7 @@ namespace Chirp.StartUp
                         // Commented out the logging statement
                         _logger.LogInformation("Using GitHub Azure Configuration");
                         o.ClientId = _configuration["Authentication:GitHub:ClientIdAzure"];
-                        o.ClientSecret = _configuration["Authentication:GitHub:ClientSecretAzure"];
+                        o.ClientSecret = _configuration["GitHub:ClientSecretAzure"];
                         o.CallbackPath = "/signin-github";
                     }
                 });
