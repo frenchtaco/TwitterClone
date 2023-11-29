@@ -95,7 +95,7 @@ public class UserTimelineModel : PageModel
                         CheepOpinionsInfo.Add(cheep.CheepId, co_Info);
                     }
                 } 
-                else if(!IsUserSignedIn)
+                else 
                 {
                     foreach (Cheep cheep in TLU_Cheeps)
                     {

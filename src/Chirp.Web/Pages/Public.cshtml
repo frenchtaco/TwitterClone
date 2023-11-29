@@ -11,24 +11,24 @@
 }
 
 <div>
-    <div class="">
-    @if(SignInManager.IsSignedIn(User))
-    {
-        <form method="post" asp-page-handler="Cheep">
-            <div id="post-cheep-container">
-                <label asp-for="CheepText" class="form-label">Hey @username! What's on your mind?</label>
-                <input asp-for="CheepText" class="form-control" aria-required="true" />
-                <span asp-validation-for="CheepText" class="text-danger"></span>
-            </div>
-            <div id="post-cheep-button-wrapper">
-                <button id="post-cheep-button" type="submit" class="w-100 btn btn-lg btn-primary">Post Cheep!</button>
-            </div>
-        </form>
-    } 
-    else
-    {
-        <p>Wanna Cheep? Click <a asp-area="Identity" asp-page="/Account/Login">here</a> to log in.</p>
-    }
+    <div class="post-cheep-form">
+        @if(SignInManager.IsSignedIn(User))
+        {
+            <form method="post" asp-page-handler="Cheep">
+                <div id="post-cheep-container">
+                    <label asp-for="CheepText" class="form-label">Hey @username! What's on your mind?</label>
+                    <input asp-for="CheepText" class="form-control" aria-required="true" />
+                    <span asp-validation-for="CheepText" class="text-danger"></span>
+                </div>
+                <div id="post-cheep-button-wrapper">
+                    <button id="post-cheep-button" type="submit" class="w-100 btn btn-lg btn-primary">Post Cheep!</button>
+                </div>
+            </form>
+        } 
+        else
+        {
+            <p>Wanna Cheep? Click <a asp-area="Identity" asp-page="/Account/Login">here</a> to log in.</p>
+        }
     </div>
 
     <h2> Public Timeline </h2>
