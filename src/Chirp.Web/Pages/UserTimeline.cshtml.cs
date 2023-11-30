@@ -22,7 +22,7 @@ public class UserTimelineModel : PageModel
     private readonly SignInManager<Author> _signInManager;
     private readonly ILogger<UserTimelineModel> _logger;
 
-    // .02 Variables:
+    // 02. Variables:
     public Dictionary<int, CheepOpinionDTO> CheepOpinionsInfo { get; set; }
     public Dictionary<Author, List<Cheep>> FollowersAndTheirCheeps { get; set; } = null!;
     public List<Cheep> TLU_Cheeps { get; set; } = null!;
@@ -32,6 +32,15 @@ public class UserTimelineModel : PageModel
     public Author TimelineUser { get; set; } = null!;
     public int CheepsPerPage;
     public int TotalCheeps;
+
+    // 03. Bind Properties:
+    [BindProperty]
+    public bool IsFollow { get; set; }
+    [BindProperty]
+    public string TargetAuthorUserName { get; set; } = null!;
+    [BindProperty]
+    public int TargetCheepId { get; set; }
+
     public UserTimelineModel(
         UserManager<Author> userManager, 
         SignInManager<Author> signInManager, 
@@ -79,12 +88,12 @@ public class UserTimelineModel : PageModel
             FollowersAndTheirCheeps = new Dictionary<Author, List<Cheep>>();
             CheepOpinionsInfo       = new Dictionary<int, CheepOpinionDTO>();
 
-            // 04. Retrieve info on Signed-In User (if any) and the Timeline User.
+            // 05. Retrieve info on Signed-In User (if any) and the Timeline User.
             bool IsUserSignedIn = _signInManager.IsSignedIn(User);
             TimelineUser        = await _authorRepository.GetAuthorByName(author);
             if(IsUserSignedIn) { SignedInUser = await _authorRepository.GetAuthorByName(signedInUser); }
 
-            // 05. Stats on User Timeline User Cheeps: 
+            // 06. Stats on User Timeline User Cheeps: 
             if(TLU_Cheeps.Any())
             {
                 if(IsUserSignedIn && author != signedInUser)
@@ -139,12 +148,7 @@ public class UserTimelineModel : PageModel
         return Page();
     }
 
-    [BindProperty]
-    public bool IsFollow { get; set; }
-    [BindProperty]
-    public string TargetAuthorUserName { get; set; } = null!;
-    [BindProperty]
-    public int TargetCheepId { get; set; }
+    
     public async Task<IActionResult> OnPostFollow([FromQuery] int? page = 0)
     {
         ModelState.Clear();
@@ -219,5 +223,44 @@ public class UserTimelineModel : PageModel
         }
 
         return RedirectToPage("Public", new { page });
+    }
+
+    public async Task<IActionResult> OnPostDeleteCheep([FromQuery] int page = 0)
+    {
+        try
+        {
+            bool IsSuccess = await _cheepRepository.DeleteCheep(TargetAuthorUserName, TargetCheepId);
+
+            string status = (IsSuccess) ? "success" : "fail";
+            _logger.LogInformation(status);
+        }
+        catch(Exception ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+            RedirectToPage("/Error");
+        }
+
+
+        return RedirectToPage("UserTimeline", new { page });
+    }
+
+    public async Task<IActionResult> OnPostForgetMe([FromQuery] int page = 0)
+    {
+        try
+        {
+            var authorToForget = await _authorRepository.GetAuthorByName(TargetAuthorUserName);
+        } 
+        catch(Exception ex)
+        {
+            TempData["ErrorMessage"] = ex.Message;
+            RedirectToPage("/Error");
+        }
+
+        // 01: Get user and update.
+        // 02: Delete all user cheeps.
+        // 03: Sign out.
+        // 04: Update the user so they CANT log back in.
+
+        return RedirectToPage("UserTimeline", new { page });
     }
 }

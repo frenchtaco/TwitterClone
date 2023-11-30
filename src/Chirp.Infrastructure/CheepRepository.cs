@@ -40,7 +40,6 @@ public class CheepRepository : ICheepRepository
             .ToListAsync();
     }
 
-    // [TODO] Change to return an integer as its only used as a way to calculate pagination.
     public async Task<int> GetTotalNumberOfCheeps()
     {
         return await _context.Cheeps
@@ -58,7 +57,6 @@ public class CheepRepository : ICheepRepository
             .ToListAsync();
     }
 
-    // [TODO] Same as above, make it return an integer as its only used to calculate pagination.
     public async Task<int> GetTotalNumberOfAuthorCheeps(string author)
     {
         return await _context.Cheeps
@@ -116,6 +114,36 @@ public class CheepRepository : ICheepRepository
             );
         }
         _logger.LogInformation($"[AFTER] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas{_context.CheepLikeDis.Count()}");
+    }
+
+    public async Task<bool> DeleteCheep(string AuthorUserName, int CheepId)
+    {
+        try
+        {
+            var author = await _authorRepository.GetAuthorByName(AuthorUserName);
+            var cheepToBeDeleted = await GetCheepById(CheepId);
+
+            bool IsSuccess = false;
+
+            if(author.Cheeps.Contains(cheepToBeDeleted))
+            {
+                IsSuccess = author.Cheeps.Remove(cheepToBeDeleted);
+                
+                if(IsSuccess)
+                {
+                    var removedCheep = _context.Cheeps.Remove(cheepToBeDeleted);
+                    // Add fail-safe
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+
+            return IsSuccess;
+        }
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
     public async Task GiveOpinionOfCheep(bool IsLike, int CheepId, string AuthorName) // [TODO] Combine both LikeCheep and DislikeCheep and just make them pass an additional variable.
