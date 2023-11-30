@@ -354,7 +354,7 @@ div.page ul.cheeps .cheep-profilepicture-usertimeline img
 /* DELETE CHEEP */
 div.page ul.cheeps .cheep-wrapper .cheep-delete-wrapper
 {
-  visibility: visible;
+  visibility: hidden;
 }
 
 div.page ul.cheeps .cheep-wrapper .cheep-delete-wrapper:hover

@@ -27,6 +27,23 @@ public class AuthorRepository : IAuthorRepository
             .ToListAsync();
     }
 
+    public async Task<bool> ForgetAuthor(string authorName)
+    {
+        try
+        {
+            var author = await GetAuthorByName(authorName);
+            author.Cheeps.Clear();
+            _context.Authors.Remove(author);
+
+            return true;
+        }
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
+    }
+
     public async Task<Author> GetAuthorByName(string authorName)
     {
         return await _context.Authors

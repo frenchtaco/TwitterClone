@@ -231,7 +231,7 @@ public class UserTimelineModel : PageModel
         {
             bool IsSuccess = await _cheepRepository.DeleteCheep(TargetAuthorUserName, TargetCheepId);
 
-            string status = (IsSuccess) ? "success" : "fail";
+            string status = (IsSuccess) ? "Delete successful" : "Delete failed";
             _logger.LogInformation(status);
         }
         catch(Exception ex)
@@ -246,9 +246,31 @@ public class UserTimelineModel : PageModel
 
     public async Task<IActionResult> OnPostForgetMe([FromQuery] int page = 0)
     {
+        _logger.LogInformation("[OnPostForgetMe()] Method called!");
         try
         {
-            var authorToForget = await _authorRepository.GetAuthorByName(TargetAuthorUserName);
+            bool IsSuccess = false;
+
+            IsSuccess = await _cheepRepository.DeleteAllCheepsFromAuthor(TargetAuthorUserName);
+            
+            _logger.LogInformation($"[OnPostForgetMe()] Forget Me Status: {IsSuccess}");
+
+            if(IsSuccess)
+            {
+                IsSuccess = await _authorRepository.ForgetAuthor(TargetAuthorUserName);
+                _logger.LogInformation($"[OnPostForgetMe()] Forget Me Status: {IsSuccess}");
+            }
+
+            if(!IsSuccess)
+            {
+                return RedirectToPage("/Error");
+            } 
+            else
+            {
+                await _signInManager.SignOutAsync();
+                return RedirectToPage("/Public");
+            }
+
         } 
         catch(Exception ex)
         {

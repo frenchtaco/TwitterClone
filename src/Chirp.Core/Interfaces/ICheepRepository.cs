@@ -15,4 +15,5 @@ public interface ICheepRepository
     public Task GiveOpinionOfCheep(bool IsLike, int CheepId, string AuthorName);
     public Task<Cheep> GetCheepById(int CheepId);
     public Task<bool> DeleteCheep(string author, int CheepId);
+    public Task<bool> DeleteAllCheepsFromAuthor(string AuthorUserName);
 }

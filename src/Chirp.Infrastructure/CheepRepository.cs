@@ -7,6 +7,7 @@ using Chirp.CDTO;
 using Microsoft.Extensions.Logging;
 using Enums.ACO;
 using Chirp.ODTO;
+using System.Formats.Asn1;
 
 namespace Chirp.Infrastructure;
 
@@ -37,6 +38,14 @@ public class CheepRepository : ICheepRepository
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip(page * CheepsPerPage())
             .Take(CheepsPerPage())
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Cheep>> GetAllCheepsFromAuthor(string AuthorUserName)
+    {
+        return await _context.Cheeps
+            .Include(cheep => cheep.Author)
+            .Where(cheep => cheep.Author.UserName == AuthorUserName)
             .ToListAsync();
     }
 
@@ -113,7 +122,59 @@ public class CheepRepository : ICheepRepository
                 $"File: CheepRepository.cs - Method: 'CreateCheep()' - Stack Trace: {ex.StackTrace}"
             );
         }
-        _logger.LogInformation($"[AFTER] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas{_context.CheepLikeDis.Count()}");
+        _logger.LogInformation($"[AFTER] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas: {_context.CheepLikeDis.Count()}");
+    }
+
+    public async Task<bool> DeleteAllCheepsFromAuthor(string AuthorUserName)
+    {
+        try
+        {
+            bool IsSuccess = false;
+            var authorToForget = await _authorRepository.GetAuthorByName(AuthorUserName);
+
+            _logger.LogInformation($"[DeleteAllCheepsFromAuthor()] Author: {authorToForget.UserName}");
+
+            var authorCheeps = await GetAllCheepsFromAuthor(AuthorUserName);
+
+            int cheepCounter = 0;
+
+            foreach (Cheep cheep in authorCheeps)
+            {
+                cheepCounter++;
+                int cID = cheep.CheepId;
+                
+                CheepLikeDis cheepOpinionSchema = await _likeDisRepository.GetCheepLikeDis(cheep.CheepId);
+                
+                if(cheepOpinionSchema != null)
+                {
+                    _logger.LogInformation("[DeleteAllCheepsFromAuthor()] Opinion was not null");
+                    cheepOpinionSchema.Likes.Clear();
+                    cheepOpinionSchema.Dislikes.Clear();
+                    
+                    _context.CheepLikeDis.Remove(cheepOpinionSchema);
+
+                    IsSuccess = true;
+                } 
+                else 
+                { 
+                    IsSuccess = false; 
+                    _logger.LogInformation("[DeleteAllCheepsFromAuthor()] Break triggered");
+                    break; 
+                }
+
+                var removedCheep = _context.Cheeps.Remove(cheep);
+
+                if(removedCheep != null)  _logger.LogInformation($"[DeleteAllCheepsFromAuthor()] Cheep Nr.{cheepCounter}");
+            }
+
+            await _context.SaveChangesAsync();
+
+            return IsSuccess;
+        }
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
     public async Task<bool> DeleteCheep(string AuthorUserName, int CheepId)
