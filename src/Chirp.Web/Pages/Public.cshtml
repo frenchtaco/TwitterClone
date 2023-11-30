@@ -5,87 +5,126 @@
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    var numPages     = Math.Ceiling((double)Model.totalCheeps / Model.cheepsPerPage);
-    var username     = User.Identity?.Name;
+    var numPages       = Math.Ceiling((double)Model.TotalCheeps / Model.CheepsPerPage);
+    var username       = User.Identity?.Name;
+    var CheepOpinionInfo = @Model.CheepOpinionsInfo;
 }
 
 <div>
-    <div>
-    @if(SignInManager.IsSignedIn(User))
-    {
-        <form method="post" asp-page-handler="Cheep">
-            <div id="post-cheep-container">
-                <label asp-for="CheepText" class="form-label">Hey @username! What's on your mind?</label>
-                <input asp-for="CheepText" class="form-control" aria-required="true" />
-                <span asp-validation-for="CheepText" class="text-danger"></span>
-            </div>
-            <div id="post-cheep-button-wrapper">
-                <button id="post-cheep-button" type="submit" class="w-100 btn btn-lg btn-primary">Post Cheep!</button>
-            </div>
-        </form>
-    } 
-    else
-    {
-        <p>Wanna Cheep? Click <a asp-area="Identity" asp-page="/Account/Login">here</a> to log in.</p>
-    }
+    <div class="post-cheep-form">
+        @if(SignInManager.IsSignedIn(User))
+        {
+            <form method="post" asp-page-handler="Cheep">
+                <div id="post-cheep-container">
+                    <label asp-for="CheepText" class="form-label">Hey @username! What's on your mind?</label>
+                    <input asp-for="CheepText" class="form-control" aria-required="true" />
+                    <span asp-validation-for="CheepText" class="text-danger"></span>
+                </div>
+                <div id="post-cheep-button-wrapper">
+                    <button id="post-cheep-button" type="submit" class="w-100 btn btn-lg btn-primary">Post Cheep!</button>
+                </div>
+            </form>
+        } 
+        else
+        {
+            <p>Wanna Cheep? Click <a asp-area="Identity" asp-page="/Account/Login">here</a> to log in.</p>
+        }
     </div>
-
-
 
     <h2> Public Timeline </h2>
 
     @if (Model.Cheeps.Any())
     {
-        <ul id="messagelist" class="cheeps">
+        <ul class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                <div class="cheep-wrapper">
-                    <li>
-                        @if(SignInManager.IsSignedIn(User) && username != null && username != cheep.Author.UserName)
-                        {
-                            var user = Model.SignedInAuthor;
-                            @* [PACK INTO PARTIAL #1] *@
-                            try
-                            {
-                                <form method="post" asp-page-handler="Follow">
-                                    @Html.AntiForgeryToken()
-                                    @if(user.Following.Any() && user.Following.Contains<Author>(cheep.Author))
-                                    {
-                                        <input type="hidden" asp-for="IsFollow" value="false" />
-                                        <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
-                                        <button type="submit" class="following-button" OnClientClick="return false;">
-                                            <img id="unfollow" src="/images/unfollow.svg" alt="Unfollow"></img>
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <input type="hidden" asp-for="IsFollow" value="true" />
-                                        <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
-                                        <button type="submit" class="following-button" OnClientClick="return false;">
-                                            <img id="follow" src="/images/follow.svg" alt="Follow"></img>
-                                        </button>
-                                    }
-                                </form>
-                            } 
-                            catch(Exception ex)
-                            {
-                                <p>Exception Message: @ex.Message</p>
-                            }
+                <li>
+                    <div class="cheep-wrapper">
+                        @* [TODO] If the user does NOT have a Profile Picture, put the default in its place. *@
+                        <div class="cheep-profilepicture-name-time">
+                            <img src="/images/blank.png" alt="Profile Picture">
+                            <div class="cheep-name-time">
+                                <strong>
+                                    <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
+                                </strong>
+                                <small>@cheep.TimeStamp</small>
+                            </div>
+                        </div>
+
+                        @{
+                            var co_Info = CheepOpinionInfo.GetValueOrDefault(cheep.CheepId);
+                            int cheepNumLikes        = co_Info.NumLikes;
+                            int cheepNumDislikes     = co_Info.NumDislikes;
                         }
 
-                        <p>
-                            <strong>
-                                <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
-                            </strong>
-                            @cheep.Text
-                            <small>&mdash; @cheep.TimeStamp</small>
-                        </p>
-                    </li>
-                </div>
+                        <div class="cheep-text-wrapper">
+                            <p>@cheep.Text</p>
+                        </div>
+
+                        <div class="cheep-number-likes-dislikes-wrapper">
+                            <small><img src="/images/thumbup.svg" alt="Like"></img> @cheepNumLikes</small>
+                            <small><img src="/images/thumbdown.svg" alt="Dislike"></img> @cheepNumDislikes</small>
+                        </div>
+
+                        <div class="cheep-func-wrapper">
+                            @if(SignInManager.IsSignedIn(User) && username != cheep.Author.UserName)
+                            {
+                                var user = Model.SignedInAuthor;
+                                var authorOpinionOfCheep = co_Info.AuthorCheepOpinion;
+
+                                try
+                                {
+                                    @* Change this to be more concise *@
+                                    <div class="cheep-func-grid-box">
+                                        <form id="followForm" method="post" asp-page-handler="Follow">
+                                            @Html.AntiForgeryToken()
+                                            @if(user.Following.Any() && user.Following.Contains<Author>(cheep.Author))
+                                            {
+                                                <input type="hidden" asp-for="IsFollow" value="false" />
+                                                <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
+                                                <button type="submit" class="form-input-button" >
+                                                    <img id="unfollow" src="/images/unfollow.svg" alt="Unfollow"></img>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <input type="hidden" asp-for="IsFollow" value="true" />
+                                                <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
+                                                <button type="submit" class="form-input-button" >
+                                                    <img id="follow" src="/images/follow.svg" alt="Follow"></img>
+                                                </button>
+                                            }
+                                        </form>
+                                    </div>
+
+                                    <div class="cheep-func-grid-box">
+                                        <form id="likeDis" method="post" asp-page-handler="DislikeOrLike">
+                                            <input type="hidden" asp-for="TargetCheepId" value="@cheep.CheepId" />
+                                            <input type="hidden" asp-for="TargetAuthorUserName" value="@username" />
+                                            <button type="submit" name="likeDis" value="like" class="form-input-button" style="@(authorOpinionOfCheep == Enums.ACO.AuthorCheepOpinion.DISLIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
+                                                <img src="/images/thumbup.svg" alt="Like"></img>
+                                            </button>
+                                            <button type="submit" name="likeDis" value="dislike" class="form-input-button" style="@(authorOpinionOfCheep == Enums.ACO.AuthorCheepOpinion.LIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
+                                                <img src="/images/thumbdown.svg" alt="Dislike"></img>
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <div class="cheep-func-grid-box">
+                                        <button class="form-input-button">Comments</button>
+                                    </div>
+                                } 
+                                catch(Exception ex)
+                                {
+                                    <p>Exception Message: @ex.Message</p>
+                                }
+                            }
+                        </div>
+                    </div>
+                </li>
             }
         </ul>
     }
-
     else
     {
         <em>There are no cheeps so far.</em>

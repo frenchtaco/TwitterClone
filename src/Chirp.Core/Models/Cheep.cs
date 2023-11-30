@@ -21,5 +21,7 @@ namespace Chirp.Models
         [DataType(DataType.Date)]
         [Required]
         public DateTime TimeStamp { get; set; }
+        
+        public CheepLikeDis LikesAndDislikes { get; set; } = null!;
     }
 }
