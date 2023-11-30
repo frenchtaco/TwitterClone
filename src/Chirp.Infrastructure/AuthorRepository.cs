@@ -34,13 +34,11 @@ public class AuthorRepository : IAuthorRepository
             var author = await GetAuthorByName(authorName);
 
             author.UserName = "NULL";
-            author.Email = "NULL";      
-            
-            author.LockoutEnabled = true;
-            author.LockoutEnd     = DateTimeOffset.MaxValue;
-
+            author.Email = "NULL";
             author.Cheeps.Clear();
-            _context.Authors.Remove(author);
+            author.IsForgotten = true;
+
+            await _context.SaveChangesAsync();
 
             return true;
         }

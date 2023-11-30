@@ -17,6 +17,9 @@ namespace Chirp.Models
 
         [EmailAddress]
         public required override string Email { get; set; }
+
+        [Display(Name = "Has the User been 'Forgotten'?")]
+        public bool IsForgotten { get; set; }
         public ICollection<Cheep> Cheeps { get; set; } = null!;
         public ISet<Author> Followers { get; set; } = null!;
         public ISet<Author> Following { get; set; } = null!;
