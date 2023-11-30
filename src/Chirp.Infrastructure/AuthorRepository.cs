@@ -32,6 +32,13 @@ public class AuthorRepository : IAuthorRepository
         try
         {
             var author = await GetAuthorByName(authorName);
+
+            author.UserName = "NULL";
+            author.Email = "NULL";      
+            
+            author.LockoutEnabled = true;
+            author.LockoutEnd     = DateTimeOffset.MaxValue;
+
             author.Cheeps.Clear();
             _context.Authors.Remove(author);
 
@@ -41,7 +48,6 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new Exception(ex.Message);
         }
-
     }
 
     public async Task<Author> GetAuthorByName(string authorName)
