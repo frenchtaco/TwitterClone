@@ -65,8 +65,8 @@ namespace Chirp.StartUp
 
             })
             .AddEntityFrameworkStores<DatabaseContext>()
-            .AddDefaultTokenProviders()
-            .AddUserValidator<ForgottenUserValidator<Author>>();
+            .AddUserValidator<ForgottenUserValidator<Author>>()
+            .AddDefaultTokenProviders();
 
             /*
             try
