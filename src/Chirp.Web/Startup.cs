@@ -6,7 +6,6 @@ using Chirp.Models;
 using DBContext;
 
 using Microsoft.Data.SqlClient;
-using FUV;
 
 //WHEN IMPLEMENTING GITHUB, WRITE THIS IN TERMINAL IF GIVES YOU A NO CLIENT ID ERR
 //dotnet user-secrets set "authentication.github.clientId" "<YOUR_CLIENTID>"
@@ -65,7 +64,6 @@ namespace Chirp.StartUp
 
             })
             .AddEntityFrameworkStores<DatabaseContext>()
-            .AddUserValidator<ForgottenUserValidator<Author>>()
             .AddDefaultTokenProviders();
 
             /*

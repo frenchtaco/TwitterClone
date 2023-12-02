@@ -101,6 +101,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            ModelState.Clear();
+
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -108,9 +110,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                _logger.LogInformation($"Login attempt for user {Input.UserName} resulted in: {result}");   // [TODO] Remove
-
+                // 01. Locate the User and confirm its not NULL and its not 
                 var user = await _userManager.FindByNameAsync(Input.UserName);
 
                 if (user == null)
@@ -123,6 +123,13 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, "This user has been 'Forgotten'. Cannot log in with this User");
                     return Page();
                 }
+
+                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                _logger.LogInformation($"Login attempt for user {Input.UserName} resulted in: {result}");   // [TODO] Remove
+
+
+                _logger.LogInformation($"Logged in User 'ForgetMe' Status: {user.IsForgotten}");   // [TODO] Remove
+
 
                 if (result.Succeeded)
                 {
@@ -153,6 +160,11 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     return Page();
                 }
             } 
+            else if(!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "File: 'Public.cshtml.cs' - Method: 'OnPostDislikeOrLike()' - Message: ModelState was Invalid";
+                return RedirectToPage("/Error");
+            }
 
             // If we got this far, something failed, redisplay form
             return Page();

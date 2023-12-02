@@ -198,7 +198,8 @@ public class PublicModel : PageModel
             } 
             else if(!ModelState.IsValid)
             {
-                throw new Exception("ModelState was invalid");
+                TempData["ErrorMessage"] = "File: 'Public.cshtml.cs' - Method: 'OnPostDislikeOrLike()' - Message: ModelState was Invalid";
+                return RedirectToPage("/Error");
             }
         }
         catch(Exception ex)
