@@ -242,12 +242,16 @@
                 <img src="/images/xcross.svg" alt="X"></img>
             </button>
         </div>
-
-        <strong class="forgetme-popup-warning">Warning!</strong> 
-        <p>By clicking this button you will delete all your Cheeps as well as your </p>
+        
+        <div class="forget-me-text">
+            <strong class="forget-me-popup-warning">Warning!</strong> 
+            <p>By clicking this button you will delete all your Cheeps as well as your </p>
+        </div>
         <form method="post" asp-page-handler="ForgetMe">
             <input type="hidden" asp-for="TargetAuthorUserName" value="@SIU.UserName" />
-            <button type="submit" class="forget-me-button">Forget Me!</button>
+            <div class="forget-me-button-wrapper">
+                <button type="submit" class="forget-me-button btn">Forget Me!</button>
+            </div>
         </form>
     </div>
 </div>

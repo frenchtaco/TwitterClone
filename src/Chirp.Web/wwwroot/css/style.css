@@ -395,12 +395,14 @@ div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forge
   position: relative;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .forget-me-popup .forget-me-wrapper .close-forget-me-popup-wrapper {
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: -20px;
+  right: -20px;
 }
 
 .forget-me-popup .forget-me-wrapper .close-forget-me-popup-wrapper .close-forget-me-popup-button {
@@ -412,7 +414,26 @@ div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forge
   opacity: 1.0;
 }
 
+.forget-me-popup .forget-me-wrapper .forget-me-popup-warning {
+  font-size: 24px;
+  color: red;
+}
 
+.forget-me-popup .forget-me-wrapper .forget-me-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.forget-me-popup .forget-me-wrapper .forget-me-button-wrapper .forget-me-button {
+  color: #fff;
+  background: rgb(235, 69, 69);
+}
+
+.forget-me-popup .forget-me-wrapper .forget-me-text {
+  padding: 10px 0px 10px 0px;
+  
+}
 
 /*
 .modal {
