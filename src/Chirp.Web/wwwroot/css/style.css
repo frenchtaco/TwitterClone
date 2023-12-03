@@ -1,6 +1,6 @@
 /*******************************
 
-          GENERAL CSS 
+      GENERAL / SHARED  CSS 
 #f0fafa
 *********************************/
 html {
@@ -28,21 +28,8 @@ a:hover {
   background: none;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus, .post-cheep-form-control:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-input[type="text"],
-input[type="password"] {
-  background: white;
-  border: 1px solid #08488b;
-  padding: 2px;
-  font-family: 'Trebuchet MS', sans-serif;
-  font-size: 14px;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  color: #08488b;
 }
 
 input[type="submit"] {
@@ -97,11 +84,6 @@ div.page div.footer { /*[REPEAT WITH OTHER FILE]*/
   font-size: 12px;
 }
 
-/*******************************
-
-          SHARED CSS 
-
-*********************************/
 div.page ul.cheeps { 
   list-style: none;
   margin: 0;
@@ -127,10 +109,6 @@ div.page ul.cheeps li { /* [CHECk - TEST] Use case? */
   min-height: 48px;
 }
 
-div.page ul.cheeps p {
-  margin: 0;
-}
-
 div.page ul.cheeps li img { /* [CHECk] Does this ever get used? */
   float: left;
   padding: 0 10px 0 0;
@@ -141,19 +119,12 @@ div.page ul.cheeps li small {
   color: #888;
 }
 
-div.page ul.cheeps li button
-{
-  background: none;
-  border: none;
-  position: relative;
-}
-
 /*******************************
 
         POST CHEEP 
 
 *********************************/
-div.page div.post-cheep-wrapper { /* [CHECk] Rename type form to 'cheepbox' */
+div.page div.post-cheep-wrapper {   
   margin: 10px 0;
   padding: 5px;
   background: #F0FAF9;
@@ -161,19 +132,31 @@ div.page div.post-cheep-wrapper { /* [CHECk] Rename type form to 'cheepbox' */
   border-radius: 2px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
+  box-shadow: #02254b;
+  display: flex;
+  flex-direction: column;
 }
 
-div.page div.post-cheep-wrapper p { 
-  margin: 0;
+div.page div.post-cheep-wrapper div.post-cheep-button-wrapper { 
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  display: flex;
+}
+
+div.page div.post-cheep-wrapper div.post-cheep-button-wrapper button.post-cheep-button {
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  background: #258cfb;
+  color: #fff;
 }
 
 div.page div.post-cheep-wrapper input[type="text"] { 
-  width: 585px;
-}
-
-div.page div.post-cheep-wrapper .post-cheep-button-wrapper { 
-  width: 70px;
-  margin-left: 5px;
+  position: relative;
+  width: 100%;
+  border: none;
 }
 
 div.error { 
@@ -195,7 +178,8 @@ div.error {
 
 
 /* CHEEP CONTENT MAIN WRAPPER */
-div.page ul.cheeps li .cheep-wrapper
+div.page div.post-cheep-wrapper,
+div.page ul.cheeps li div.cheep-wrapper
 {
   display: grid;
   padding: 5px;
@@ -203,27 +187,23 @@ div.page ul.cheeps li .cheep-wrapper
   row-gap: 8px;
 }
 
-/*Doesn't do a damn thing....*/ 
-div.page ul.cheeps li .cheep-wrapper .cheep-content-wrapper
-{
-  padding: 10px;
-}
-
-div.page ul.cheeps li .cheep-wrapper .cheep-profilepicture-name-time
+div.page div.post-cheep-wrapper div.post-cheep-profilepicture,
+div.page ul.cheeps li div.cheep-wrapper div.cheep-profilepicture-name-time
 {
   height: 50px;
   object-fit: fill;
   display: flex;
 }
 
-div.page ul.cheeps li .cheep-wrapper .cheep-profilepicture-name-time .cheep-name-time
+div.page ul.cheeps li div.cheep-wrapper div.cheep-profilepicture-name-time div.cheep-name-time
 {
   display: flex;
   flex-direction: column;
 }
 
-/* PROFILE PICTURE */
-div.page ul.cheeps li .cheep-wrapper .cheep-profilepicture-name-time img
+
+div.page div.post-cheep-wrapper div.post-cheep-profilepicture img,
+div.page ul.cheeps li div.cheep-wrapper div.cheep-profilepicture-name-time img
 {
   object-fit: contain;
   border-radius: 4px;
@@ -434,29 +414,3 @@ div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forge
   padding: 10px 0px 10px 0px;
   
 }
-
-/*
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.7);
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-*/

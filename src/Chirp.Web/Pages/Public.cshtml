@@ -11,28 +11,28 @@
 }
 
 <div>
-    <div class="post-cheep-wrapper">
-        @if(SignInManager.IsSignedIn(User))
-        {
-            <div class="post-cheep-form-wrapper">
-                <form method="post" asp-page-handler="Cheep">
-                    <label asp-for="CheepText" class="post-cheep-form-label">Hey @username! What's on your mind?</label>
-                    <input asp-for="CheepText" class="post-cheep-form-control" aria-required="true" />
-                    <span asp-validation-for="CheepText" class="text-danger"></span>
-                    <div id="post-cheep-button-wrapper">
-                        <button id="post-cheep-button" type="submit" class="w-100 btn btn-lg btn-primary">Cheep!</button>
-                    </div>
-                </form>
+    @if(SignInManager.IsSignedIn(User))
+    {
+        <div class="post-cheep-wrapper">
+            <div class="post-cheep-profilepicture profile-picture">
+                <img src="/images/blank.png" alt="Profile Picture" />
+                <strong>@username</strong>
             </div>
-        } 
-        else
-        {
-            <p>Wanna Cheep? Click <a asp-area="Identity" asp-page="/Account/Login">here</a> to log in.</p>
-        }
-    </div>
+            <form method="post" asp-page-handler="Cheep">
+                <input type="text" asp-for="CheepText" class="post-cheep-form-control" aria-required="true" placeholder="Hey @username! What's on your mind?"/>
+                <span asp-validation-for="CheepText" class="text-danger"></span>
+                <div class="post-cheep-button-wrapper">
+                    <button type="submit" class="post-cheep-button btn">Cheep!</button>
+                </div>
+            </form>
+        </div>
+    } 
+    else
+    {
+        <p class="post-cheep-text">Wanna Cheep? Click <a asp-area="Identity" asp-page="/Account/Login">here</a> to log in.</p>
+    }
 
     <h2> Public Timeline </h2>
-
     @if (Model.Cheeps.Any())
     {
         <ul class="cheeps">

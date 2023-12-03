@@ -204,7 +204,7 @@ public class PublicModel : PageModel
         }
         catch(Exception ex)
         {
-            string exceptionInfo = "File: Public.cshtml.cs \n Method: 'OnPostDislikeOrLike()' \n Stack Trace: \n";
+            string exceptionInfo = "File: Public.cshtml.cs - Method: 'OnPostDislikeOrLike()' - Stack Trace: ";
             TempData["ErrorMessage"] = exceptionInfo += ex.StackTrace;
             return RedirectToPage("/Error");
         }

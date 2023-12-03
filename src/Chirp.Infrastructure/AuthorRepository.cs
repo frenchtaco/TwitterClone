@@ -31,10 +31,11 @@ public class AuthorRepository : IAuthorRepository
     {
         try
         {
+
+            // [TODO] Change it to proper delete and instead make "Account Recovery"
             var author = await GetAuthorByName(authorName);
 
             author.UserName = "NULL";
-            author.Email = "NULL";
             author.Cheeps.Clear();
             author.IsForgotten = true;
 
