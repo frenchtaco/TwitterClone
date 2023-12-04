@@ -96,13 +96,13 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-
-
             ReturnUrl = returnUrl;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            ModelState.Clear();
+
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -110,11 +110,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                _logger.LogInformation($"Login attempt for user {Input.UserName} resulted in: {result}");
-
+                // 01. Locate the User and confirm its not NULL and its not 
                 var user = await _userManager.FindByNameAsync(Input.UserName);
 
                 if (user == null)
@@ -122,18 +118,29 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, "User not found. Ya sure you registered your account?");
                     return Page();
                 }
+                else if(user.IsForgotten == true)
+                {
+                    ModelState.AddModelError(string.Empty, "This user has been 'Forgotten'. Cannot log in with this User.");
+                    return Page();
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                _logger.LogInformation($"Login attempt for user {Input.UserName} resulted in: {result}");   // [TODO] Remove
+
+
+                _logger.LogInformation($"Logged in User 'ForgetMe' Status: {user.IsForgotten}");   // [TODO] Remove
+
 
                 if (result.Succeeded)
                 {
                     return RedirectToPage("/Public");
                 }
-                else if (result.RequiresTwoFactor)
+                else if (result.RequiresTwoFactor) // [TODO] Consider removing - only adds unnecessary clutter.
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, Input.RememberMe });
                 }
-                else if (result.IsLockedOut)
+                else if (result.IsLockedOut)    // [TODO] Consider removing - only adds unnecessary clutter.
                 {
-                    _logger.LogWarning("[LOG-IN] User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
                 else if (result.IsNotAllowed)
@@ -152,6 +159,11 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }
+            } 
+            else if(!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "File: 'Public.cshtml.cs' - Method: 'OnPostDislikeOrLike()' - Message: ModelState was Invalid";
+                return RedirectToPage("/Error");
             }
 
             // If we got this far, something failed, redisplay form

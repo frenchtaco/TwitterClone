@@ -11,28 +11,28 @@
 }
 
 <div>
-    <div class="post-cheep-form">
-        @if(SignInManager.IsSignedIn(User))
-        {
+    @if(SignInManager.IsSignedIn(User))
+    {
+        <div class="post-cheep-wrapper">
+            <div class="post-cheep-profilepicture profile-picture">
+                <img src="/images/blank.png" alt="Profile Picture" />
+                <strong>@username</strong>
+            </div>
             <form method="post" asp-page-handler="Cheep">
-                <div id="post-cheep-container">
-                    <label asp-for="CheepText" class="form-label">Hey @username! What's on your mind?</label>
-                    <input asp-for="CheepText" class="form-control" aria-required="true" />
-                    <span asp-validation-for="CheepText" class="text-danger"></span>
-                </div>
-                <div id="post-cheep-button-wrapper">
-                    <button id="post-cheep-button" type="submit" class="w-100 btn btn-lg btn-primary">Post Cheep!</button>
+                <input type="text" asp-for="CheepText" class="post-cheep-form-control form-control" aria-required="true" placeholder="Hey @username! What's on your mind?" />
+                <span asp-validation-for="CheepText" class="text-danger"></span>
+                <div class="post-cheep-button-wrapper">
+                    <button type="submit" class="post-cheep-button btn">Cheep!</button>
                 </div>
             </form>
-        } 
-        else
-        {
-            <p>Wanna Cheep? Click <a asp-area="Identity" asp-page="/Account/Login">here</a> to log in.</p>
-        }
-    </div>
+        </div>
+    } 
+    else
+    {
+        <p class="post-cheep-text">Wanna Cheep? Click <a asp-area="Identity" asp-page="/Account/Login">here</a> to log in.</p>
+    }
 
     <h2> Public Timeline </h2>
-
     @if (Model.Cheeps.Any())
     {
         <ul class="cheeps">
@@ -82,7 +82,7 @@
                                             {
                                                 <input type="hidden" asp-for="IsFollow" value="false" />
                                                 <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
-                                                <button type="submit" class="form-input-button" >
+                                                <button type="submit" class="form-input-button btn" >
                                                     <img id="unfollow" src="/images/unfollow.svg" alt="Unfollow"></img>
                                                 </button>
                                             }
@@ -90,7 +90,7 @@
                                             {
                                                 <input type="hidden" asp-for="IsFollow" value="true" />
                                                 <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
-                                                <button type="submit" class="form-input-button" >
+                                                <button type="submit" class="form-input-button btn" >
                                                     <img id="follow" src="/images/follow.svg" alt="Follow"></img>
                                                 </button>
                                             }
@@ -101,17 +101,19 @@
                                         <form id="likeDis" method="post" asp-page-handler="DislikeOrLike">
                                             <input type="hidden" asp-for="TargetCheepId" value="@cheep.CheepId" />
                                             <input type="hidden" asp-for="TargetAuthorUserName" value="@username" />
-                                            <button type="submit" name="likeDis" value="like" class="form-input-button" style="@(authorOpinionOfCheep == Enums.ACO.AuthorCheepOpinion.DISLIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
+                                            <button type="submit" name="likeDis" value="like" class="form-input-button btn" style="@(authorOpinionOfCheep == Enums.ACO.AuthorCheepOpinion.DISLIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
                                                 <img src="/images/thumbup.svg" alt="Like"></img>
                                             </button>
-                                            <button type="submit" name="likeDis" value="dislike" class="form-input-button" style="@(authorOpinionOfCheep == Enums.ACO.AuthorCheepOpinion.LIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
+                                            <button type="submit" name="likeDis" value="dislike" class="form-input-button btn" style="@(authorOpinionOfCheep == Enums.ACO.AuthorCheepOpinion.LIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
                                                 <img src="/images/thumbdown.svg" alt="Dislike"></img>
                                             </button>
                                         </form>
                                     </div>
 
                                     <div class="cheep-func-grid-box">
-                                        <button class="form-input-button">Comments</button>
+                                        <button class="form-input-button btn">
+                                            <img src="/images/chat.svg" alt="Comments"></img>
+                                        </button>
                                     </div>
                                 } 
                                 catch(Exception ex)

@@ -198,12 +198,13 @@ public class PublicModel : PageModel
             } 
             else if(!ModelState.IsValid)
             {
-                throw new Exception("ModelState was invalid");
+                TempData["ErrorMessage"] = "File: 'Public.cshtml.cs' - Method: 'OnPostDislikeOrLike()' - Message: ModelState was Invalid";
+                return RedirectToPage("/Error");
             }
         }
         catch(Exception ex)
         {
-            string exceptionInfo = "File: Public.cshtml.cs \n Method: 'OnPostDislikeOrLike()' \n Stack Trace: \n";
+            string exceptionInfo = "File: Public.cshtml.cs - Method: 'OnPostDislikeOrLike()' - Stack Trace: ";
             TempData["ErrorMessage"] = exceptionInfo += ex.StackTrace;
             return RedirectToPage("/Error");
         }
