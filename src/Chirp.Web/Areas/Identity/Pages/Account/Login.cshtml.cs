@@ -120,7 +120,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 }
                 else if(user.IsForgotten == true)
                 {
-                    ModelState.AddModelError(string.Empty, "This user has been 'Forgotten'. Cannot log in with this User");
+                    ModelState.AddModelError(string.Empty, "This user has been 'Forgotten'. Cannot log in with this User.");
                     return Page();
                 }
 

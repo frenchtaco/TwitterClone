@@ -19,7 +19,7 @@
                 <strong>@username</strong>
             </div>
             <form method="post" asp-page-handler="Cheep">
-                <input type="text" asp-for="CheepText" class="post-cheep-form-control" aria-required="true" placeholder="Hey @username! What's on your mind?"/>
+                <input type="text" asp-for="CheepText" class="post-cheep-form-control form-control" aria-required="true" placeholder="Hey @username! What's on your mind?" />
                 <span asp-validation-for="CheepText" class="text-danger"></span>
                 <div class="post-cheep-button-wrapper">
                     <button type="submit" class="post-cheep-button btn">Cheep!</button>

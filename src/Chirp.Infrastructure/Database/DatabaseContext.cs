@@ -24,6 +24,7 @@ public class DatabaseContext : IdentityDbContext<Author>
     public virtual DbSet<Author> Authors { get; set; } = null!;
     public virtual DbSet<CheepLikeDis> CheepLikeDis { get; set; } = null!;
 
+
     public DatabaseContext()
     {
         // Must have empty constructor for Compile-Time Migrtion to work.
@@ -38,7 +39,6 @@ public class DatabaseContext : IdentityDbContext<Author>
     {
         base.OnModelCreating(modelBuilder);
 
-        // [Try to move all of this to Entities and use Data Annotations]
         modelBuilder.Entity<Author>(entity =>
         {
             entity.ToTable("Authors");
