@@ -16,7 +16,7 @@
         <div class="post-cheep-wrapper">
             <div class="post-cheep-profilepicture profile-picture">
                 <img src="/images/blank.png" alt="Profile Picture" />
-                <strong>@username</strong>
+                <p>@username</p>
             </div>
             <form method="post" asp-page-handler="Cheep">
                 <input type="text" asp-for="CheepText" class="post-cheep-form-control form-control" aria-required="true" placeholder="Hey @username! What's on your mind?" />
@@ -38,12 +38,13 @@
         <!-- DROP DOWN HERE --> 
         <div class="dropdown-wrapper">
                 <div class="icon-wrapper">
-                    <p class="toggle">Order by Options</p>
+                    <button class="toggle toggle-dropdown-button btn">Order by Options</button>
                     <div class="dropdown-content">
                         <ul>
-                            <li><input type="radio" name="test" id="1"><label for="1">All sources</label></li>
-                            <li><input type="radio" name="test" id="2"><label for="2"><strong>Most Liked</strong></label></li>
-                            <li><input type="radio" name="test" id="3"><label for="3"><strong>Most Hated</strong></label></li>
+                            <li><input type="radio" name="test"  id="1"><label for="1">None</label></li>
+                            <li><input type="radio" name="test" id="2"><label for="2">Most Liked</label></li>
+                            <li><input type="radio" name="test" id="3"><label for="3">Most Hated</label></li>
+                            <li><input type="radio" name="test"  id="4"><label for="4">By Name</label></li>
                         </ul>
                     </div>
                 </div>
