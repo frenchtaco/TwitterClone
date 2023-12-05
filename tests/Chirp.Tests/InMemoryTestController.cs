@@ -167,7 +167,7 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
         await cheepRepository.CreateCheep(newCheep);
 
         numberOfCheeps = await cheepRepository.GetTotalNumberOfCheeps();
-        Assert.Equal(64, numberOfCheeps);
+        Assert.Equal(65, numberOfCheeps);
     }
 
     /// <summary>

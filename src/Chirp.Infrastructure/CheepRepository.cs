@@ -92,7 +92,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task CreateCheep(CheepDTO cheepDTO)
     {
-        _logger.LogInformation($"[BEFORE] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas{_context.CheepLikeDis.Count()}");
+        //_logger.LogInformation($"[BEFORE] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas{_context.CheepLikeDis.Count()}");
         try
         {
             var author = await _authorRepository.GetAuthorByName(cheepDTO.Author) ?? throw new Exception("Author was NULL");
@@ -110,8 +110,7 @@ public class CheepRepository : ICheepRepository
             author.Cheeps.Add(newCheep);
 
             //03. Update Context:
-            _context.Cheeps.Add(newCheep);
-            _context.CheepLikeDis.Add(_likeDisRepository.CreateLikeDisSchema(newCheep));
+            _context.Cheeps.Add(newCheep);   
 
             //04. Save the changes:
             await _context.SaveChangesAsync();
@@ -122,7 +121,7 @@ public class CheepRepository : ICheepRepository
                 $"File: CheepRepository.cs - Method: 'CreateCheep()' - Stack Trace: {ex.StackTrace}"
             );
         }
-        _logger.LogInformation($"[AFTER] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas: {_context.CheepLikeDis.Count()}");
+        //_logger.LogInformation($"[AFTER] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas: {_context.CheepLikeDis.Count()}");
     }
 
     public async Task<bool> DeleteAllCheepsFromAuthor(string AuthorUserName)
@@ -132,7 +131,7 @@ public class CheepRepository : ICheepRepository
             bool IsSuccess = false;
             var authorToForget = await _authorRepository.GetAuthorByName(AuthorUserName);
 
-            _logger.LogInformation($"[DeleteAllCheepsFromAuthor()] Author: {authorToForget.UserName}");
+            //_logger.LogInformation($"[DeleteAllCheepsFromAuthor()] Author: {authorToForget.UserName}");
 
             var authorCheeps = await GetAllCheepsFromAuthor(AuthorUserName);
 
@@ -147,7 +146,7 @@ public class CheepRepository : ICheepRepository
                 
                 if(cheepOpinionSchema != null)
                 {
-                    _logger.LogInformation("[DeleteAllCheepsFromAuthor()] Opinion was not null");
+                    //_logger.LogInformation("[DeleteAllCheepsFromAuthor()] Opinion was not null");
                     cheepOpinionSchema.Likes.Clear();
                     cheepOpinionSchema.Dislikes.Clear();
                     
@@ -158,7 +157,7 @@ public class CheepRepository : ICheepRepository
                 else 
                 { 
                     IsSuccess = false; 
-                    _logger.LogInformation("[DeleteAllCheepsFromAuthor()] Break triggered");
+                    //_logger.LogInformation("[DeleteAllCheepsFromAuthor()] Break triggered");
                     break; 
                 }
 
