@@ -31,16 +31,29 @@ public class CheepRepository : ICheepRepository
         return 32;
     }
 
-    public async Task<IEnurable<Cheep>> GetCheepsSortedByLikes()
+    
+    /*public async Task<IEnumerable<Cheep>> GetCheepsSortedByLikes(int page)
     {
         
-    }
+        return await _context.Cheeps
+            .Include(cheep => cheep.Author)
+            .Include(cheep => cheep.LikesAndDislikes) 
+                .ThenInclude(cheepLikeDis => cheepLikeDis.Likes) 
+            .Include(cheep => cheep.LikesAndDislikes) 
+                .ThenInclude(cheepLikeDis => cheepLikeDis.Dislikes) 
+            .Skip(page * CheepsPerPage())
+            .Take(CheepsPerPage())
+            .ToListAsync();
+    }*/
 
     public async Task<IEnumerable<Cheep>> GetCheeps(int page)
     {
         return await _context.Cheeps
             .Include(cheep => cheep.Author)
-            .OrderByDescending(cheep => cheep.TimeStamp)
+            .Include(cheep => cheep.LikesAndDislikes) 
+                .ThenInclude(cheepLikeDis => cheepLikeDis.Likes) 
+            .Include(cheep => cheep.LikesAndDislikes) 
+                .ThenInclude(cheepLikeDis => cheepLikeDis.Dislikes) 
             .Skip(page * CheepsPerPage())
             .Take(CheepsPerPage())
             .ToListAsync();
