@@ -6,7 +6,6 @@ using Chirp.Models;
 using DBContext;
 
 using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 //WHEN IMPLEMENTING GITHUB, WRITE THIS IN TERMINAL IF GIVES YOU A NO CLIENT ID ERR
 //dotnet user-secrets set "authentication.github.clientId" "<YOUR_CLIENTID>"
@@ -67,7 +66,7 @@ namespace Chirp.StartUp
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
 
-
+            /*
             try
             {
                 _ = services.AddAuthentication(options =>
@@ -104,6 +103,7 @@ namespace Chirp.StartUp
             {
                 _logger.LogError(exception, "An error occurred while setting up GitHub authentication.");
             }
+            */
 
             SqlConnectionStringBuilder sqlConnectionString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("DefaultConnection"));
 
@@ -136,9 +136,9 @@ namespace Chirp.StartUp
 
             services.AddRazorPages();
 
-
             services.AddScoped<ICheepRepository, CheepRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<ILikeDisRepository, LikeDisRepository>();
         }
 
         public void Configure(IApplicationBuilder app)

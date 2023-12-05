@@ -1,5 +1,15 @@
+/*******************************
+
+      GENERAL / SHARED  CSS 
+#f0fafa
+*********************************/
+html {
+  position: relative;
+  min-height: 100%;
+}
+
 body {
-  background: #eccaca;
+  background: #258cfb;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
 }
@@ -12,22 +22,19 @@ a:hover {
   color: #333;
 }
 
-input[type="text"],
-input[type="password"] {
-  background: white;
-  border: 1px solid #e6c0bf;
-  padding: 2px;
-  font-family: 'Trebuchet MS', sans-serif;
-  font-size: 14px;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  color: #571010;
+.btn {
+  padding: 0;
+  margin: 0;
+  background: none;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus, .post-cheep-form-control:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 input[type="submit"] {
-  background: #571010;
-  border: 1px solid #3b0707;
+  background: #08488b;
+  border: 1px solid #02254b;
   padding: 1px 3px;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
@@ -40,18 +47,18 @@ input[type="submit"] {
 
 div.page {
   background: white;
-  border: 1px solid #cc6e6e;
-  width: 700px;
+  border: 1px solid #258cfb;
+  width: 720px;
   margin: 30px auto;
 }
 
-div.page h1 {
-  background: #cc6e6e;
+div.page h1 { /* [CHECK] Consider having the same for h3 */
+  background: #258cfb;
   margin: 0;
   padding: 10px 14px;
   color: white;
   letter-spacing: 1px;
-  text-shadow: 0 0 3px #772424;
+  text-shadow: 0 0 3px #08488b;
   font-weight: normal;
   font-size: 80px;
 }
@@ -60,24 +67,9 @@ div.page h1 img {
   height: 1em;
 }
 
-div.page div.navigation {
-  background: #DEE9E8;
-  padding: 4px 10px;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #eee;
-  color: #888;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-}
-
-div.page div.navigation a {
-  color: #444;
-  font-weight: bold;
-}
-
-div.page h2 {
+div.page h2 { 
   margin: 0 0 15px 0;
-  color: #571010;
+  color: #08488b;
   text-shadow: 0 1px 2px #ccc;
 }
 
@@ -85,30 +77,27 @@ div.page div.body {
   padding: 10px;
 }
 
-div.page div.footer {
+div.page div.footer { /*[REPEAT WITH OTHER FILE]*/
   background: #eee;
   color: #888;
   padding: 5px 10px;
   font-size: 12px;
 }
 
-div.page div.followstatus {
-  border: 1px solid #ccc;
-  background: #E3EBEA;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  padding: 3px;
-  font-size: 13px;
-}
-
-div.page ul.cheeps {
+div.page ul.cheeps { 
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-div.page ul.cheeps li {
+div.page ul.cheeps button
+{
+  padding: 0px;
+  margin: 0px;
+  background: none;
+}
+
+div.page ul.cheeps li { /* [CHECk - TEST] Use case? */
   position: relative;
   margin: 10px 0;
   padding: 5px;
@@ -120,11 +109,7 @@ div.page ul.cheeps li {
   min-height: 48px;
 }
 
-div.page ul.cheeps p {
-  margin: 0;
-}
-
-div.page ul.cheeps li img {
+div.page ul.cheeps li img { /* [CHECk] Does this ever get used? */
   float: left;
   padding: 0 10px 0 0;
 }
@@ -134,59 +119,48 @@ div.page ul.cheeps li small {
   color: #888;
 }
 
-div.page div.cheepbox {
+/*******************************
+
+        POST CHEEP 
+
+*********************************/
+div.page div.post-cheep-wrapper {   
   margin: 10px 0;
   padding: 5px;
   background: #F0FAF9;
-  border: 1px solid #e29494;
+  border: 1px solid #DBF3F1;
   border-radius: 2px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
+  box-shadow: #02254b;
+  display: flex;
+  flex-direction: column;
 }
 
-div.page div.cheepbox h3 {
-  margin: 0;
-  font-size: 1em;
-  color: #7e2c2c;
+div.page div.post-cheep-wrapper div.post-cheep-button-wrapper { 
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  display: flex;
 }
 
-div.page div.cheepbox p {
-  margin: 0;
+div.page div.post-cheep-wrapper div.post-cheep-button-wrapper button.post-cheep-button {
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  background: #258cfb;
+  color: #fff;
+  padding: 10;
 }
 
-div.page div.cheepbox input[type="text"] {
-  width: 585px;
+div.page div.post-cheep-wrapper input[type="text"] { 
+  position: relative;
+  width: 100%;
+  border: none;
 }
 
-div.page div.cheepbox input[type="submit"] {
-  width: 70px;
-  margin-left: 5px;
-}
-
-div.message {
-  list-style: none;
-  margin: 10px 10px 0 10px;
-
-  background: #f3b9b9;
-  border: 1px solid #ce8181;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  padding: 4px;
-  font-size: 13px;
-}
-
-ul.message li {
-  background: #f3b9b9;
-  border: 1px solid #ce8181;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  padding: 4px;
-  font-size: 13px;
-}
-
-div.error {
+div.error { 
   margin: 10px 0;
   background: #FAE4E4;
   border: 1px solid #DD6F6F;
@@ -197,54 +171,269 @@ div.error {
   font-size: 13px;
 }
 
-div.topics {
-  width: 180px;
-  height: 250px;
-  background: #ffffff;
-  border: 1px solid #e29494;
-  border-radius: 2px;
+/* USER TIMELINE */
+.user-time-line-header-container
+{
+  display: flex;
+}
+
+
+/* CHEEP CONTENT MAIN WRAPPER */
+div.page div.post-cheep-wrapper,
+div.page ul.cheeps li div.cheep-wrapper
+{
+  display: grid;
+  padding: 5px;
+  grid-template-columns: auto;
+  row-gap: 8px;
+}
+
+div.page div.post-cheep-wrapper div.post-cheep-profilepicture,
+div.page ul.cheeps li div.cheep-wrapper div.cheep-profilepicture-name-time
+{
+  height: 50px;
+  object-fit: fill;
+  display: flex;
+}
+
+div.page ul.cheeps li div.cheep-wrapper div.cheep-profilepicture-name-time div.cheep-name-time
+{
+  display: flex;
+  flex-direction: column;
+}
+
+div.page div.post-cheep-wrapper div.post-cheep-profilepicture img,
+div.page ul.cheeps li div.cheep-wrapper div.cheep-profilepicture-name-time img
+{
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/* CHEEP TEXT & UTILITY (i.e. Likes, Dislikes) */
+
+
+/* UTIL */
+div.page ul.cheeps li .cheep-wrapper .cheep-func-wrapper
+{
+  display: grid;
+  justify-content: space-around;
+  grid-template-columns: auto auto auto;
+  column-gap: 5px;
+  padding: 2px;
+}
+
+div.page ul.cheeps li .cheep-wrapper .cheep-func-wrapper .cheep-func-grid-box
+{
+  width: 200px;
+  height: 30px;
+  border-top: 1px solid #a3a0a0;
+}
+
+div.page ul.cheeps li .cheep-wrapper .cheep-func-wrapper .cheep-func-grid-box button
+{
+  background: none;
+  border: none;
+  position: relative;
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: fill; 
+  transition: background 0.3s ease;
+}
+
+div.page ul.cheeps li .cheep-wrapper .cheep-func-wrapper .cheep-func-grid-box button:hover
+{
+  background-color: #c1c1c1;
+}
+
+ul.navbar-nav li.nav-item a.nav-link
+{
+  position: relative;
+}
+
+ul.navbar-nav li.nav-item a.nav-link::after
+{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #747474;
+  bottom: 0;
+  left: 0;
+  transform: scale(0);
+  transition: .2s all ease-out;
+}
+
+ul.navbar-nav li.nav-item a.nav-link:hover::after
+{
+  transform: scale(1);
+}
+
+/* UTIL - FOLLOW / UNFOLLOW */
+div.page ul.cheeps li .cheep-wrapper .cheep-func-wrapper .cheep-func-grid-box /*.form-input-button*/ img
+{
+  object-fit: cover; 
+}
+
+div.page ul.cheeps li .cheep-wrapper .cheep-func-wrapper .cheep-func-grid-box #likeDis {
+  display: flex;
+  gap: 5px;
+}
+
+div.page ul.cheeps li .cheep-wrapper .cheep-func-wrapper .cheep-func-grid-box #likeDis button {
+  flex: 1;
+}
+
+/*****************************************
+
+    DISPLAYING NUM LIKES / DISLIKES 
+
+*****************************************/
+div.page ul.cheeps li .cheep-wrapper .cheep-number-likes-dislikes-wrapper
+{
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+  /* [TESTING] background: red;  */
+}
+
+div.page ul.cheeps li .cheep-wrapper .cheep-func-grid-box #likeDis button
+{
+  display: flex;
+  flex-direction: column;
+}
+
+div.page ul.cheeps li .cheep-wrapper .cheep-number-likes-dislikes-wrapper small img
+{
+  object-fit: cover;
+}
+
+div.page ul.cheeps .cheep-profilepicture-usertimeline img
+{
+  object-fit: contain;
+  border-radius: 4px;
+  height: 60px;
+}
+
+/*********************
+
+      DELETE CHEEP 
+
+*********************/
+div.page ul.cheeps li .cheep-wrapper .cheep-delete-wrapper
+{
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  display: inline-flex;
+  visibility: hidden;
+  margin: 0;
+  padding: 0px;
+  transition: visibility;
+}
+
+div.page ul.cheeps li:hover .cheep-delete-wrapper
+{
+  visibility: visible;
+}
+
+
+/*********************
+
+      FORGET ME
+
+*********************/
+div.page .user-time-line-header-container {
+  position: relative;
+}
+
+div.page .user-time-line-header-container .trigger-forget-me-wrapper {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forget-me-button
+{
+  color: #fff;
+  background: rgb(235, 69, 69);
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forget-me-button:hover
+{
+  background: rgb(235, 69, 69);
+  opacity: 1.0;
+}
+
+.frost-panel
+{
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 10;
+}
+
+.pop-up-window {
+  display: none;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  margin-left: 460px;
-  padding: 10px;
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #b9b9b9;
+  border-radius: 5px;
+  z-index: 1000;
 }
 
-ul.topic {
-  list-style: none;
+.forget-me-popup .forget-me-wrapper {
+  position: relative;
+  padding: 0;
   margin: 0;
-  padding: 0;
-}
-
-li.topic {
-  margin: 10px 0;
-  padding: 5px;
-  background: #F0FAF9;
-  border: 1px solid #DBF3F1;
-  border-radius: 2px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  min-height: 20px;
-}
-
-.following-button
-{
-  background: none;
-  border: none;
-  padding: 0;
-}
-
-div.page ul.cheeps li .following-button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-}
-
-
-
-.user-time-line-header-container
-{
   display: flex;
-  background: #cc6e6ead;
+  flex-direction: column;
+}
+
+.forget-me-popup .forget-me-wrapper .close-forget-me-popup-wrapper {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+}
+
+.forget-me-popup .forget-me-wrapper .close-forget-me-popup-wrapper .close-forget-me-popup-button {
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.forget-me-popup .forget-me-wrapper .close-forget-me-popup-wrapper .close-forget-me-popup-button:hover {
+  opacity: 1.0;
+}
+
+.forget-me-popup .forget-me-wrapper .forget-me-popup-warning {
+  font-size: 24px;
+  color: red;
+}
+
+.forget-me-popup .forget-me-wrapper .forget-me-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.forget-me-popup .forget-me-wrapper .forget-me-button-wrapper .forget-me-button {
+  color: #fff;
+  background: rgb(235, 69, 69);
+}
+
+.forget-me-popup .forget-me-wrapper .forget-me-text {
+  padding: 10px 0px 10px 0px;
+  
 }

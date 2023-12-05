@@ -6,106 +6,185 @@
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
     var routeName = HttpContext.GetRouteValue("author")?.ToString();
-    var username  = User.Identity?.Name;
-    var SIU = Model.SignedInUser;   // 01. SignedInUser
-    var TLU = Model.TimelineUser;   // 02. TimelineUser
+
+    var UserFollowersAndTheirCheeps = @Model.FollowersAndTheirCheeps;
+    var TLU_Followers = @Model.Followers;
+    var TLU_Following = @Model.Following;
+    var TLU_Cheeps    = @Model.TLU_Cheeps;
+    var CheepOpinionsInfo = Model.CheepOpinionsInfo;
+    var SignedInUser = SignInManager.IsSignedIn(User);
+
+    string? username  = User.Identity?.Name;
+    Author? SIU = Model.SignedInUser;   // 01. SignedInUser
+    Author? TLU = Model.TimelineUser;   // 02. TimelineUser
 }
 
 <div class="user-time-line-container">
+    
     <div class="user-time-line-header-container">
         <h3> @routeName's Timeline </h3>
-        @if(SignInManager.IsSignedIn(User) && username != null && routeName != username) @* Pack into bool method *@
+        @if(SignedInUser && username != null) @* 'username != null' should be always FALSE if user is signed in [This was just added to remove warning] *@
         {
-            @* [PACK INTO PARTIAL #1] *@
-            try
+            // 01. Embed option to Follow User:
+            @if(routeName != username)
             {
-                <form method="post" asp-page-handler="Follow">
-                    @Html.AntiForgeryToken()
-                    @if(SIU.Following.Any() && SIU.Following.Contains<Author>(TLU))
-                    {
-                        <input type="hidden" asp-for="IsFollow" value="false" />
-                        <input type="hidden" asp-for="TargetAuthorUserName" value="@TLU.UserName" />
-                        <button type="submit" class="following-button" OnClientClick="return false;">
-                            <img id="unfollow" src="/images/unfollow.svg" alt="Unfollow"></img>
-                        </button>
-                    }
-                    else
-                    {
-                        <input type="hidden" asp-for="IsFollow" value="true" />
-                        <input type="hidden" asp-for="TargetAuthorUserName" value="@TLU.UserName" />
-                        <button type="submit" class="following-button" OnClientClick="return false;">
-                            <img id="follow" src="/images/follow.svg" alt="Follow"></img>
-                        </button>
-                    }
-                </form>
-            }
-            catch(Exception ex)
+                try
+                {
+                    <form method="post" asp-page-handler="Follow">
+                        @Html.AntiForgeryToken()
+                        @if(SIU.Following.Any() && SIU.Following.Contains<Author>(TLU))
+                        {
+                            <input type="hidden" asp-for="IsFollow" value="false" />
+                            <input type="hidden" asp-for="TargetAuthorUserName" value="@TLU.UserName" />
+                            <button type="submit" class="following-button" OnClientClick="return false;">
+                                <img id="unfollow" src="/images/unfollow.svg" alt="Unfollow"></img>
+                            </button>
+                        }
+                        else
+                        {
+                            <input type="hidden" asp-for="IsFollow" value="true" />
+                            <input type="hidden" asp-for="TargetAuthorUserName" value="@TLU.UserName" />
+                            <button type="submit" class="following-button" OnClientClick="return false;">
+                                <img id="follow" src="/images/follow.svg" alt="Follow"></img>
+                            </button>
+                        }
+                    </form>
+                }
+                catch(Exception ex)
+                {
+                    <p>[USER-TIME-LINE.CSHTML] Exception Message: @ex.Message --- Exception Location: @ex.TargetSite</p>
+                }
+            } 
+            // 02. Embed option to be forgotten:
+            else if(routeName == username)
             {
-                <p>[USER-TIME-LINE.CSHTML] Exception Message: @ex.Message --- Exception Location: @ex.TargetSite</p>
+                <div class="trigger-forget-me-wrapper">
+                    <button class="open-forget-me-button btn" onclick="openForgetMe()">Forget Me!</button>
+                </div>
             }
         }
     </div>
-    <ul id="messagelist" class="cheeps">
-    @if (Model.Cheeps.Any())
+    
+    <ul class="cheeps"> @* Can id be removed? *@
+    @if (Model.TLU_Cheeps.Any())
     {
-        @foreach (var cheep in Model.Cheeps)
+        @foreach (var cheep in TLU_Cheeps)
         {
-            if (cheep.Author.UserName.Equals(routeName))
-            {
-                <li>
-                    <p>
-                        <strong>
-                            <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
-                        </strong>
-                        @cheep.Text
-                        <small>&mdash; @cheep.TimeStamp</small>
-                    </p>
-                </li>
-            }
+            <li>
+                <div class="cheep-wrapper">
+                    @{
+                        var co_Info = CheepOpinionsInfo.GetValueOrDefault(cheep.CheepId);
+                        int cheepNumLikes        = co_Info.NumLikes;
+                        int cheepNumDislikes     = co_Info.NumDislikes;
+                    }
+
+                    <div class="cheep-profilepicture-name-time">
+                        <img src="/images/blank.png" alt="Profile Picture">
+                        <div class="cheep-name-time">
+                            <strong>
+                                <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
+                            </strong>
+                            <small>@cheep.TimeStamp</small>
+                        </div>
+                    </div>
+
+                    <div class="cheep-text-wrapper">
+                        <p>@cheep.Text</p>
+                    </div>
+
+                    <div class="cheep-number-likes-dislikes-wrapper">
+                        <small><img src="/images/thumbup.svg" alt="Like"></img> @cheepNumLikes</small>
+                        <small><img src="/images/thumbdown.svg" alt="Dislike"></img> @cheepNumDislikes</small>
+                    </div>
+
+                    @if(SignedInUser && TLU == SIU)
+                    {
+                        <div class="cheep-delete-wrapper">
+                            <form id="deleteCheep" method="post" asp-page-handler="DeleteCheep">
+                                <input type="hidden" asp-for="TargetCheepId" value="@cheep.CheepId" />
+                                <input type="hidden" asp-for="TargetAuthorUserName" value="@username" />
+                                <button type="submit" name="deleteCheep" class="delete-button btn" >
+                                    <img src="/images/garbage.svg" alt="Delete"></img>
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </li>
         }
     }
     else
     {
+        // followerText
         <em>There are no cheeps so far.</em>
     }
     </ul>
 
     <h3> Following </h3>
-    <ul class="cheeps"> @* Change class name to something more universal. Was just given same name as above *@
-        @if (Model.Following.Any())
+    <ul class="cheeps">
+        @if (TLU_Following.Any())
         {
-            @foreach (var follow in Model.Following)
+            @foreach (var follower in TLU_Following)
             {
-                @if(SignInManager.IsSignedIn(User) && follow.UserName.Equals(User.Identity?.Name))
-                {
-                    <h5><a href="/@User.Identity?.Name">Your Genius Cheeps</a></h5>
-                }
-                else
-                {
-                    <h5><a href="/@follow.UserName">@follow.UserName</a></h5>
-                }
+                List<Cheep>? currFollowerCheep = UserFollowersAndTheirCheeps.GetValueOrDefault(follower);
 
-                @*[TODO] Fix this! Part of ugly part*@
-                var followersCheepTask = await Model.GetTop4CheepsFromFollower(follow.UserName);
-                var followersCheep = followersCheepTask.ToList();
+                string followerText = (SignedInUser && follower.UserName.Equals(username) ? "Your Cheeps" : follower.UserName);
 
-                @if(followersCheep.Any())
+                <div class="cheep-profilepicture-usertimeline profile-picture">
+                    <img src="/images/blank.png" alt="Profile Picture">
+                    <h5><a href="/@follower.UserName">@followerText</a></h5>
+                </div>
+
+                @if(currFollowerCheep != null && currFollowerCheep.Any())
                 {
-                    @foreach (var cheep in followersCheep)
+                    @foreach (var cheep in currFollowerCheep)
                     {
                         <li>
-                            <p>
-                                @cheep.Text
-                                <small>&mdash; @cheep.TimeStamp</small>
-                            </p>
+                            @{
+                                var co_Info = CheepOpinionsInfo.GetValueOrDefault(cheep.CheepId);
+                                var currAuthorOpinion    = co_Info.AuthorCheepOpinion;
+                                int cheepNumLikes        = co_Info.NumLikes;
+                                int cheepNumDislikes     = co_Info.NumDislikes;
+                            }
+
+                            <div class="cheep-text-wrapper">
+                                <p>
+                                    @cheep.Text
+                                    <small>&mdash; @cheep.TimeStamp</small>
+                                </p>
+                            </div>
+
+                            <div class="cheep-number-likes-dislikes-wrapper">
+                                <small><img src="/images/thumbup.svg" alt="Like"></img> @cheepNumLikes</small>
+                                <small><img src="/images/thumbdown.svg" alt="Dislike"></img> @cheepNumDislikes</small>
+                            </div>
+
+                            <div class="cheep-util-wrapper">
+                                @if(SignedInUser && SIU.UserName != TLU.UserName)
+                                {
+                                <div class="form-like-and-dislike">
+                                    <form id="likeDis" method="post" asp-page-handler="DislikeOrLike">
+                                        <input type="hidden" asp-for="TargetCheepId" value="@cheep.CheepId" />
+                                        <input type="hidden" asp-for="TargetAuthorUserName" value="@username" />
+                                        <button type="submit" name="likeDis" value="like" class="like-button" style="@(currAuthorOpinion == Enums.ACO.AuthorCheepOpinion.DISLIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
+                                            <img src="/images/thumbup.svg" alt="Like"></img>
+                                        </button>
+                                        <button type="submit" name="likeDis" value="dislike" class="dislike-button" style="@(currAuthorOpinion == Enums.ACO.AuthorCheepOpinion.LIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
+                                            <img src="/images/thumbdown.svg" alt="Dislike"></img>
+                                        </button>
+                                    </form>
+                                </div>
+                                }
+                            </div>
                         </li>
                     }
                 }
+
             }
         }
         else
         {
-            @if(routeName == username)
+            @if(routeName.Equals(username))
             {
                 <em>You currently aren't Following anyone.</em>
             } 
@@ -119,10 +198,14 @@
 
     <h3> Followers </h3>
     <ul class="cheeps">
-        @if (Model.Followers.Any())
+        @if (TLU_Followers.Any())
         {
-            @foreach (var follower in Model.Followers)
+            @foreach (var follower in TLU_Followers)
             {
+                // [TODO] Create simple author books with details on User:
+                //        - Number of Cheeps
+                //        - Number of Followers
+                //        - Picture
                 <h5>
                     <a href="/@follower.UserName">@follower.UserName</a>
                 </h5>
@@ -136,17 +219,53 @@
             } 
             else
             {
-                <em>@routeName currently has no Followers. Haha.</em>
+                <em>@routeName currently has no Followers.</em>
             }
         }
     </ul>
 </div>
 
     <div class="pagination">
-        @for (int i = 1; i <= Math.Ceiling((double) Model.totalCheeps / Model.cheepsPerPage) - 1; i++)
+        @for (int i = 1; i <= Math.Ceiling((double) Model.TotalCheeps / Model.CheepsPerPage) - 1; i++)
         {
             <a href="/@routeName/?page=@i">@i</a>
         }
     </div>
-
 </div>
+
+@* The 'Forget Me!' pop-up container I'd like to be displayed in the center of the screen. *@ 
+<div class="frost-panel" onclick="closeForgetMe()"></div>
+<div class="forget-me-popup pop-up-window">
+    <div class="forget-me-wrapper">
+        <div class="close-forget-me-popup-wrapper">
+            <button class="close-forget-me-popup-button btn" onclick="closeForgetMe()">
+                <img src="/images/xcross.svg" alt="X"></img>
+            </button>
+        </div>
+        
+        <div class="forget-me-text">
+            <strong class="forget-me-popup-warning">Warning!</strong> 
+            <p>By clicking this button you will delete all your Cheeps as well as your </p>
+        </div>
+        <form method="post" asp-page-handler="ForgetMe">
+            <input type="hidden" asp-for="TargetAuthorUserName" value="@SIU.UserName" />
+            <div class="forget-me-button-wrapper">
+                <button type="submit" class="forget-me-button btn">Forget Me!</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        const openForgetMe = () => {
+            document.querySelector('.frost-panel').style.display = 'block';
+            document.querySelector('.forget-me-popup').style.display = 'block';
+        }
+        const closeForgetMe = () => {
+            document.querySelector('.frost-panel').style.display = 'none';
+            document.querySelector('.forget-me-popup').style.display = 'none';
+        }
+    </script>
+}
