@@ -444,26 +444,21 @@ div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forge
       DROP DOWN RANKING
 
 *********************/
-
 input[type="checkbox"],
 .dropdown-content,
 input[type="radio"] {
   display: none;
 }
 
-div.public-timeline-header-wrapper {
-  display: flex;
-}
-
 div.dropdown-wrapper {
   position: relative;
-  top: 5px;
   right: 5px;
+  top: 5px;
 }
 
 .dropdown-wrapper.active .dropdown-content {
   display: block;
-  z-index: 100;
+  z-index: 1;
 }
 
 input[type="radio"] + label {
@@ -488,11 +483,6 @@ input[type="radio"]:checked + label:before {
   -webkit-box-shadow: 0px 0px 0px 2px #53e0ed;
           box-shadow: 0px 0px 0px 2px #53e0ed;
 }
-
-body {
-  font-family: sans-serif;
-}
-
 .dropdown-wrapper {
   margin: 0 auto;
   max-width: 260px;
@@ -541,26 +531,16 @@ body {
   margin-left: -11px;
 }
 
-.icon-wrapper {
-  color: #b3b3bf;
-}
 .icon-wrapper i {
-  position: relative;
   margin-left: 5px;
-  width: 20px;
-  height: 20px;
   background: #dcdbe5;
-  border-radius: 50%;
+  border-radius: 4px;
   text-align: center;
-  display: block;
   cursor: pointer;
-  color: #2f255b;
+  color: #000;
+  padding: 8px;
 }
-.icon-wrapper i:before {
-  display: block;
-  line-height: 18px;
-  font-size: 10px;
-}
+
 .icon-wrapper li {
   border-bottom: 1px solid #dcdbe5;
   padding-bottom: 15px;
@@ -575,18 +555,9 @@ body {
 .icon-wrapper li:first-child {
   margin-top: 0;
 }
-.icon-wrapper li span {
-  display: block;
-  padding-left: 35px;
-  font-size: 0.9em;
-  color: #b3b3bf;
-}
 
 .icon-wrapper {
-  display: inline-block;
-  position: relative;
-}
-
-.dropdown-heading {
-  color: #b3b3bf;
+  position: fixed;
+  top: 15px;
+  right: 10px;
 }
