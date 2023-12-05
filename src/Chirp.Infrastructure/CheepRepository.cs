@@ -31,6 +31,11 @@ public class CheepRepository : ICheepRepository
         return 32;
     }
 
+    public async Task<IEnurable<Cheep>> GetCheepsSortedByLikes()
+    {
+        
+    }
+
     public async Task<IEnumerable<Cheep>> GetCheeps(int page)
     {
         return await _context.Cheeps

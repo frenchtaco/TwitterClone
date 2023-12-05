@@ -32,7 +32,32 @@
         <p class="post-cheep-text">Wanna Cheep? Click <a asp-area="Identity" asp-page="/Account/Login">here</a> to log in.</p>
     }
 
-    <h2> Public Timeline </h2>
+    <div class="public-timeline-header-wrapper">
+        <h2> Public Timeline </h2>
+
+        <!-- DROP DOWN HERE --> 
+        <div class="dropdown-wrapper">
+            <span class="dropdown-heading">Order Cheeps by...</span>
+                <div class="icon-wrapper">
+                    <i class="toggle fa fa-chevron-down"></i>
+                    <div class="dropdown-content">
+                        <ul>
+                            <li><input type="radio" name="test" id="1"><label for="1">All sources</label></li>
+                            <li><input type="radio" name="test" id="2"><label for="2"><strong>Dropbox</strong><span>konstantin@metalab.co</span></label></li>
+                            <li><input type="radio" name="test" id="3"><label for="3"><strong>Google Drive</strong><span>konstantin@metalab.co</span></label></li>
+                        </ul>
+                    </div>
+                </div>
+        </div>
+        <!-- DROP DOWN HERE! --> 
+        
+    </div>
+     
+
+
+
+
+
     @if (Model.Cheeps.Any())
     {
         <ul class="cheeps">
@@ -142,4 +167,11 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        let toggle = function(){
+	        document.querySelectorAll('.dropdown-wrapper')[0].classList.toggle('active');
+        }
+
+        document.querySelectorAll('.toggle')[0].addEventListener("click", toggle);
+    </script>
 }
