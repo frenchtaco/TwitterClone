@@ -43,21 +43,13 @@ public class AuthorRepository : IAuthorRepository
             var targetAuthor = await GetAuthorByName(followersDTO.TargetAuthor);
             var authorToFollow = await GetAuthorByName(followersDTO.FollowAuthor);
 
-            _logger.LogInformation($"[FOLLOW - BEFORE] '{targetAuthor.UserName}' is Following {targetAuthor.Following.Count} accounts");
             if(!targetAuthor.Following.Contains(authorToFollow)) // additional check that !(authorToFollow.Followers.Contains(targetAuthor))
             {
-                _logger.LogInformation($"[FOLLOW] Author {targetAuthor.UserName} does not contain {authorToFollow.UserName}");
-                
                 targetAuthor.Following.Add(authorToFollow);
                 authorToFollow.Followers.Add(targetAuthor);
-            } 
-            else
-            {
-                _logger.LogInformation($"[FOLLOW] Author {targetAuthor.UserName} already follows {authorToFollow.UserName}");
             }
 
             await _context.SaveChangesAsync();
-            _logger.LogInformation($"[FOLLOW - AFTER] '{targetAuthor.UserName}' is Following {targetAuthor.Following.Count} accounts");
         } 
         catch(Exception ex)
         {
@@ -69,24 +61,16 @@ public class AuthorRepository : IAuthorRepository
     {
         try
         {  
-            _logger.LogInformation($"[UNFOLLOW] Initiated 'Unfollow' --- DTO: ({followersDTO.TargetAuthor}, {followersDTO.FollowAuthor})");
             var targetAuthor = await GetAuthorByName(followersDTO.TargetAuthor);
             var authorToUnfollow = await GetAuthorByName(followersDTO.FollowAuthor);
 
-            _logger.LogInformation($"[UNFOLLOW - BEFORE] '{targetAuthor.UserName}' is Following {targetAuthor.Following.Count} accounts");
             if(targetAuthor.Following.Contains(authorToUnfollow))
             {
-                _logger.LogInformation($"[UNFOLLOW] Author {targetAuthor.UserName} does contain {authorToUnfollow.UserName}");
                 targetAuthor.Following.Remove(authorToUnfollow);
                 authorToUnfollow.Followers.Remove(targetAuthor);
-            } 
-            else
-            {
-                _logger.LogInformation($"[UNFOLLOW] Author {targetAuthor.UserName} does not contain the intended target to remove");
             }
 
             await _context.SaveChangesAsync();
-            _logger.LogInformation($"[UNFOLLOW - AFTER] '{targetAuthor.UserName}' is Following {targetAuthor.Following.Count} accounts");
         } 
         catch(Exception ex)
         {

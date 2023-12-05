@@ -81,7 +81,6 @@ public class CheepRepository : ICheepRepository
         {
             var author = await _authorRepository.GetAuthorByName(cheepDTO.Author) ?? throw new Exception("Author was NULL");
 
-            _logger.LogInformation($"[POST] Located author is {author.UserName}");
 
             Cheep newCheep = new()
             {
@@ -93,7 +92,6 @@ public class CheepRepository : ICheepRepository
             if (author.Cheeps == null)
             {
                 author.Cheeps = new List<Cheep>();
-                _logger.LogInformation("Authors Cheeps was null");
             }
 
             author.Cheeps.Add(newCheep);

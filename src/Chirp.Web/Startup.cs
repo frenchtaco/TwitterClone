@@ -55,26 +55,21 @@ namespace Chirp.StartUp
             .AddDefaultTokenProviders();
 
 
-            try
+            _ = services.AddAuthentication(options =>
             {
-                _ = services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = "GitHub";
-                })
-                .AddCookie()
-                .AddGitHub(o =>
-                {//updated ID and SecretID!
-                    o.ClientId = _configuration["Authentication:GitHub:ClientIdAzure"];
-                    o.ClientSecret = _configuration["Authentication:GitHub:ClientSecretAzure"];
-                    o.CallbackPath = "/signin-github";
-                });
-            }
-            catch (Exception exception)
-            {
-
-            }
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = "GitHub";
+            })
+            .AddCookie()
+            .AddGitHub(o =>
+            {//updated ID and SecretID!
+#pragma warning disable CS8601 // Possible null reference assignment.
+                o.ClientId = _configuration["Authentication:GitHub:ClientIdAzure"];
+                o.ClientSecret = _configuration["Authentication:GitHub:ClientSecretAzure"];
+#pragma warning restore CS8601 // Possible null reference assignment.
+                o.CallbackPath = "/signin-github";
+            });
 
             SqlConnectionStringBuilder sqlConnectionString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("DefaultConnection"));
 
