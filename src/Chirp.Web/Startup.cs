@@ -6,7 +6,6 @@ using Chirp.Models;
 using DBContext;
 
 using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 //WHEN IMPLEMENTING GITHUB, WRITE THIS IN TERMINAL IF GIVES YOU A NO CLIENT ID ERR
 //dotnet user-secrets set "authentication.github.clientId" "<YOUR_CLIENTID>"
@@ -16,18 +15,31 @@ namespace Chirp.StartUp
 {
     public class Startup
     {
-        private IConfiguration _configuration { get; set; }
-        private IWebHostEnvironment _env { get; set; }
+        private IConfiguration _configuration { get; }
+        private IWebHostEnvironment _env { get; }
+        private ILogger _logger; // Logger instance
 
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
-
             _env = env;
             _configuration = configuration;
-        }
 
+            // Create a logger manually
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder
+                    .AddConsole()
+                    .AddDebug();
+            });
+
+            _logger = loggerFactory.CreateLogger<Startup>();
+        }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpsRedirection(options =>
+    {
+        options.HttpsPort = 5232; // The port your HTTPS development server will use
+    });
             services.AddDefaultIdentity<Author>(options =>
             {
 
@@ -54,22 +66,44 @@ namespace Chirp.StartUp
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
 
-
-            _ = services.AddAuthentication(options =>
+            /*
+            try
             {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = "GitHub";
-            })
-            .AddCookie()
-            .AddGitHub(o =>
-            {//updated ID and SecretID!
-#pragma warning disable CS8601 // Possible null reference assignment.
-                o.ClientId = _configuration["Authentication:GitHub:ClientIdAzure"];
-                o.ClientSecret = _configuration["Authentication:GitHub:ClientSecretAzure"];
-#pragma warning restore CS8601 // Possible null reference assignment.
-                o.CallbackPath = "/signin-github";
-            });
+                _ = services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = "GitHub";
+                })
+                .AddCookie()
+                .AddGitHub(o =>
+                {
+
+
+                    if (_env.IsDevelopment())
+                    {
+                        // Commented out the logging statement
+                        _logger.LogInformation("Using GitHub Local Configuration");
+                        o.ClientId = _configuration["Authentication:GitHub:ClientIdLocal"];
+                        _logger.LogInformation($"Configuring GitHub authentication with Client ID: {o.ClientId}");
+                        o.ClientSecret = _configuration["GitHub:ClientSecretLocal"];
+                        o.CallbackPath = "/signin-github";
+                    }
+                    else if (_env.IsProduction())
+                    {
+                        // Commented out the logging statement
+                        _logger.LogInformation("Using GitHub Azure Configuration");
+                        o.ClientId = _configuration["Authentication:GitHub:ClientIdAzure"];
+                        o.ClientSecret = _configuration["GitHub:ClientSecretAzure"];
+                        o.CallbackPath = "/signin-github";
+                    }
+                });
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "An error occurred while setting up GitHub authentication.");
+            }
+            */
 
             SqlConnectionStringBuilder sqlConnectionString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("DefaultConnection"));
 
@@ -102,9 +136,9 @@ namespace Chirp.StartUp
 
             services.AddRazorPages();
 
-
             services.AddScoped<ICheepRepository, CheepRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<ILikeDisRepository, LikeDisRepository>();
         }
 
         public void Configure(IApplicationBuilder app)

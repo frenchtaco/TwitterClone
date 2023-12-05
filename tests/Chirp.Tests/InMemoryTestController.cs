@@ -26,7 +26,7 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
         context.Database.EnsureCreated();
 
         var authorRepository = new AuthorRepository(null, context);
-        var cheepRepository = new CheepRepository(context, authorRepository, null);
+        var cheepRepository = new CheepRepository(context, authorRepository, null, null);
 
         List<Author> authors = new();
         for (int i = 1; i <= 64; i++)
@@ -70,7 +70,7 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
     {
         using var context = CreateContext();
         var authorRepository = new AuthorRepository(null, context);
-        var cheepRepository = new CheepRepository(context, authorRepository, null);
+        var cheepRepository = new CheepRepository(context, authorRepository, null, null);
 
         IEnumerable<Cheep> _cheeps = await cheepRepository.GetCheeps(0);
         List<Cheep> cheeps = _cheeps.ToList();
@@ -81,15 +81,15 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
     }
 
     [Fact]
-    public async void GetAllCheeps()
+    public async void GetTotalNumberOfCheeps()
     {
         using var context = CreateContext();
         var authorRepository = new AuthorRepository(null, context);
-        var cheepRepository = new CheepRepository(context, authorRepository, null);
+        var cheepRepository = new CheepRepository(context, authorRepository, null, null);
 
-        IEnumerable<Cheep> cheeps = await cheepRepository.GetAllCheeps();
+        var numberOfCheeps = await cheepRepository.GetTotalNumberOfCheeps();
 
-        Assert.Equal(64, cheeps.Count());
+        Assert.Equal(64, numberOfCheeps);
     }
 
     [Fact]
@@ -98,7 +98,7 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
         using var context = CreateContext();
 
         var authorRepository = new AuthorRepository(null, context);
-        var cheepRepository = new CheepRepository(context, authorRepository, null);
+        var cheepRepository = new CheepRepository(context, authorRepository, null, null);
 
         IEnumerable<Cheep> _cheeps = await cheepRepository.GetCheepsFromAuthor("AuthorName10", 0);
         List<Cheep> cheeps = _cheeps.ToList();
@@ -117,7 +117,7 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
     {
         using var context = CreateContext();
         var authorRepository = new AuthorRepository(null, context);
-        var cheepRepository = new CheepRepository(context, authorRepository, null);
+        var cheepRepository = new CheepRepository(context, authorRepository, null, null);
 
         IEnumerable<Cheep> _cheeps = await cheepRepository.GetAllCheepsFromAuthor("AuthorName10");
         List<Cheep> cheeps = _cheeps.ToList();
@@ -131,7 +131,7 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
     {
         using var context = CreateContext();
         var authorRepository = new AuthorRepository(null, context);
-        var cheepRepository = new CheepRepository(context, authorRepository, null);
+        var cheepRepository = new CheepRepository(context, authorRepository, null, null);
 
         for (int i = 0; i < 4; i++)
         {
@@ -158,16 +158,16 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
     {
         using var context = CreateContext();
         var authorRepository = new AuthorRepository(null, context);
-        var cheepRepository = new CheepRepository(context, authorRepository, null);
+        var cheepRepository = new CheepRepository(context, authorRepository, null, null);
 
-        IEnumerable<Cheep> cheeps = await cheepRepository.GetAllCheeps();
-        Assert.Equal(64, cheeps.Count());
+        var numberOfCheeps = await cheepRepository.GetTotalNumberOfCheeps();
+        Assert.Equal(64, numberOfCheeps);
 
         CheepDTO newCheep = new CheepDTO("7. cheep2", "AuthorName7");
         await cheepRepository.CreateCheep(newCheep);
 
-        cheeps = await cheepRepository.GetAllCheeps();
-        Assert.Equal(65, cheeps.Count());
+        numberOfCheeps = await cheepRepository.GetTotalNumberOfCheeps();
+        Assert.Equal(64, numberOfCheeps);
     }
 
     /// <summary>
@@ -181,7 +181,7 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
     {
         using var context = CreateContext();
         var authorRepository = new AuthorRepository(null, context);
-        var cheepRepository = new CheepRepository(context, authorRepository, null);
+        var cheepRepository = new CheepRepository(context, authorRepository, null, null);
 
         IEnumerable<Author> _authors = await authorRepository.GetAllAuthors();
 
@@ -193,7 +193,7 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
     {
         using var context = CreateContext();
         var authorRepository = new AuthorRepository(null, context);
-        var cheepRepository = new CheepRepository(context, authorRepository, null);
+        var cheepRepository = new CheepRepository(context, authorRepository, null, null);
 
         Author targetAuthor = await authorRepository.GetAuthorByName("AuthorName19");
 
@@ -205,7 +205,7 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
     {
         using var context = CreateContext();
         var authorRepository = new AuthorRepository(null, context);
-        var cheepRepository = new CheepRepository(context, authorRepository, null);
+        var cheepRepository = new CheepRepository(context, authorRepository, null, null);
 
         Author targetAuthor = await authorRepository.GetAuthorByName("AuthorName12");
         Author authorToFollow = await authorRepository.GetAuthorByName("AuthorName13");

@@ -22,12 +22,13 @@ public class DatabaseContext : IdentityDbContext<Author>
 {
     public virtual DbSet<Cheep> Cheeps { get; set; } = null!;
     public virtual DbSet<Author> Authors { get; set; } = null!;
+    public virtual DbSet<CheepLikeDis> CheepLikeDis { get; set; } = null!;
+
 
     public DatabaseContext()
     {
         // Must have empty constructor for Compile-Time Migrtion to work.
     }
-
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
@@ -38,7 +39,6 @@ public class DatabaseContext : IdentityDbContext<Author>
     {
         base.OnModelCreating(modelBuilder);
 
-        // [Try to move all of this to Entities and use Data Annotations]
         modelBuilder.Entity<Author>(entity =>
         {
             entity.ToTable("Authors");
@@ -51,6 +51,19 @@ public class DatabaseContext : IdentityDbContext<Author>
             entity.Property(cheep => cheep.Text).HasMaxLength(160);
         });
 
+        modelBuilder.Entity<CheepLikeDis>(entity =>
+        {
+            entity.ToTable("CheepLikesDislikes");
+            entity.HasKey(ld => new { ld.CheepLikeDisId });
+
+            entity.HasMany(ld => ld.Likes)
+                .WithMany()
+                .UsingEntity(j => j.ToTable("CheepLikes"));
+
+            entity.HasMany(ld => ld.Dislikes)
+                .WithMany()
+                .UsingEntity(j => j.ToTable("CheepDislikes"));
+        });
     }
 
 

@@ -124,6 +124,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         Followers = new HashSet<Author>(),
                         Following = new HashSet<Author>(),
                         EmailConfirmed = true,
+                        IsForgotten = false,
                     };
                     
                     Console.WriteLine($"[REGISTRATION] Followers Count: {user.Followers?.Count}");

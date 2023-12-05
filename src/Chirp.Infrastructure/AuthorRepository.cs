@@ -27,6 +27,28 @@ public class AuthorRepository : IAuthorRepository
             .ToListAsync();
     }
 
+    public async Task<bool> ForgetAuthor(string authorName)
+    {
+        try
+        {
+
+            // [TODO] Change it to proper delete and instead make "Account Recovery"
+            var author = await GetAuthorByName(authorName);
+
+            author.UserName = "NULL";
+            author.Cheeps.Clear();
+            author.IsForgotten = true;
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
     public async Task<Author> GetAuthorByName(string authorName)
     {
         return await _context.Authors
