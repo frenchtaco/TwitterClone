@@ -151,6 +151,7 @@ div.page div.post-cheep-wrapper div.post-cheep-button-wrapper button.post-cheep-
   -webkit-border-radius: 5px;
   background: #258cfb;
   color: #fff;
+  padding: 10;
 }
 
 div.page div.post-cheep-wrapper input[type="text"] { 
@@ -244,7 +245,30 @@ div.page ul.cheeps li .cheep-wrapper .cheep-func-wrapper .cheep-func-grid-box bu
 
 div.page ul.cheeps li .cheep-wrapper .cheep-func-wrapper .cheep-func-grid-box button:hover
 {
-  background:#e5ebee;
+  background-color: #c1c1c1;
+}
+
+ul.navbar-nav li.nav-item a.nav-link
+{
+  position: relative;
+}
+
+ul.navbar-nav li.nav-item a.nav-link::after
+{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #747474;
+  bottom: 0;
+  left: 0;
+  transform: scale(0);
+  transition: .2s all ease-out;
+}
+
+ul.navbar-nav li.nav-item a.nav-link:hover::after
+{
+  transform: scale(1);
 }
 
 /* UTIL - FOLLOW / UNFOLLOW */
@@ -359,7 +383,7 @@ div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forge
 
 .pop-up-window {
   display: none;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
