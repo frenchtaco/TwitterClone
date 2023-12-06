@@ -8,6 +8,7 @@
     var numPages       = Math.Ceiling((double)Model.TotalCheeps / Model.CheepsPerPage);
     var username       = User.Identity?.Name;
     var CheepOpinionInfo = @Model.CheepOpinionsInfo;
+    var Cheeps           = @Model.Cheeps;
 }
 
 <div>
@@ -22,7 +23,7 @@
                 <input type="text" asp-for="CheepText" class="post-cheep-form-control form-control" aria-required="true" placeholder="Hey @username! What's on your mind?" />
                 <span asp-validation-for="CheepText" class="text-danger"></span>
                 <div class="post-cheep-button-wrapper">
-                    <button type="submit" class="post-cheep-button btn">Cheep!</button>
+                    <button type="submit" class="post-cheep-button btn" >Cheep!</button>
                 </div>
             </form>
         </div>
@@ -36,132 +37,41 @@
         <h2> Public Timeline </h2>
 
         <!-- DROP DOWN HERE --> 
-        <form method="post">
-            <div class="dropdown-wrapper">
-            <span class="dropdown-heading">Order Cheeps by...</span>
+        <div class="dropdown-wrapper">
                 <div class="icon-wrapper">
                     <button class="toggle toggle-dropdown-button btn">Order by Options</button>
                     <div class="dropdown-content">
                         <ul>
-                            <li>
-                                <input type="radio" asp-for="OrderBy" value="Time" id="OrderByTime" onchange="this.form.submit()">
-                                <label for="OrderByTime">Order by Time</label>
+                            <li class="option">
+                                <input type="radio" name="test" id="1">
+                                <label for="1">None</label>
+                                <div class="check"></div>
+                            </li>
+                            <li class="option">
+                                <input type="radio" name="test" id="2">
+                                <label for="2">Most Liked</label>
+                                <div class="check"></div>
+                            </li>
+                            <li class="option">
+                                <input type="radio" name="test" id="3">
+                                <label for="3">Most Hated</label>
+                                <div class="check"></div>
                             </li>
                             <li>
-                                <input type="radio" asp-for="OrderBy" value="Likes" id="OrderByLikes" onchange="this.form.submit()">
-                                <label for="OrderByLikes"><strong>Order by Likes</strong></label>
+                                <input type="radio" name="test" id="4">
+                                <label for="4">By Name</label>
+                                <div class="check"></div>
                             </li>
                         </ul>
                     </div>
                 </div>
-            </div>
-        </form>
-
-
-
-        
+        </div>
         <!-- DROP DOWN HERE! --> 
-
     </div>
-     
 
-
-
-
-
-    @if (Model.Cheeps.Any())
+    @if (Cheeps.Any())
     {
-        <ul class="cheeps">
-            @foreach (var cheep in Model.Cheeps)
-            {
-                <li>
-                    <div class="cheep-wrapper">
-                        @* [TODO] If the user does NOT have a Profile Picture, put the default in its place. *@
-                        <div class="cheep-profilepicture-name-time">
-                            <img src="/images/blank.png" alt="Profile Picture">
-                            <div class="cheep-name-time">
-                                <strong>
-                                    <a href="/@cheep.Author.UserName">@cheep.Author.UserName</a>
-                                </strong>
-                                <small>@cheep.TimeStamp</small>
-                            </div>
-                        </div>
-
-                        @{
-                            var co_Info = CheepOpinionInfo.GetValueOrDefault(cheep.CheepId);
-                            int cheepNumLikes        = co_Info.NumLikes;
-                            int cheepNumDislikes     = co_Info.NumDislikes;
-                        }
-
-                        <div class="cheep-text-wrapper">
-                            <p>@cheep.Text</p>
-                        </div>
-
-                        <div class="cheep-number-likes-dislikes-wrapper">
-                            <small><img src="/images/thumbup.svg" alt="Like"></img> @cheepNumLikes</small>
-                            <small><img src="/images/thumbdown.svg" alt="Dislike"></img> @cheepNumDislikes</small>
-                        </div>
-
-                        <div class="cheep-func-wrapper">
-                            @if(SignInManager.IsSignedIn(User) && username != cheep.Author.UserName)
-                            {
-                                var user = Model.SignedInAuthor;
-                                var authorOpinionOfCheep = co_Info.AuthorCheepOpinion;
-
-                                try
-                                {
-                                    @* Change this to be more concise *@
-                                    <div class="cheep-func-grid-box">
-                                        <form id="followForm" method="post" asp-page-handler="Follow">
-                                            @Html.AntiForgeryToken()
-                                            @if(user.Following.Any() && user.Following.Contains<Author>(cheep.Author))
-                                            {
-                                                <input type="hidden" asp-for="IsFollow" value="false" />
-                                                <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
-                                                <button type="submit" class="form-input-button btn" >
-                                                    <img id="unfollow" src="/images/unfollow.svg" alt="Unfollow"></img>
-                                                </button>
-                                            }
-                                            else
-                                            {
-                                                <input type="hidden" asp-for="IsFollow" value="true" />
-                                                <input type="hidden" asp-for="TargetAuthorUserName" value="@cheep.Author.UserName" />
-                                                <button type="submit" class="form-input-button btn" >
-                                                    <img id="follow" src="/images/follow.svg" alt="Follow"></img>
-                                                </button>
-                                            }
-                                        </form>
-                                    </div>
-
-                                    <div class="cheep-func-grid-box">
-                                        <form id="likeDis" method="post" asp-page-handler="DislikeOrLike">
-                                            <input type="hidden" asp-for="TargetCheepId" value="@cheep.CheepId" />
-                                            <input type="hidden" asp-for="TargetAuthorUserName" value="@username" />
-                                            <button type="submit" name="likeDis" value="like" class="form-input-button btn" style="@(authorOpinionOfCheep == Enums.ACO.AuthorCheepOpinion.DISLIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
-                                                <img src="/images/thumbup.svg" alt="Like"></img>
-                                            </button>
-                                            <button type="submit" name="likeDis" value="dislike" class="form-input-button btn" style="@(authorOpinionOfCheep == Enums.ACO.AuthorCheepOpinion.LIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
-                                                <img src="/images/thumbdown.svg" alt="Dislike"></img>
-                                            </button>
-                                        </form>
-                                    </div>
-
-                                    <div class="cheep-func-grid-box">
-                                        <button class="form-input-button btn">
-                                            <img src="/images/chat.svg" alt="Comments"></img>
-                                        </button>
-                                    </div>
-                                } 
-                                catch(Exception ex)
-                                {
-                                    <p>Exception Message: @ex.Message</p>
-                                }
-                            }
-                        </div>
-                    </div>
-                </li>
-            }
-        </ul>
+        @await Html.PartialAsync("_CheepPartial", Model)
     }
     else
     {
@@ -171,7 +81,14 @@
     <div class="pagination">
         @for (int i = 0; i <= numPages; i++)
         {
-            <a href="/?page=@(i+1)">@(i+1)</a>
+            @if(i == numPages)
+            {
+                <a href="/?page=@(i+1)">@(i+1)</a>
+            } 
+            else
+            {
+                <a href="/?page=@(i+1)">@(i+1), </a>
+            }
         }
     </div>
 </div>
@@ -179,10 +96,9 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        let toggle = function(){
-	        document.querySelectorAll('.dropdown-wrapper')[0].classList.toggle('active');
-        }
+        // 01. Toggle 'OrderCheepsOptions':
+        const toggle = () => { document.querySelector('.dropdown-wrapper').classList.toggle('active'); };
+        document.querySelector('.toggle').addEventListener("click", toggle);
 
-        document.querySelectorAll('.toggle')[0].addEventListener("click", toggle);
     </script>
 }

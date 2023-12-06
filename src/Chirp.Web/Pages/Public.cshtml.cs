@@ -60,18 +60,13 @@ public class PublicModel : PageModel
         CheepsPerPage = cheepRepository.CheepsPerPage();
     }
 
-    public async Task<IActionResult> OnGet([FromQuery] int? page = 0)
-    {   
-
-        int pgNum = page ?? 0;
+    public async Task<IActionResult> OnGet([FromQuery] int? page = 1)
+    {
+        int pgNum = page ?? 1;
         
         IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(pgNum);
-        Cheeps = cheeps.ToList(); //Problem might be that it re-changes itself AGAIN.
+        Cheeps = cheeps.ToList();     
 
-
-
-
-        
         TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
         CheepOpinionsInfo = new Dictionary<int, CheepOpinionDTO>();
 
@@ -115,8 +110,6 @@ public class PublicModel : PageModel
     {
         ModelState.Clear();
         
-        int pgNum = page ?? 0;
-
         try
         {
             if(ModelState.IsValid) {
@@ -126,7 +119,7 @@ public class PublicModel : PageModel
 
                 await _cheepRepository.CreateCheep(cheepDTO);
 
-                return RedirectToPage("Public", new { pgNum });
+                return RedirectToPage("Public", new { page });
             }
             else if(!ModelState.IsValid)
             {
@@ -219,46 +212,18 @@ public class PublicModel : PageModel
         return RedirectToPage("Public", new { page });
     }
 
-    public async Task<IActionResult> OnPost([FromQuery] int? page = 0)
-    {
 
-        //FROM ONGET: 
-        int pgNum = page ?? 0;
-        
-        IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(pgNum);
-        Cheeps = cheeps.ToList();
-        //It has been asserted that it fucking gets the drop-down now.
-        //Dropdown is either "Likes" or "Time".
-        //IEnumerable<Cheep> cheepsSortedByDate = cheeps.OrderBy(cheep => cheep.TimeStamp).ToList();
-        //IEnumerable<Cheep> cheepsSortedByLikes = cheeps.OrderByDescending(cheep => cheep.LikesAndDislikes.Likes.Count + cheep.LikesAndDislikes.Dislikes.Count).ToList();
-
-
-
-        var orderBy = Request.Form["OrderBy"];
-        
-        IEnumerable<Cheep> sortedCheeps;
-
-        if (orderBy == "Likes")
-        {
-            sortedCheeps = Cheeps.OrderByDescending(cheep => cheep.LikesAndDislikes.Likes.Count + cheep.LikesAndDislikes.Dislikes.Count).ToList();
-        }
-        else
-        {
-            sortedCheeps = Cheeps.OrderBy(cheep => cheep.TimeStamp).ToList();
-        }
-
-        Cheeps = sortedCheeps.ToList();
-        
-
-        //Just a CHECKER.
-        bool checker = false;
-        if (OrderBy == null) checker = true; 
-        _logger.LogInformation($" DADDYDADDY {orderBy} AND {checker}");
-
-
-        
-        // Perform actions based on the updated OrderBy value or save it in the database
-
-        return RedirectToPage(); // Redirect to the same page after handling the POST request
-    }
+    // public Task<IActionResult> OnGetOrderCheepsBy(string orderBy)
+    // {
+    //     switch(orderBy)
+    //     {
+    //         case "timestamp":
+                
+    //             //... Sort the 'Cheeps' by timestamp 
+    //             break;
+    //         case "name":
+    //             //... Sort the 'Cheeps' by author name 
+    //             break;
+    //     }
+    // }
 }

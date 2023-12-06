@@ -7,7 +7,6 @@ using Chirp.CDTO;
 using Microsoft.Extensions.Logging;
 using Enums.ACO;
 using Chirp.ODTO;
-using System.Formats.Asn1;
 
 namespace Chirp.Infrastructure;
 
@@ -54,6 +53,7 @@ public class CheepRepository : ICheepRepository
                 .ThenInclude(cheepLikeDis => cheepLikeDis.Likes) 
             .Include(cheep => cheep.LikesAndDislikes) 
                 .ThenInclude(cheepLikeDis => cheepLikeDis.Dislikes) 
+            .OrderBy(cheep => cheep.TimeStamp)
             .Skip(page * CheepsPerPage())
             .Take(CheepsPerPage())
             .ToListAsync();
