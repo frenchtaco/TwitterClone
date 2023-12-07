@@ -23,11 +23,13 @@ namespace MyApp.Namespace
 
         public async Task<IActionResult> OnPostEditMe([FromQuery] int page = 0)
     {
-            _logger.LogInformation($"Logged in user:  {TargetAuthorUserName}");
+            _logger.LogInformation($"LOGGED IN USER:  {User.Identity.Name}");
             _logger.LogInformation($"New Username:  {NewUsername}");
 
             return RedirectToPage("/Public");
         }
+
+        //Inject the correct repositories so that we can fuck around.
        
     }
 
