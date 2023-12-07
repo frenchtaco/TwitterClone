@@ -115,7 +115,6 @@
     }
     else
     {
-        // followerText
         <em>There are no cheeps so far.</em>
     }
     </ul>
@@ -234,27 +233,31 @@
 </div>
 
 @* The 'Forget Me!' pop-up container I'd like to be displayed in the center of the screen. *@ 
-<div class="frost-panel" onclick="closeForgetMe()"></div>
-<div class="forget-me-popup pop-up-window">
-    <div class="forget-me-wrapper">
-        <div class="close-forget-me-popup-wrapper">
-            <button class="close-forget-me-popup-button btn" onclick="closeForgetMe()">
-                <img src="/images/xcross.svg" alt="X"></img>
-            </button>
-        </div>
-        
-        <div class="forget-me-text">
-            <strong class="forget-me-popup-warning">Warning!</strong> 
-            <p>By clicking this button you will delete all your Cheeps as well as your </p>
-        </div>
-        <form method="post" asp-page-handler="ForgetMe">
-            <input type="hidden" asp-for="TargetAuthorUserName" value="@SIU.UserName" />
-            <div class="forget-me-button-wrapper">
-                <button type="submit" class="forget-me-button btn">Forget Me!</button>
+@if(SignedInUser && username != null && TLU == SIU)
+{
+    <div class="frost-panel" onclick="closeForgetMe()"></div>
+    <div class="forget-me-popup pop-up-window">
+        <div class="forget-me-wrapper">
+            <div class="close-forget-me-popup-wrapper">
+                <button class="close-forget-me-popup-button btn" onclick="closeForgetMe()">
+                    <img src="/images/xcross.svg" alt="X"></img>
+                </button>
             </div>
-        </form>
+            
+            <div class="forget-me-text">
+                <strong class="forget-me-popup-warning">Warning!</strong> 
+                <p>By clicking this button you will delete all your Cheeps as well as your </p>
+            </div>
+            <form method="post" asp-page-handler="ForgetMe">
+                <input type="hidden" asp-for="TargetAuthorUserName" value="@SIU.UserName" />
+                <div class="forget-me-button-wrapper">
+                    <button type="submit" class="forget-me-button btn">Forget Me!</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+}
+
 
 @section Scripts
 {

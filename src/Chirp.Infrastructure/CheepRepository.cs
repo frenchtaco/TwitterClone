@@ -53,7 +53,7 @@ public class CheepRepository : ICheepRepository
                 .ThenInclude(cheepLikeDis => cheepLikeDis.Likes) 
             .Include(cheep => cheep.LikesAndDislikes) 
                 .ThenInclude(cheepLikeDis => cheepLikeDis.Dislikes) 
-            .OrderBy(cheep => cheep.TimeStamp)
+            .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip(page * CheepsPerPage())
             .Take(CheepsPerPage())
             .ToListAsync();

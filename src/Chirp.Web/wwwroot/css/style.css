@@ -376,7 +376,7 @@ div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forge
   opacity: 1.0;
 }
 
-.frost-panel
+div.frost-panel
 {
   display: none;
   position: fixed;
@@ -388,7 +388,7 @@ div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forge
   z-index: 10;
 }
 
-.pop-up-window {
+div.pop-up-window {
   display: none;
   position: fixed;
   top: 50%;
@@ -401,7 +401,7 @@ div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forge
   z-index: 1000;
 }
 
-.forget-me-popup .forget-me-wrapper {
+div.forget-me-popup div.forget-me-wrapper {
   position: relative;
   padding: 0;
   margin: 0;
@@ -409,40 +409,39 @@ div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forge
   flex-direction: column;
 }
 
-.forget-me-popup .forget-me-wrapper .close-forget-me-popup-wrapper {
+div.forget-me-popup div.forget-me-wrapper div.close-forget-me-popup-wrapper {
   position: absolute;
   top: -20px;
   right: -20px;
 }
 
-.forget-me-popup .forget-me-wrapper .close-forget-me-popup-wrapper .close-forget-me-popup-button {
+div.forget-me-popup div.forget-me-wrapper div.close-forget-me-popup-wrapper button.close-forget-me-popup-button {
   opacity: 0.8;
   transition: opacity 0.3s ease;
 }
 
-.forget-me-popup .forget-me-wrapper .close-forget-me-popup-wrapper .close-forget-me-popup-button:hover {
+div.forget-me-popup div.forget-me-wrapper div.close-forget-me-popup-wrapper button.close-forget-me-popup-button:hover {
   opacity: 1.0;
 }
 
-.forget-me-popup .forget-me-wrapper .forget-me-popup-warning {
+div.forget-me-popup div.forget-me-wrapper strong.forget-me-popup-warning {
   font-size: 24px;
   color: red;
 }
 
-.forget-me-popup .forget-me-wrapper .forget-me-button-wrapper {
+div.forget-me-popup div.forget-me-wrapper div.forget-me-button-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.forget-me-popup .forget-me-wrapper .forget-me-button-wrapper .forget-me-button {
+div.forget-me-popup div.forget-me-wrapper div.forget-me-button-wrapper button.forget-me-button {
   color: #fff;
   background: rgb(235, 69, 69);
 }
 
-.forget-me-popup .forget-me-wrapper .forget-me-text {
+div.forget-me-popup div.forget-me-wrapper div.forget-me-text {
   padding: 10px 0px 10px 0px;
-  
 }
 
 

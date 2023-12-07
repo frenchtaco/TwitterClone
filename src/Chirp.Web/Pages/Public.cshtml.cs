@@ -60,12 +60,12 @@ public class PublicModel : PageModel
         CheepsPerPage = cheepRepository.CheepsPerPage();
     }
 
-    public async Task<IActionResult> OnGet([FromQuery] int? page = 1)
+    public async Task<IActionResult> OnGet([FromQuery] int? page = 0)
     {
-        int pgNum = page ?? 1;
+        int pgNum = page ?? 0;
         
         IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(pgNum);
-        Cheeps = cheeps.ToList();     
+        Cheeps = cheeps.ToList();
 
         TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
         CheepOpinionsInfo = new Dictionary<int, CheepOpinionDTO>();
@@ -213,17 +213,28 @@ public class PublicModel : PageModel
     }
 
 
-    // public Task<IActionResult> OnGetOrderCheepsBy(string orderBy)
-    // {
-    //     switch(orderBy)
-    //     {
-    //         case "timestamp":
-                
-    //             //... Sort the 'Cheeps' by timestamp 
-    //             break;
-    //         case "name":
-    //             //... Sort the 'Cheeps' by author name 
-    //             break;
-    //     }
-    // }
+    public PartialViewResult OnGetOrderCheepsBy([FromQuery] string? orderBy = "")
+    {
+        switch(orderBy)
+        {
+            case "timestamp":
+                _logger.LogInformation("Ordering Cheeps by TimeStamp");
+                Cheeps = Cheeps.OrderBy(c => c.TimeStamp).ToList();
+                break;
+            case "likes":
+                _logger.LogInformation("Ordering Cheeps by UserName");
+                Cheeps = Cheeps.OrderBy(c => c.LikesAndDislikes.Likes.Count).ToList();
+                break;
+            case "hated":
+                _logger.LogInformation("Ordering Cheeps by UserName");
+                Cheeps = Cheeps.OrderBy(c => c.LikesAndDislikes.Likes.Count).ToList();
+                break;
+            case "name":
+                _logger.LogInformation("Ordering Cheeps by UserName");
+                Cheeps = Cheeps.OrderBy(c => c.Author.UserName).ToList();
+                break;
+        }
+
+        return Partial("_CheepPartial", Cheeps);
+    }
 }

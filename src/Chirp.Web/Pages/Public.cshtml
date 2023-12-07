@@ -42,22 +42,22 @@
                     <button class="toggle toggle-dropdown-button btn">Order by Options</button>
                     <div class="dropdown-content">
                         <ul>
-                            <li class="option">
+                            <li class="option" onclick="orderCheeps('timestamp')">
                                 <input type="radio" name="test" id="1">
-                                <label for="1">None</label>
+                                <label for="1">Time Stamp</label>
                                 <div class="check"></div>
                             </li>
-                            <li class="option">
+                            <li class="option" onclick="orderCheeps('liked')">
                                 <input type="radio" name="test" id="2">
                                 <label for="2">Most Liked</label>
                                 <div class="check"></div>
                             </li>
-                            <li class="option">
+                            <li class="option" onclick="orderCheeps('hated')">
                                 <input type="radio" name="test" id="3">
                                 <label for="3">Most Hated</label>
                                 <div class="check"></div>
                             </li>
-                            <li>
+                            <li class="option" onclick="orderCheeps('name')">
                                 <input type="radio" name="test" id="4">
                                 <label for="4">By Name</label>
                                 <div class="check"></div>
@@ -69,14 +69,16 @@
         <!-- DROP DOWN HERE! --> 
     </div>
 
-    @if (Cheeps.Any())
-    {
-        @await Html.PartialAsync("_CheepPartial", Model)
-    }
-    else
-    {
-        <em>There are no cheeps so far.</em>
-    }
+    <div id="cheepsContainer">
+        @if (Cheeps.Any())
+        {
+            @await Html.PartialAsync("_CheepPartial", Model)
+        }
+        else
+        {
+            <em>There are no cheeps so far.</em>
+        }
+    </div>
 
     <div class="pagination">
         @for (int i = 0; i <= numPages; i++)
@@ -100,5 +102,20 @@
         const toggle = () => { document.querySelector('.dropdown-wrapper').classList.toggle('active'); };
         document.querySelector('.toggle').addEventListener("click", toggle);
 
+        function orderCheeps(orderBy) {
+            console.log('Ordering Cheeps by:', orderBy);
+
+            $.ajax({
+                url: '/Public?handler=OrderCheepsBy&orderBy=' + orderBy,
+                type: 'GET',
+                success: function (data) {
+                    console.log('AJAX success! Received data:', data);
+                    $('#cheepsContainer').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX error:', status, error);
+                }
+            });
+        }
     </script>
 }
