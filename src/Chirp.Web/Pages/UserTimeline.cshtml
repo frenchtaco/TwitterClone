@@ -256,6 +256,19 @@
     </div>
 </div>
 
+<!-- EDIT BUTTON --> 
+        <div class="forget-me-text"></div>
+            <form method="post" asp-page-handler="EditMe">
+                <input type="hidden" asp-for="TargetAuthorUserName" value="@SIU.UserName" />
+                <button type="submit" class="">Edit...</button>
+            </form>
+        </div>
+
+
+
+
+
+
 @section Scripts
 {
     <script>

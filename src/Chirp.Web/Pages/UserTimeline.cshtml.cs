@@ -285,4 +285,15 @@ public class UserTimelineModel : PageModel
 
         return RedirectToPage("UserTimeline", new { page });
     }
+
+
+    public async Task<IActionResult> OnPostEditMe([FromQuery] int page = 0)
+    {
+        _logger.LogInformation($"Logged in user:  {TargetAuthorUserName}");
+
+        return RedirectToPage("EditMe", new { page });
+        
+    }
+
+
 }

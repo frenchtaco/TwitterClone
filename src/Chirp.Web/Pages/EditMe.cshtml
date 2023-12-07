@@ -1,0 +1,23 @@
+﻿@page "/EditMe"
+@model MyApp.Namespace.EditMeModel
+@inject SignInManager<Author> SignInManager
+    @inject UserManager<Author> UserManager
+@{
+    var SignedInUser = SignInManager.IsSignedIn(User);
+    Author? SIU = Model.SignedInUser;   
+}
+ <h2> EditMe Place</h2>
+<p> Some people wish to edit their life...</p>
+<p> ... try the next best thing!</p>
+
+
+<!-- EditMe Form--> 
+
+        <div class="EditMe">
+            <form method="post" asp-page-handler="EditMe">
+                <input type="hidden" asp-for="TargetAuthorUserName" value="@SIU.UserName" />
+                <input type="text" asp-for="NewUsername" placeholder="New Username" />
+                <button type="submit">Edit UserName...</button>
+            </form>
+        </div>
+    
