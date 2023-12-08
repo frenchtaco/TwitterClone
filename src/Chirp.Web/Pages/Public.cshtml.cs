@@ -29,18 +29,18 @@ public class PublicModel : PageModel
     public Author SignedInAuthor { get; set; } = null!;
     public Dictionary<int, CheepOpinionDTO> CheepOpinionsInfo { get; set; }
     public int TotalCheeps, CheepsPerPage;
+    public bool IsUserSignedIn;
 
     // 03. Bind properties:
     [BindProperty, Required(ErrorMessage="Cheep must be between 1-to-160 characters"), StringLength(160, MinimumLength = 1)]
     public string CheepText { get; set; } = "";
     [BindProperty]
+    [ViewData]
     public bool IsFollow { get; set; } = false;
     [BindProperty]
     public string TargetAuthorUserName { get; set; } = null!;
     [BindProperty]
     public int TargetCheepId { get; set; }
-    [BindProperty]
-    public string OrderBy { get; set; } // WHAT THE HECK
 
     public PublicModel(
         ILogger<PublicModel> logger, 
@@ -70,30 +70,22 @@ public class PublicModel : PageModel
         TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
         CheepOpinionsInfo = new Dictionary<int, CheepOpinionDTO>();
 
-        bool IsUserSignedIn = _signInManager.IsSignedIn(User);
+        IsUserSignedIn = _signInManager.IsSignedIn(User);
 
         try
         {
+            // 01. We perform Lazy Loading, wherein we retrieve both the Author Opinions on the Cheep and
+            //     the total number of 'Likes' and 'Dislikes'.
             if(IsUserSignedIn)
             {
                 SignedInAuthor = await _authorRepository.GetAuthorByName(User.Identity?.Name);
 
-                if(Cheeps.Any())
-                {
-                    foreach (Cheep cheep in Cheeps)
-                    {
-                        CheepOpinionDTO co_Info = await _likeDisRepository.GetAuthorCheepOpinion(cheep.CheepId, SignedInAuthor.UserName);
-                        CheepOpinionsInfo.Add(cheep.CheepId, co_Info);
-                    }
-                }
+                bool Result_PopulateCheepOpinionInfo = await PopulateCheepOpinionInfo(true);
             }
+            // 02. Here we just retrieve the 'Likes' and 'Dislikes' associated with that CheepId.
             else if(!IsUserSignedIn)
             {
-                foreach(Cheep cheep in Cheeps)
-                {
-                    CheepOpinionDTO LikesAndDislikes = await _likeDisRepository.GetCheepLikesAndDislikes(cheep.CheepId);
-                    CheepOpinionsInfo.Add(cheep.CheepId, LikesAndDislikes);
-                }
+                bool Result_PopulateCheepOpinionInfo = await PopulateCheepOpinionInfo(false);
             }
         } 
         catch(Exception ex)
@@ -212,29 +204,88 @@ public class PublicModel : PageModel
         return RedirectToPage("Public", new { page });
     }
 
-
-    public PartialViewResult OnGetOrderCheepsBy([FromQuery] string? orderBy = "")
+    public async Task<bool> PopulateCheepOpinionInfo(bool GetAuthorOpinion)
     {
-        switch(orderBy)
+        try
         {
-            case "timestamp":
-                _logger.LogInformation("Ordering Cheeps by TimeStamp");
-                Cheeps = Cheeps.OrderBy(c => c.TimeStamp).ToList();
-                break;
-            case "likes":
-                _logger.LogInformation("Ordering Cheeps by UserName");
-                Cheeps = Cheeps.OrderBy(c => c.LikesAndDislikes.Likes.Count).ToList();
-                break;
-            case "hated":
-                _logger.LogInformation("Ordering Cheeps by UserName");
-                Cheeps = Cheeps.OrderBy(c => c.LikesAndDislikes.Likes.Count).ToList();
-                break;
-            case "name":
-                _logger.LogInformation("Ordering Cheeps by UserName");
-                Cheeps = Cheeps.OrderBy(c => c.Author.UserName).ToList();
-                break;
+            if(GetAuthorOpinion)
+            {
+                if(Cheeps.Any())
+                {
+                    foreach (Cheep cheep in Cheeps)
+                    {
+                        CheepOpinionDTO co_Info = await _likeDisRepository.GetAuthorCheepOpinion(cheep.CheepId, SignedInAuthor.UserName);
+                        if(co_Info == null) throw new Exception("'co_Info' was NULL");
+                        CheepOpinionsInfo.Add(cheep.CheepId, co_Info);
+                    }
+                }
+            }
+            else
+            {
+                if(Cheeps.Any())
+                {
+                    foreach(Cheep cheep in Cheeps)
+                    {
+                        CheepOpinionDTO LikesAndDislikes = await _likeDisRepository.GetCheepLikesAndDislikes(cheep.CheepId);
+                        if(LikesAndDislikes == null) throw new Exception("'LikesAndDislikes' was NULL");
+                        CheepOpinionsInfo.Add(cheep.CheepId, LikesAndDislikes);
+                    }
+                }
+            }
+
+            return true;    // [TODO] Make this more fail-safe.
+        } 
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public async Task<PartialViewResult> OnGetOrderCheepsBy([FromQuery] string? orderBy = "")
+    {
+        try
+        {
+            SignedInAuthor = await _authorRepository.GetAuthorByName(User.Identity?.Name);
+            IsUserSignedIn = _signInManager.IsSignedIn(User);
+
+            await PopulateCheepOpinionInfo(IsUserSignedIn);
+
+            switch(orderBy)
+            {
+                case "timestamp":
+                    _logger.LogInformation("Ordering Cheeps by TimeStamp");
+                    Cheeps = Cheeps.OrderBy(c => c.TimeStamp).ToList();
+                    break;
+                case "likes":
+                    _logger.LogInformation("Ordering Cheeps by Likes");
+                    Cheeps = Cheeps.OrderBy(c => c.LikesAndDislikes.Likes.Count).ToList();
+                    break;
+                case "hated":
+                    _logger.LogInformation("Ordering Cheeps by Hates");
+                    Cheeps = Cheeps.OrderBy(c => c.LikesAndDislikes.Likes.Count).ToList();
+                    break;
+                case "name":
+                    _logger.LogInformation("Ordering Cheeps by UserName");
+                    Cheeps = Cheeps.OrderBy(c => c.Author.UserName).ToList();
+                    break;
+            }
+        } 
+        catch(Exception ex)
+        {
+            string exceptionInfo = $"File: Public.cshtml.cs \n\n Method: 'OnGet()' \n\n Message: {ex.Message} \n\n Stack Trace: {ex.StackTrace}";
+            TempData["ErrorMessage"] = exceptionInfo;
         }
 
-        return Partial("_CheepPartial", Cheeps);
+        ViewData["IsFollow"]             = IsFollow;
+        ViewData["TargetAuthorUserName"] = TargetAuthorUserName;
+        ViewData["TargetCheepId"]        = TargetCheepId;
+        ViewData["CheepOpinionInfo"]     = CheepOpinionsInfo;
+        ViewData["Cheeps"]               = Cheeps;
+        ViewData["SignedInAuthor"]       = SignedInAuthor;
+        ViewData["UserName"]             = User.Identity?.Name;
+
+        return new PartialViewResult {
+            ViewName = "_CheepPartial",
+        };
     }
 }

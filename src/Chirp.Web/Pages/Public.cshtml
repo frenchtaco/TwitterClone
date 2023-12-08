@@ -3,12 +3,20 @@
 @inject SignInManager<Author> SignInManager
 @inject UserManager<Author> UserManager
 @{
-    ViewData["Title"] = "Chirp!";
+    var numPages = Math.Ceiling((double)Model.TotalCheeps / Model.CheepsPerPage);
+    var username = User.Identity?.Name;
+
+    ViewData["Title"]                = "Chirp!";
+    ViewData["IsFollow"]             = @Model.IsFollow;
+    ViewData["TargetAuthorUserName"] = @Model.TargetAuthorUserName;
+    ViewData["TargetCheepId"]        = @Model.TargetCheepId;
+    ViewData["CheepOpinionInfo"]     = @Model.CheepOpinionsInfo;
+    ViewData["Cheeps"]               = @Model.Cheeps;
+    ViewData["SignedInAuthor"]       = @Model.SignedInAuthor;
+    ViewData["UserName"]             = username;
+
+
     Layout = "Shared/_Layout";
-    var numPages       = Math.Ceiling((double)Model.TotalCheeps / Model.CheepsPerPage);
-    var username       = User.Identity?.Name;
-    var CheepOpinionInfo = @Model.CheepOpinionsInfo;
-    var Cheeps           = @Model.Cheeps;
 }
 
 <div>
@@ -36,7 +44,6 @@
     <div class="public-timeline-header-wrapper">
         <h2> Public Timeline </h2>
 
-        <!-- DROP DOWN HERE --> 
         <div class="dropdown-wrapper">
                 <div class="icon-wrapper">
                     <button class="toggle toggle-dropdown-button btn">Order by Options</button>
@@ -66,19 +73,19 @@
                     </div>
                 </div>
         </div>
-        <!-- DROP DOWN HERE! --> 
     </div>
 
-    <div id="cheepsContainer">
-        @if (Cheeps.Any())
-        {
+    @if (@Model.Cheeps.Any())
+    {
+        <div id="cheeps-container">
             @await Html.PartialAsync("_CheepPartial", Model)
-        }
-        else
-        {
-            <em>There are no cheeps so far.</em>
-        }
-    </div>
+        </div>
+    }
+    else
+    {
+        <em>There are no cheeps so far.</em>
+    }
+    
 
     <div class="pagination">
         @for (int i = 0; i <= numPages; i++)
@@ -96,6 +103,7 @@
 </div>
 
 @section Scripts {
+    @* Uncaught SyntaxError: Identifier 'toggle' has already been declared *@
     <partial name="_ValidationScriptsPartial" />
     <script>
         // 01. Toggle 'OrderCheepsOptions':
@@ -106,14 +114,14 @@
             console.log('Ordering Cheeps by:', orderBy);
 
             $.ajax({
-                url: '/Public?handler=OrderCheepsBy&orderBy=' + orderBy,
+                url: '@Url.Page("/Public", "OrderCheepsBy")' + '?orderBy=' + orderBy,
                 type: 'GET',
                 success: function (data) {
                     console.log('AJAX success! Received data:', data);
-                    $('#cheepsContainer').html(data);
+                    $('#cheeps-container').html(data);
                 },
                 error: function (xhr, status, error) {
-                    console.error('AJAX error:', status, error);
+                    $('#cheeps-container').html("[AJAX Error] Cheeps could not located");
                 }
             });
         }

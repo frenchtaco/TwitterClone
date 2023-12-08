@@ -1,9 +1,18 @@
+@using Chirp.ODTO
 @model Chirp.Web.Pages.PublicModel
 @inject SignInManager<Author> SignInManager
+@inject UserManager<Author> UserManager
 
 @{
-    var CheepOpinionInfo = @Model.CheepOpinionsInfo;
-    var username = User.Identity?.Name;
+    Layout = null;
+    
+    var IsFollow = (bool)ViewData["IsFollow"];
+    var TargetAuthorUserName = (string)ViewData["TargetAuthorUserName"];
+    var TargetCheepId = (int)ViewData["TargetCheepId"];
+    var CheepOpinionInfo = ViewData["CheepOpinionInfo"] as Dictionary<int, CheepOpinionDTO>;
+    var Cheeps = ViewData["Cheeps"] as List<Cheep>;
+    var SignedInAuthor = ViewData["SignedInAuthor"] as Author;
+    var UserName = ViewData["UserName"] as string;
 }
 
 <ul class="cheeps">
@@ -38,9 +47,9 @@
                 </div>
 
                 <div class="cheep-func-wrapper">
-                    @if(SignInManager.IsSignedIn(User) && username != cheep.Author.UserName)
+                    @if(SignInManager.IsSignedIn(User) && UserName != cheep.Author.UserName)
                     {
-                        var user = Model.SignedInAuthor;
+                        var user = SignedInAuthor;
                         var authorOpinionOfCheep = co_Info.AuthorCheepOpinion;
 
                         try
@@ -71,7 +80,7 @@
                             <div class="cheep-func-grid-box">
                                 <form id="likeDis" method="post" asp-page-handler="DislikeOrLike">
                                     <input type="hidden" asp-for="TargetCheepId" value="@cheep.CheepId" />
-                                    <input type="hidden" asp-for="TargetAuthorUserName" value="@username" />
+                                    <input type="hidden" asp-for="TargetAuthorUserName" value="@UserName" />
                                     <button type="submit" name="likeDis" value="like" class="form-input-button btn" style="@(authorOpinionOfCheep == Enums.ACO.AuthorCheepOpinion.DISLIKES ? "opacity: 0.5;" : "opacity: 1.0;")">
                                         <img src="/images/thumbup.svg" alt="Like"></img>
                                     </button>
