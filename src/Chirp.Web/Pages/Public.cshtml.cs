@@ -29,6 +29,7 @@ public class PublicModel : PageModel
     public Author SignedInAuthor { get; set; } = null!;
     public Dictionary<int, CheepOpinionDTO> CheepOpinionsInfo { get; set; }
     public int TotalCheeps, CheepsPerPage;
+    public string UserName { get; set; }
 
     // 03. Bind properties:
     [BindProperty, Required(ErrorMessage="Cheep must be between 1-to-160 characters"), StringLength(160, MinimumLength = 1)]
@@ -74,7 +75,8 @@ public class PublicModel : PageModel
         {
             if(IsUserSignedIn)
             {
-                SignedInAuthor = await _authorRepository.GetAuthorByName(User.Identity?.Name);
+                UserName = User.Identity?.Name;
+                SignedInAuthor = await _authorRepository.GetAuthorByName(UserName);
 
                 if(Cheeps.Any())
                 {
