@@ -345,7 +345,6 @@ div.page ul.cheeps li:hover .cheep-delete-wrapper
 
 *********************/
 div.pagination {
-  
   display: flex;
   flex-wrap: wrap;
 }
@@ -353,10 +352,13 @@ div.pagination {
 div.pagination a {
   text-decoration: none;
   color: rgb(121, 121, 121);
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 div.pagination a:hover {
   color: rgb(0, 153, 255);
+  text-decoration: underline;
 }
 
 /*********************
@@ -368,13 +370,13 @@ div.page .user-time-line-header-container {
   position: relative;
 }
 
-div.page .user-time-line-header-container .trigger-forget-me-wrapper {
+div.page .user-time-line-header-container div.trigger-forget-me-wrapper {
   position: absolute;
   top: 0px;
   right: 0px;
 }
 
-div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forget-me-button
+div.page .user-time-line-header-container div.trigger-forget-me-wrapper .open-forget-me-button
 {
   color: #fff;
   background: rgb(235, 69, 69);
@@ -382,7 +384,7 @@ div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forge
   transition: opacity 0.3s ease;
 }
 
-div.page .user-time-line-header-container .trigger-forget-me-wrapper .open-forget-me-button:hover
+div.page .user-time-line-header-container div.trigger-forget-me-wrapper .open-forget-me-button:hover
 {
   background: rgb(235, 69, 69);
   opacity: 1.0;
@@ -455,4 +457,171 @@ div.forget-me-popup div.forget-me-wrapper div.forget-me-button-wrapper button.fo
 div.forget-me-popup div.forget-me-wrapper div.forget-me-text {
   padding: 10px 0px 10px 0px;
   
+}
+
+/*********************
+
+  DROP DOWN RANKING
+
+*********************/
+input[type="checkbox"],
+div.dropdown-content,
+input[type="radio"] {
+  display: none;
+}
+
+div.dropdown-wrapper {
+  position: relative;
+  right: 5px;
+  top: 5px;
+  margin: 0 auto;
+  max-width: 260px;
+  width: 100%;
+}
+
+div.dropdown-wrapper.active div.dropdown-content {
+  display: block;
+  z-index: 1;
+}
+
+div.dropdown-content {
+  border-radius: 5px;
+  position: absolute;
+  border: 1px solid #b3b3bf;
+  padding: 15px;
+  left: 20%;
+  top: 60px;
+  -webkit-transform: translate(-50%, 0);
+          transform: translate(-50%, 0);
+  width: 230px;
+}
+
+div.dropdown-content ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+div.dropdown-content li {
+  display: flex;
+  position: relative;
+  float: left;
+  width: 100%;
+  height: 40px;
+  z-index: 9;
+  border-bottom: 1px solid #dcdbe5;
+  &:last-child{
+    border-bottom:0;
+    padding-bottom:0;
+  }
+}
+
+div.dropdown-content ul li input[type=radio] {
+  position: absolute;
+  visibility: hidden;
+}
+
+div.dropdown-content ul li label {
+  display: block;
+  position: relative;
+  font-weight: 300;
+  font-size: 1.35em;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  cursor: pointer;
+  transition: all 0.25s linear;
+}
+
+div.dropdown-content ul li div.check {
+  position: relative;
+  display: block;
+  border: 5px solid #AAAAAA;
+  border-radius: 100%;
+  height: 25px;
+  width: 25px;
+  top: 20%;
+  left: 0px;
+  z-index: -1;
+  transition: border .25s linear;
+  -webkit-transition: border .25s linear;
+}
+
+div.dropdown-content ul li div.check::before {
+  scale: 0.75;
+  display: block;
+  content: '';
+  border-radius: 100%;
+  height: 15px;
+  width: 15px;
+  top: 5px;
+  left: 5px;
+  margin: auto;
+  z-index: -1;
+  transition: background 0.25s linear;
+  -webkit-transition: background 0.25s linear;
+}
+
+input[type=radio]:checked ~ div.check {
+  border: 5px solid #0d72ff;
+}
+
+input[type=radio]:checked ~ div.check::before{
+  background: #0d72ff;
+}
+
+input[type=radio]:checked ~ label{
+  color: #0d72ff;
+}
+
+div.dropdown-content:after, div.dropdown-content:before {
+  bottom: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+div.dropdown-content:after {
+  border-color: rgba(0, 0, 0, 0);
+  border-bottom-color: #ffff;
+  border-width: 10px;
+  margin-left: -10px;
+}
+div.dropdown-content:before {
+  border-color: rgba(179, 179, 191, 0);
+  border-bottom-color: #b3b3bf;
+  border-width: 11px;
+  margin-left: -11px;
+}
+
+div.icon-wrapper button.toggle-dropdown-button {
+  margin-left: 5px;
+  background: #dcdbe5;
+  opacity: 0.7;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  color: #000;
+  padding: 10px;
+  transition: background color 0.3s ease;
+}
+
+div.icon-wrapper button.toggle-dropdown-button:hover {
+  background: #258cfb;
+  color: #fff;
+}
+
+div.icon-wrapper li:hover {
+  background: rgba(227, 226, 226, 0.399);
+}
+
+div.icon-wrapper {
+  position: fixed;
+  top: 15px;
+  right: 10px;
 }

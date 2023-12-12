@@ -31,14 +31,48 @@ public class CheepRepository : ICheepRepository
         return 32;
     }
 
-    public async Task<IEnumerable<Cheep>> GetCheeps(int page)
+    public async Task<IEnumerable<Cheep>> GetCheeps(int page, string orderBy)
     {
-        return await _context.Cheeps
+        var cheepQuery = _context.Cheeps
             .Include(cheep => cheep.Author)
-            .OrderByDescending(cheep => cheep.TimeStamp)
-            .Skip(page * CheepsPerPage())
-            .Take(CheepsPerPage())
-            .ToListAsync();
+            .Include(cheep => cheep.LikesAndDislikes) 
+                .ThenInclude(cheepLikeDis => cheepLikeDis.Likes) 
+            .Include(cheep => cheep.LikesAndDislikes) 
+                .ThenInclude(cheepLikeDis => cheepLikeDis.Dislikes);
+            
+        switch(orderBy)
+        {
+            case "timestamp":
+                return await cheepQuery
+                    .OrderByDescending(cheep => cheep.TimeStamp)
+                    .Skip(page * CheepsPerPage())
+                    .Take(CheepsPerPage())
+                    .ToListAsync();
+            case "likes":
+                return await cheepQuery
+                    .OrderByDescending(cheep => cheep.LikesAndDislikes.Likes.Count)
+                    .Skip(page * CheepsPerPage())
+                    .Take(CheepsPerPage())
+                    .ToListAsync();
+            case "dislikes":
+                return await cheepQuery
+                    .OrderByDescending(cheep => cheep.LikesAndDislikes.Dislikes.Count)
+                    .Skip(page * CheepsPerPage())
+                    .Take(CheepsPerPage())
+                    .ToListAsync();
+            case "name":
+                return await cheepQuery
+                    .OrderByDescending(cheep => cheep.Author.UserName)
+                    .Skip(page * CheepsPerPage())
+                    .Take(CheepsPerPage())
+                    .ToListAsync();
+            default:
+                return await cheepQuery
+                    .OrderByDescending(cheep => cheep.TimeStamp)
+                    .Skip(page * CheepsPerPage())
+                    .Take(CheepsPerPage())
+                    .ToListAsync();
+        }
     }
 
     public async Task<IEnumerable<Cheep>> GetAllCheepsFromAuthor(string AuthorUserName)

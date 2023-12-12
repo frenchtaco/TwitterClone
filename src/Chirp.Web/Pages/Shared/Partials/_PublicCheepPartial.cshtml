@@ -8,11 +8,11 @@
     var UserName          = @Model.UserName;
     var SignedInAuthor    = @Model.SignedInAuthor;
     var CheepOpinionsInfo = @Model.CheepOpinionsInfo;
-
+    var Cheeps            = @Model.Cheeps;
 }
 
 <ul class="cheeps">
-    @foreach (var cheep in @Model.Cheeps)
+    @foreach (var cheep in Cheeps)
     {
         <li>
             <div class="cheep-wrapper">
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="cheep-func-wrapper">
-                    @if(SignInManager.IsSignedIn(User) && @Model.UserName != null && @Model.UserName != cheep.Author.UserName)
+                    @if(SignInManager.IsSignedIn(User) && UserName != null && UserName != cheep.Author.UserName)
                     {
                         var user = SignedInAuthor;
                         var authorOpinionOfCheep = co_Info.AuthorCheepOpinion;

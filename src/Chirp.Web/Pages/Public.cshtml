@@ -34,10 +34,15 @@
     }
 
     <h2> Public Timeline </h2>
+    <div id="orderByContainer">
+        <partial name="./Partials/_OrderByPartial" />
+    </div>
+
+
     @if (Cheeps.Any())
     {
-        <div id="cheeps-container">
-            @await Html.PartialAsync("_PublicCheepPartial", Model)
+        <div id="cheepsContainer">
+            <partial name="./Partials/_PublicCheepPartial" model="Model" />
         </div>
     }
     else
@@ -54,7 +59,7 @@
             } 
             else
             {
-                <a href="/?page=@(i)">@(i), </a>
+                <a href="/?page=@(i)">@(i)</a>
             }
         }
     </div>
@@ -62,4 +67,29 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const toggle = () => { document.querySelector('.dropdown-wrapper').classList.toggle('active'); };
+        document.querySelector('.toggle').addEventListener("click", toggle);
+
+
+        function orderCheeps(orderBy) {
+            console.log('Ordering Cheeps by:', orderBy);
+
+            var cheepContainer = $('#cheeps-container');
+
+            $.ajax({
+                url: '@Url.Page("/Public")?handler=OrderCheepsBy&orderBy=' + orderBy,
+                method: 'GET',
+                success: function (data) {
+                    console.log('AJAX success! Received data:', data);
+                    $('#cheeps-container').html(data);
+                },
+                error: function (xhr, status, error) {
+                    alert('Failed to retrieve Cheeps');
+                    $('#cheeps-container').html("[AJAX Error] Cheeps could not located");
+                }
+            });
+        }
+    </script>
 }
