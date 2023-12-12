@@ -1,0 +1,35 @@
+@model Chirp.Web.Pages.PublicModel
+
+<div class="dropdown-wrapper">
+    <div class="icon-wrapper">
+        <button class="toggle toggle-dropdown-button btn">Order by Options</button>
+        <div class="dropdown-content">
+            <ul>
+                <li class="option" onclick="orderCheeps('timestamp')">
+                    <input type="radio" name="test" id="1">
+                    <label for="1">Time Stamp</label>
+                    <div class="check"></div>
+                </li>
+                <li class="option" onclick="orderCheeps('liked')">
+                    <input type="radio" name="test" id="2">
+                    <label for="2">Most Liked</label>
+                    <div class="check"></div>
+                </li>
+                <li class="option" onclick="orderCheeps('hated')">
+                    <input type="radio" name="test" id="3">
+                    <label for="3">Most Hated</label>
+                    <div class="check"></div>
+                </li>
+                <li class="option" onclick="orderCheeps('name')">
+                    <input type="radio" name="test" id="4">
+                    <label for="4">By Name</label>
+                    <div class="check"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts 
+{
+}

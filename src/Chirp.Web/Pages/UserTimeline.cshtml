@@ -8,11 +8,12 @@
     var routeName = HttpContext.GetRouteValue("author")?.ToString();
 
     var UserFollowersAndTheirCheeps = @Model.FollowersAndTheirCheeps;
-    var TLU_Followers = @Model.Followers;
-    var TLU_Following = @Model.Following;
-    var TLU_Cheeps    = @Model.TLU_Cheeps;
-    var CheepOpinionsInfo = Model.CheepOpinionsInfo;
-    var SignedInUser = SignInManager.IsSignedIn(User);
+    var TLU_Followers               = @Model.Followers;
+    var TLU_Following               = @Model.Following;
+    var TLU_Cheeps                  = @Model.TLU_Cheeps;
+    var CheepOpinionsInfo           = @Model.CheepOpinionsInfo;
+    var SignedInUser                = SignInManager.IsSignedIn(User);
+    var NumberOfPages               = (Math.Ceiling((double) Model.TotalCheeps / Model.CheepsPerPage) - 1);
 
     string? username  = User.Identity?.Name;
     Author? SIU = Model.SignedInUser;   // 01. SignedInUser
@@ -66,7 +67,7 @@
     </div>
     
     <ul class="cheeps"> @* Can id be removed? *@
-    @if (Model.TLU_Cheeps.Any())
+    @if (TLU_Cheeps.Any())
     {
         @foreach (var cheep in TLU_Cheeps)
         {
@@ -226,14 +227,22 @@
 </div>
 
     <div class="pagination">
-        @for (int i = 1; i <= Math.Ceiling((double) Model.TotalCheeps / Model.CheepsPerPage) - 1; i++)
+        @for (int i = 1; i <= NumberOfPages; i++)
         {
-            <a href="/@routeName/?page=@i">@i</a>
+            @if(i == NumberOfPages)
+            {
+                <a href="/@routeName/?page=@i">@i</a>
+            } 
+            else
+            {
+                <a href="/@routeName/?page=@i">@i, </a>
+            }
         }
     </div>
 </div>
 
-@* The 'Forget Me!' pop-up container I'd like to be displayed in the center of the screen. *@ 
+@if(SignedInUser && TLU == SIU)
+{
 <div class="frost-panel" onclick="closeForgetMe()"></div>
 <div class="forget-me-popup pop-up-window">
     <div class="forget-me-wrapper">
@@ -255,6 +264,7 @@
         </form>
     </div>
 </div>
+}
 
 @section Scripts
 {

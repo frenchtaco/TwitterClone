@@ -11,6 +11,7 @@ using Enums.ACO;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using Chirp.ODTO;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Chirp.Web.Pages;
 
@@ -29,6 +30,7 @@ public class PublicModel : PageModel
     public Author SignedInAuthor { get; set; } = null!;
     public Dictionary<int, CheepOpinionDTO> CheepOpinionsInfo { get; set; }
     public int TotalCheeps, CheepsPerPage;
+    public string UserName { get; set; }
 
     // 03. Bind properties:
     [BindProperty, Required(ErrorMessage="Cheep must be between 1-to-160 characters"), StringLength(160, MinimumLength = 1)]
@@ -60,39 +62,18 @@ public class PublicModel : PageModel
 
     public async Task<IActionResult> OnGet([FromQuery] int? page = 0)
     {   
+        _logger.LogInformation("[STANDARD ON-GET]");
+
         int pgNum = page ?? 0;
         
-        IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(pgNum);
-        Cheeps = cheeps.ToList();
-
-        TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
-        CheepOpinionsInfo = new Dictionary<int, CheepOpinionDTO>();
-
-        bool IsUserSignedIn = _signInManager.IsSignedIn(User);
-
         try
         {
-            if(IsUserSignedIn)
-            {
-                SignedInAuthor = await _authorRepository.GetAuthorByName(User.Identity?.Name);
+            IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(pgNum, "");
+            Cheeps = cheeps.ToList();
 
-                if(Cheeps.Any())
-                {
-                    foreach (Cheep cheep in Cheeps)
-                    {
-                        CheepOpinionDTO co_Info = await _likeDisRepository.GetAuthorCheepOpinion(cheep.CheepId, SignedInAuthor.UserName);
-                        CheepOpinionsInfo.Add(cheep.CheepId, co_Info);
-                    }
-                }
-            }
-            else if(!IsUserSignedIn)
-            {
-                foreach(Cheep cheep in Cheeps)
-                {
-                    CheepOpinionDTO LikesAndDislikes = await _likeDisRepository.GetCheepLikesAndDislikes(cheep.CheepId);
-                    CheepOpinionsInfo.Add(cheep.CheepId, LikesAndDislikes);
-                }
-            }
+            TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
+            
+            await GetCheepInformation();
         } 
         catch(Exception ex)
         {
@@ -210,5 +191,82 @@ public class PublicModel : PageModel
         }
 
         return RedirectToPage("Public", new { page });
+    }
+
+    public async Task<IActionResult> OnGetOrderCheepsBy([FromQuery] int? page = 0, [FromQuery] string? orderBy = "timestamp")
+    {
+        _logger.LogInformation("OnGetOrderCheepsBy() method has been called");
+
+        int pgNum = page ?? 0;
+        string orderByVal = orderBy ?? "timestamp";
+
+        try
+        {
+
+            // 01. Get Cheeps in a specified order:
+            var cheeps = await _cheepRepository.GetCheeps(pgNum, orderByVal);
+            Cheeps = cheeps.ToList();
+
+            var topCheep = Cheeps.FirstOrDefault();
+
+            _logger.LogInformation($"'orderByVal': {orderByVal} ---> Top Cheep -- UserName: {topCheep.Author} | Likes: {topCheep.LikesAndDislikes.Likes.Count}");
+            
+            // 02. Get the total number of Cheeps [used for Pagination]:
+            TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
+
+            // 03. Get Author Opinion of Cheeps and or Likes-&-Dislikes:
+            await GetCheepInformation();
+
+            return new PartialViewResult {
+                ViewName = "./Shared/Partials/_PublicCheepPartial",
+                ViewData = new ViewDataDictionary<PublicModel>(ViewData)
+                {
+                    Model = this
+                }
+            };
+        } 
+        catch(Exception ex)
+        {
+            string exceptionInfo = $"File: Public.cshtml.cs \n\n Method: 'OnGet()' \n\n Message: {ex.Message} \n\n Stack Trace: {ex.StackTrace}";
+            TempData["ErrorMessage"] = exceptionInfo;
+            return RedirectToPage("/Error");
+        }
+    }
+
+
+    public async Task GetCheepInformation()
+    {
+        CheepOpinionsInfo = new Dictionary<int, CheepOpinionDTO>();
+        bool IsUserSignedIn = _signInManager.IsSignedIn(User);
+
+        try
+        {
+            if(IsUserSignedIn)
+            {
+                UserName = User.Identity?.Name;
+                SignedInAuthor = await _authorRepository.GetAuthorByName(UserName);
+
+                if(Cheeps.Any())
+                {
+                    foreach (Cheep cheep in Cheeps)
+                    {
+                        CheepOpinionDTO co_Info = await _likeDisRepository.GetAuthorCheepOpinion(cheep.CheepId, SignedInAuthor.UserName);
+                        CheepOpinionsInfo.Add(cheep.CheepId, co_Info);
+                    }
+                }
+            }
+            else if(!IsUserSignedIn)
+            {
+                foreach(Cheep cheep in Cheeps)
+                {
+                    CheepOpinionDTO LikesAndDislikes = await _likeDisRepository.GetCheepLikesAndDislikes(cheep.CheepId);
+                    CheepOpinionsInfo.Add(cheep.CheepId, LikesAndDislikes);
+                }
+            }
+        } 
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 }
