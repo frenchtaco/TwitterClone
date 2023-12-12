@@ -63,7 +63,7 @@ public class PublicModel : PageModel
     public async Task<IActionResult> OnGet([FromQuery] int? page = 0)
     {   
         _logger.LogInformation("[STANDARD ON-GET]");
-        
+
         int pgNum = page ?? 0;
         
         try
@@ -202,19 +202,20 @@ public class PublicModel : PageModel
 
         try
         {
-            _logger.LogInformation($"'orderByVal': {orderByVal}");
 
             // 01. Get Cheeps in a specified order:
             var cheeps = await _cheepRepository.GetCheeps(pgNum, orderByVal);
             Cheeps = cheeps.ToList();
 
-            // 02. 
+            var topCheep = Cheeps.FirstOrDefault();
+
+            _logger.LogInformation($"'orderByVal': {orderByVal} ---> Top Cheep -- UserName: {topCheep.Author} | Likes: {topCheep.LikesAndDislikes.Likes.Count}");
+            
+            // 02. Get the total number of Cheeps [used for Pagination]:
             TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
 
-            // 02. Get Author Opinion of Cheeps:
+            // 03. Get Author Opinion of Cheeps and or Likes-&-Dislikes:
             await GetCheepInformation();
-
-
 
             return new PartialViewResult {
                 ViewName = "./Shared/Partials/_PublicCheepPartial",

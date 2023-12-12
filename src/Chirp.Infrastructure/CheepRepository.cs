@@ -48,13 +48,13 @@ public class CheepRepository : ICheepRepository
                     .Skip(page * CheepsPerPage())
                     .Take(CheepsPerPage())
                     .ToListAsync();
-            case "likes":
+            case "liked":
                 return await cheepQuery
                     .OrderByDescending(cheep => cheep.LikesAndDislikes.Likes.Count)
                     .Skip(page * CheepsPerPage())
                     .Take(CheepsPerPage())
                     .ToListAsync();
-            case "dislikes":
+            case "hated":
                 return await cheepQuery
                     .OrderByDescending(cheep => cheep.LikesAndDislikes.Dislikes.Count)
                     .Skip(page * CheepsPerPage())
@@ -62,7 +62,7 @@ public class CheepRepository : ICheepRepository
                     .ToListAsync();
             case "name":
                 return await cheepQuery
-                    .OrderByDescending(cheep => cheep.Author.UserName)
+                    .OrderBy(cheep => cheep.Author.UserName)
                     .Skip(page * CheepsPerPage())
                     .Take(CheepsPerPage())
                     .ToListAsync();
