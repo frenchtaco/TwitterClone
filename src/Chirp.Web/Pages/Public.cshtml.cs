@@ -35,9 +35,9 @@ public class PublicModel : PageModel
     // 03. Bind properties:
     [BindProperty, Required(ErrorMessage="Cheep must be between 1-to-160 characters"), StringLength(160, MinimumLength = 1)]
     public string CheepText { get; set; } = "";
-    [BindProperty]
+    [BindProperty(SupportsGet = true)]
     public bool IsFollow { get; set; } = false;
-    [BindProperty]
+    [BindProperty(SupportsGet = true)]
     public string TargetAuthorUserName { get; set; } = null!;
     [BindProperty]
     public int TargetCheepId { get; set; }
@@ -62,18 +62,11 @@ public class PublicModel : PageModel
 
     public async Task<IActionResult> OnGet([FromQuery] int? page = 0)
     {   
-        _logger.LogInformation("[STANDARD ON-GET]");
-
         int pgNum = page ?? 0;
         
         try
         {
-            IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(pgNum, "");
-            Cheeps = cheeps.ToList();
-
-            TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
-            
-            await GetCheepInformation();
+            await GetCheepInformation(pgNum, "timestamp");
         } 
         catch(Exception ex)
         {
@@ -116,9 +109,12 @@ public class PublicModel : PageModel
         return Page();
     }
 
-    public async Task<IActionResult> OnPostFollow([FromQuery] int? page = 0)
+    public async Task<IActionResult> OnPostFollow([FromQuery] int? page = 0, [FromQuery] string? orderBy = null)
     {
         ModelState.Clear();
+
+        int pgNum = page ?? 0;
+        string orderByVal = orderBy ?? "timestamp";
 
         try
         {
@@ -136,12 +132,16 @@ public class PublicModel : PageModel
                         await _authorRepository.Unfollow(followersDTO);
                     }
                 } 
-                else if(SignedInAuthor == null)
-                {
-                    throw new Exception("[PUBLIC.CSHTML.CS] The 'SignedInAuthor' variable was NULL");
-                }
 
-                return RedirectToPage("Public", new { page });
+                await GetCheepInformation(pgNum, orderByVal);
+
+                return new PartialViewResult {
+                    ViewName = "./Shared/Partials/_PublicCheepPartial",
+                    ViewData = new ViewDataDictionary<PublicModel>(ViewData)
+                    {
+                        Model = this
+                    }
+                };
             } 
         }
         catch(Exception ex)
@@ -150,20 +150,23 @@ public class PublicModel : PageModel
             return RedirectToPage("/Error");
         }
 
-        return RedirectToPage("Public", new { page });
+        return RedirectToPage("Public", new { page });  // [TODO]: Add Alter - NOT Exception
     }
 
-    public async Task<IActionResult> OnPostDislikeOrLike([FromQuery] int? page = 0)
+    public async Task<IActionResult> OnPostDislikeOrLike([FromQuery] int? page = 0, [FromQuery] string? opinion = null, [FromQuery] string? orderBy = null)
     {
         ModelState.Clear();
+
+        int pgNum = page ?? 0;
+        string orderByVal = orderBy ?? "timestamp";
 
         try
         {
             if(ModelState.IsValid) {
                 if(_signInManager.IsSignedIn(User))
-                {   
-                    var likeDislikeValue = Request.Form["likeDis"];
-                    if(string.IsNullOrEmpty(likeDislikeValue)) throw new Exception("File: 'Public.cshtml.cs' - Method: 'OnPostDislikeOrLike()' - Message: Value retrieved from Request Form was NULL");
+                {
+                    var likeDislikeValue = opinion;
+                    if(string.IsNullOrEmpty(likeDislikeValue)) { throw new Exception("File: 'Public.cshtml.cs' - Method: 'OnPostDislikeOrLike()' - Message: Value retrieved from Request Form was NULL"); }
 
                     if(likeDislikeValue == "like")
                     {
@@ -172,21 +175,31 @@ public class PublicModel : PageModel
                     else if(likeDislikeValue == "dislike")
                     {
                         await _cheepRepository.GiveOpinionOfCheep(false, TargetCheepId, TargetAuthorUserName);
-                    }
-                } 
+                    } 
+                }
 
-                return RedirectToPage("Public", new { page });
+                await GetCheepInformation(pgNum, orderByVal);
+
+                return new PartialViewResult {
+                    ViewName = "./Shared/Partials/_PublicCheepPartial",
+                    ViewData = new ViewDataDictionary<PublicModel>(ViewData)
+                    {
+                        Model = this
+                    }
+                };
             } 
             else if(!ModelState.IsValid)
             {
                 TempData["ErrorMessage"] = "File: 'Public.cshtml.cs' - Method: 'OnPostDislikeOrLike()' - Message: ModelState was Invalid";
                 return RedirectToPage("/Error");
             }
+
+            return RedirectToPage("Public", new { page });  // [TODO] // [TODO]: Add Alter - NOT Exception
         }
         catch(Exception ex)
         {
-            string exceptionInfo = "File: Public.cshtml.cs - Method: 'OnPostDislikeOrLike()' - Stack Trace: ";
-            TempData["ErrorMessage"] = exceptionInfo += ex.StackTrace;
+            string exceptionInfo = $"File: Public.cshtml.cs - Method: 'OnPostDislikeOrLike()' - Message: {ex.Message} - Stack Trace: {ex.StackTrace}";
+            TempData["ErrorMessage"] = exceptionInfo;
             return RedirectToPage("/Error");
         }
 
@@ -202,20 +215,7 @@ public class PublicModel : PageModel
 
         try
         {
-
-            // 01. Get Cheeps in a specified order:
-            var cheeps = await _cheepRepository.GetCheeps(pgNum, orderByVal);
-            Cheeps = cheeps.ToList();
-
-            var topCheep = Cheeps.FirstOrDefault();
-
-            _logger.LogInformation($"'orderByVal': {orderByVal} ---> Top Cheep -- UserName: {topCheep.Author} | Likes: {topCheep.LikesAndDislikes.Likes.Count}");
-            
-            // 02. Get the total number of Cheeps [used for Pagination]:
-            TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
-
-            // 03. Get Author Opinion of Cheeps and or Likes-&-Dislikes:
-            await GetCheepInformation();
+            await GetCheepInformation(pgNum, orderByVal);
 
             return new PartialViewResult {
                 ViewName = "./Shared/Partials/_PublicCheepPartial",
@@ -234,13 +234,23 @@ public class PublicModel : PageModel
     }
 
 
-    public async Task GetCheepInformation()
+    public async Task GetCheepInformation(int pgNum = 0, string orderByVal = "timestamp")
     {
-        CheepOpinionsInfo = new Dictionary<int, CheepOpinionDTO>();
-        bool IsUserSignedIn = _signInManager.IsSignedIn(User);
-
         try
         {
+            // 01. Retrieve the Cheeps:
+            IEnumerable<Cheep> cheeps = await _cheepRepository.GetCheeps(pgNum, orderByVal);
+            Cheeps = cheeps.ToList();
+
+            // 02. Retrieve the Authors Opinions AND-OR Likes and Dislikes:
+            CheepOpinionsInfo = new Dictionary<int, CheepOpinionDTO>();
+            
+            // 03. Get the total number of Cheeps [used to calculate pagination]:
+            TotalCheeps = await _cheepRepository.GetTotalNumberOfCheeps();
+
+            // 04. Determine whether or not a User is signed in:
+            bool IsUserSignedIn = _signInManager.IsSignedIn(User);
+
             if(IsUserSignedIn)
             {
                 UserName = User.Identity?.Name;
