@@ -2,11 +2,11 @@
 title: _Chirp!_ Project Report
 subtitle: ITU BDSA 2023 Group 6
 author:
-- "Mikkel Toft <mikto@itu.dk>
-- "Emil Ladegaard <elad@itu.dk>"
-- "Kåre Kejser Jensen <kaaj@itu.dk>"
-- "Morten Kaas Neergaard <monie@itu.dk>"
-- "Victor la Cour<vicl@itu.dk>"
+- "Mikkel Toft mikto@itu.dk"
+- "Emil Ladegaard elad@itu.dk"
+- "Kåre Kejser Jensen kaaj@itu.dk"
+- "Morten Kaas Neergaard monie@itu.dk"
+- "Victor la Cour vicl@itu.dk"
 numbersections: true
 ---
 
