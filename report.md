@@ -17,9 +17,12 @@ Provide an illustration of your domain model. Make sure that it is correct and c
 Here comes a description of our domain model.
 
 
+
+
 ## Architecture — In the small
 Illustrate the organization of your code base. That is, illustrate which layers exist in your (onion) architecture. Make sure to illustrate which part of your code is residing in which layer.
 
+![Onion-Architecture](images\Onion-Architecture.drawio.png "Onion-Architecture")
 ## Architecture of deployed application
 
 Illustrate the architecture of your deployed application. Remember, you developed a client-server application. Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
