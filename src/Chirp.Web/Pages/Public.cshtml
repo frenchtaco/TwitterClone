@@ -99,13 +99,12 @@
 
             console.log('Form "Follow" submission clicked!');
 
-
             var formData = new FormData($(this)[0]);   
             var followOrUnfollow = $(this).find('button[type="submit"]:focus').val()
             var orderByValue = $('input[name="test"]:checked').val();
 
-            console.log('Order by: ',orderByValue);
             console.log('Follow or Unfollow: ',followOrUnfollow);  
+            console.log('Order by: ',orderByValue);
 
             $.ajax({
                 url: '@Url.Page("/Public")?handler=Follow&orderBy' + orderByValue,

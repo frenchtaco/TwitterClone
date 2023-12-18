@@ -116,16 +116,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         return Page();
                     }
 
-                    var user = new Author
-                    {
-                        UserName = Input.UserName,
-                        Email = Input.Email,
-                        Cheeps = new List<Cheep>(),
-                        Followers = new HashSet<Author>(),
-                        Following = new HashSet<Author>(),
-                        EmailConfirmed = true,
-                        IsForgotten = false,
-                    };
+                    Author user = _authorRepository.CreateAuthor(Input.UserName, Input.Email);
                     
                     Console.WriteLine($"[REGISTRATION] Followers Count: {user.Followers?.Count}");
                     Console.WriteLine($"[REGISTRATION] Following Count: {user.Following?.Count}");

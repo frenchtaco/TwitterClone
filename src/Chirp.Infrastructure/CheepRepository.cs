@@ -54,7 +54,7 @@ public class CheepRepository : ICheepRepository
                     .Skip(page * CheepsPerPage())
                     .Take(CheepsPerPage())
                     .ToListAsync();
-            case "hated":
+            case "disliked":
                 return await cheepQuery
                     .OrderByDescending(cheep => cheep.LikesAndDislikes.Dislikes.Count)
                     .Skip(page * CheepsPerPage())

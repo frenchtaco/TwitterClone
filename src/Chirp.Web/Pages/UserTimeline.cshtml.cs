@@ -77,23 +77,24 @@ public class UserTimelineModel : PageModel
             // 02. All the Authors Cheeps:
             TotalCheeps = await _cheepRepository.GetTotalNumberOfAuthorCheeps(author);
 
-            // 03. Followers:
+            // 03. Get the TLU's Followers:
             IEnumerable<Author> followers = await _authorRepository.GetAuthorFollowers(author);
-            Followers = followers.ToList(); // Their followers
+            Followers = followers.ToList();
 
-            // 04. Following:
+            // 04. Get the Authors the TLU is Following:
             IEnumerable<Author> following = await _authorRepository.GetAuthorFollowing(author);
-            Following = following.ToList(); // Them they are following
+            Following = following.ToList(); 
 
+            // 05. Instantiate containers for our 
             FollowersAndTheirCheeps = new Dictionary<Author, List<Cheep>>();
             CheepOpinionsInfo       = new Dictionary<int, CheepOpinionDTO>();
 
-            // 05. Retrieve info on Signed-In User (if any) and the Timeline User.
+            // 06. Retrieve info on Signed-In User (if any) and the Timeline User.
             bool IsUserSignedIn = _signInManager.IsSignedIn(User);
             TimelineUser        = await _authorRepository.GetAuthorByName(author);
             if(IsUserSignedIn) { SignedInUser = await _authorRepository.GetAuthorByName(signedInUser); }
 
-            // 06. Stats on User Timeline User Cheeps: 
+            // 07. Stats on User Timeline User Cheeps: 
             if(TLU_Cheeps.Any())
             {
                 if(IsUserSignedIn && author != signedInUser)
