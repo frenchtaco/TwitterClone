@@ -23,6 +23,7 @@ Here comes a description of our domain model.
 Illustrate the organization of your code base. That is, illustrate which layers exist in your (onion) architecture. Make sure to illustrate which part of your code is residing in which layer.
 
 ![Onion-Architecture](images\Onion-Architecture.drawio.png "Onion-Architecture")
+
 ## Architecture of deployed application
 
 Illustrate the architecture of your deployed application. Remember, you developed a client-server application. Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
@@ -47,8 +48,14 @@ Make sure that your illustration is complete. That is, likely for many of you th
 
 ## Build, test, release, and deployment
 Illustrate with a UML activity diagram how your Chirp! applications are build, tested, released, and deployed. That is, illustrate the flow of activities in your respective GitHub Actions workflows.
-
 Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
+
+![GitHubActionsBothWorkflow](images\GitHubActionsBothWorkflow.drawio.png "GitHub Actions Both Workflow")
+images\GitHubActionsBothWorkflow.drawio.png
+
+The CI/CD pipeline for the Chirp application starts with the developer committing code to the main branch or creating a pull request. GitHub Actions are then triggered to execute workflows defined in build_and_testing.yml and main_bdsagroup6chirprazor.yml(deployment).
+This ensures that each commit to the main branch undergoes a thorough process of integration, testing, and deployment, thereby maintaining the quality and reliability of the Chirp application with automated processes for efficiency and consistency.
+
 
 ## Team work
 Show a screenshot of your project board right before hand-in. Briefly describe which tasks are still unresolved, i.e., which features are missing from your applications or which functionality is incomplete.
