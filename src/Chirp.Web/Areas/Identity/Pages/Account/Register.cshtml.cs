@@ -117,16 +117,11 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     }
 
                     Author user = _authorRepository.CreateAuthor(Input.UserName, Input.Email);
-                    
-                    Console.WriteLine($"[REGISTRATION] Followers Count: {user.Followers?.Count}");
-                    Console.WriteLine($"[REGISTRATION] Following Count: {user.Following?.Count}");
 
                     var result = await _userManager.CreateAsync(user, Input.Password);
 
                     if (result.Succeeded)
-                    {
-                        AuthorDTO authorDTO = new(Input.UserName, Input.Email);
-                        
+                    {                        
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }

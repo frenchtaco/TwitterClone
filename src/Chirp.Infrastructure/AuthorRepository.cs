@@ -37,7 +37,7 @@ public class AuthorRepository : IAuthorRepository
             EmailConfirmed = true,
             IsForgotten = false,
         };
-
+        
         return newUser;
     }
 

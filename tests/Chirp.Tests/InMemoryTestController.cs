@@ -23,12 +23,4 @@ public class InMemoryTestController //Inspired by https://learn.microsoft.com/en
     }
     public DatabaseContext GetDatabaseContext() { return _databaseContext; }
     public void Dispose() => _connection.Dispose();
-    public void SeedDB() 
-    {
-        _databaseContext.AddRange(
-            new Cheep { CheepId = 1, Author = new Author() { Email = "author1@id.com", UserName = "AuthorName1" }, Text = "First cheep", TimeStamp = DateTime.Now },
-            new Cheep { CheepId = 2, Author = new Author() { Email = "author2@id.com", UserName = "AuthorName2" }, Text = "Second cheep", TimeStamp = DateTime.Now },
-            new Cheep { CheepId = 3, Author = new Author() { Email = "author3@id.com", UserName = "AuthorName3" }, Text = "Third cheep", TimeStamp = DateTime.Now });
-        _databaseContext.SaveChanges();
-    }
 }

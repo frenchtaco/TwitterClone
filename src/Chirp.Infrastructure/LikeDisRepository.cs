@@ -10,13 +10,11 @@ namespace Chirp.Infrastructure;
 
 public class LikeDisRepository : ILikeDisRepository
 {
-    private readonly ILogger<LikeDisRepository> _logger;
     private readonly IAuthorRepository _authorRepository;
     private readonly DatabaseContext _context;
 
-    public LikeDisRepository(ILogger<LikeDisRepository> logger, DatabaseContext context, IAuthorRepository authorRepository)
+    public LikeDisRepository(DatabaseContext context, IAuthorRepository authorRepository)
     {
-        _logger = logger;
         _context = context;
         _authorRepository = authorRepository;
     }
@@ -44,7 +42,6 @@ public class LikeDisRepository : ILikeDisRepository
             .FirstOrDefaultAsync();
     }
 
-    // [FIX] Have to make a method that gets the Cheep Info when the user is NOT signed in.
     public async Task<CheepOpinionDTO> GetCheepLikesAndDislikes(int CheepId)
     {
         var cld = await GetCheepLikeDis(CheepId) ?? throw new Exception("File: 'LikeDisRepository' - Method: 'GetNumCheepLikesDis' - Message: CheepLikeDisSchema could not be located with CheepId");
