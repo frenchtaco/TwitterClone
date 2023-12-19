@@ -1,5 +1,4 @@
 using Chirp.Models;
-using Chirp.ADTO;
 using Chirp.FDTO;
 
 namespace Chirp.Interfaces;

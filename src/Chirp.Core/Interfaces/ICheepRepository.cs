@@ -1,6 +1,5 @@
 using Chirp.Models;
 using Chirp.CDTO;
-using Chirp.ADTO;
 namespace Chirp.Interfaces;
 
 public interface ICheepRepository

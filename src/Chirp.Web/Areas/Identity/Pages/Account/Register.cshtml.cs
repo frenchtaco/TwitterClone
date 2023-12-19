@@ -20,7 +20,6 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
 using Chirp.Models;
-using Chirp.ADTO;
 using Chirp.Interfaces;
 
 
@@ -133,9 +132,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     var result = await _userManager.CreateAsync(user, Input.Password);
 
                     if (result.Succeeded)
-                    {
-                        AuthorDTO authorDTO = new(Input.UserName, Input.Email);
-                        
+                    {   
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
