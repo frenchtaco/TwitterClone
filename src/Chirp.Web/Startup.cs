@@ -37,9 +37,10 @@ namespace Chirp.StartUp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpsRedirection(options =>
-    {
-        options.HttpsPort = 5232; // The port your HTTPS development server will use
-    });
+            {
+                options.HttpsPort = 5232; // The port your HTTPS development server will use
+            });
+            
             services.AddDefaultIdentity<Author>(options =>
             {
 

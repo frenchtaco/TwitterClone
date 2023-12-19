@@ -239,46 +239,49 @@ public class CheepRepository : ICheepRepository
             Author author = await _authorRepository.GetAuthorByName(AuthorName);
             CheepOpinionDTO CODTO = await _likeDisRepository.GetAuthorCheepOpinion(CheepId, AuthorName);
 
-            // [!BEWARE!] Potential need for Fail-Safe
-
-
             switch(CODTO.AuthorCheepOpinion)
             {
 
-                // Case .01: They Liked it but now they don't:
+                // Case 1.0: They previously Liked it:
                 case AuthorCheepOpinion.LIKES:  
                     if(!IsLike)
                     {
+                        // 1.1: They Disliked it, but now they Like it:
                         CODTO.CheepOpinionSchema.Likes.Remove(author);
                         CODTO.CheepOpinionSchema.Dislikes.Add(author);
                     } 
                     else 
                     {
+                        // 1.2: They Liked it, but they want to take that back:
                         CODTO.CheepOpinionSchema.Likes.Remove(author);
                     }
                     break;
 
-                // Case .02: They Disliked it but now they do like it:
+                // Case 2.0: Their previous opinion was they Disliked it:
                 case AuthorCheepOpinion.DISLIKES:
                     if(IsLike)
                     {
+                        // 2.1: They Liked it, but now they Dislike it:
                         CODTO.CheepOpinionSchema.Dislikes.Remove(author);
                         CODTO.CheepOpinionSchema.Likes.Add(author);
                     } 
                     else 
                     { 
+                        // 2.2: They Disliked it, but then want to take it back.
                         CODTO.CheepOpinionSchema.Dislikes.Remove(author);
                     }
                     break;
                     
-                // Case .03: They did neither and now they either Like or Dislike:
+                // Case 3.0: They did neither and now they either Like or Dislike:
                 case AuthorCheepOpinion.NEITHER:
                     if(IsLike)
                     {
+                        // 3.1: They Like the Cheep:
                         CODTO.CheepOpinionSchema.Likes.Add(author);
                     } 
                     else
                     {
+                        // 3.2: They Dislike it:
                         CODTO.CheepOpinionSchema.Dislikes.Add(author);
                     }
                     break;
