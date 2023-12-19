@@ -22,7 +22,7 @@ Here comes a description of our domain model.
 ## Architecture — In the small
 Illustrate the organization of your code base. That is, illustrate which layers exist in your (onion) architecture. Make sure to illustrate which part of your code is residing in which layer.
 
-![Onion-Architecture](images\Onion-Architecture.drawio.png "Onion-Architecture")
+![Onion-Architecture](images\Final_Onion-Architecture.jpg "Onion-Architecture")
 
 ## Architecture of deployed application
 
