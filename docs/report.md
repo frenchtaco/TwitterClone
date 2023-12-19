@@ -22,9 +22,9 @@ Illustrate the organization of your code base. That is, illustrate which layers 
 
 ## Architecture of deployed application
 
-![Deployment using Azure Database](docs\images\AzureDeploymentArchitectureDiagram.png "Deployment using Azure Database")
+![Deployment using Azure Database](docs/images/AzureDeploymentArchitectureDiagram.png "Deployment using Azure Database")
 
-![Deployment using Local Database](docs\images\LocalDeploymentArchitectureDiagram.png "Deployment using Local Database")
+![Deployment using Local Database](docs/images/LocalDeploymentArchitectureDiagram.png "Deployment using Local Database")
 
 Illustrate the architecture of your deployed application. Remember, you developed a client-server application. Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
 
@@ -53,7 +53,7 @@ Make sure that your illustration is complete. That is, likely for many of you th
 Illustrate with a UML activity diagram how your Chirp! applications are build, tested, released, and deployed. That is, illustrate the flow of activities in your respective GitHub Actions workflows.
 Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
 
-![GitHubActionsBothWorkflow](images\GitHubActionsBothWorkflow.drawio.png "GitHub Actions Both Workflow")
+![GitHubActionsBothWorkflow](images/GitHubActionsBothWorkflow.drawio.png "GitHub Actions Both Workflow")
 images\GitHubActionsBothWorkflow.drawio.png
 
 The CI/CD pipeline for the Chirp application starts with the developer committing code to the main branch or creating a pull request. GitHub Actions are then triggered to execute workflows defined in build_and_testing.yml and main_bdsagroup6chirprazor.yml(deployment).
