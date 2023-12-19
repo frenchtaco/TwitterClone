@@ -13,11 +13,7 @@ numbersections: true
 # Design and Architecture of _Chirp!_
 
 ## Domain model
-Provide an illustration of your domain model. Make sure that it is correct and complete. In case you are using ASP.NET Identity, make sure to illustrate that accordingly.
-Here comes a description of our domain model.
-
-
-
+![Architecture Diagram of Domain Model](docs\images\DomainModel.png "Domain Model")
 
 ## Architecture — In the small
 Illustrate the organization of your code base. That is, illustrate which layers exist in your (onion) architecture. Make sure to illustrate which part of your code is residing in which layer.
@@ -25,6 +21,10 @@ Illustrate the organization of your code base. That is, illustrate which layers 
 ![Onion-Architecture](images\Final_Onion-Architecture.jpg "Onion-Architecture")
 
 ## Architecture of deployed application
+
+![Deployment using Azure Database](docs\images\AzureDeploymentArchitectureDiagram.png "Deployment using Azure Database")
+
+![Deployment using Local Database](docs\images\LocalDeploymentArchitectureDiagram.png "Deployment using Local Database")
 
 Illustrate the architecture of your deployed application. Remember, you developed a client-server application. Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
 
