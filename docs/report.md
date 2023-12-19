@@ -63,7 +63,99 @@ Show a screenshot of your project board right before hand-in. Briefly describe w
 Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the main branch of your repository.
 
 ## How to make _Chirp!_ work locally
-There has to be some documentation on how to come from cloning your project to a running system. That is, Rasmus or Helge have to know precisely what to do in which order. Likely, it is best to describe how we clone your project, which commands we have to execute, and what we are supposed to see then.
+## Build, test, release, and deployment
+Illustrate with a UML activity diagram how your Chirp! applications are build, tested, released, and deployed. That is, illustrate the flow of activities in your respective GitHub Actions workflows.
+Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
+
+![GitHubActionsBothWorkflow](images\GitHubActionsBothWorkflow.drawio.png "GitHub Actions Both Workflow")
+images\GitHubActionsBothWorkflow.drawio.png
+
+The CI/CD pipeline for the Chirp application starts with the developer committing code to the main branch or creating a pull request. GitHub Actions are then triggered to execute workflows defined in build_and_testing.yml and main_bdsagroup6chirprazor.yml(deployment).
+This ensures that each commit to the main branch undergoes a thorough process of integration, testing, and deployment, thereby maintaining the quality and reliability of the Chirp application with automated processes for efficiency and consistency.
+
+
+## Team work
+Show a screenshot of your project board right before hand-in. Briefly describe which tasks are still unresolved, i.e., which features are missing from your applications or which functionality is incomplete.
+
+Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the main branch of your repository.
+
+## How to make _Chirp!_ work locally
+## Chirp! Project Setup Guide
+
+This guide assists new contributors, like Rasmus and Helge, in setting up the Chirp! project locally.
+
+## Cloning the Chirp! Repository
+
+### Install Git
+- Ensure Git is installed on your system. 
+- Download and install from [git-scm.com](https://git-scm.com/).
+
+## Clone the Repository
+- Open a terminal or command prompt.
+- Clone the Chirp! repository:
+git clone https://github.com/ITU-BDSA23-GROUP6/Chirp.git
+
+## Prerequisites
+
+- **.NET 7 SDK**: Install from [Microsoft's .NET download page](https://dotnet.microsoft.com/en-us/download/dotnet/7.0).
+- **IDE**: Use an IDE supporting .NET 7, such as:
+- Visual Studio 2022 (with the latest updates)
+- Visual Studio Code with C# extension
+- JetBrains Rider
+
+## Environment Setup and Configuration
+
+### Open the Project
+- Open the cloned directory in your IDE.
+
+### Restore Dependencies
+- Run the following command in the terminal or use the IDE’s built-in restore feature:
+dotnet restore
+
+
+### Check Configuration
+- Ensure `appsettings.json` in the project root is correctly configured and contains:
+"ConnectionStrings": {
+    "DefaultConnection": "Server=tcp:bdsagroup6chirpserver.database.windows.net,1433;Initial Catalog=bdsagroup6chirpdb;Persist Security Info=False;User ID=chripadmin;Password=chirpdbPassword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  },
+  "Authentication": {
+    "GitHub": {
+      "ClientIdAzure": "564f6fd9fd6c86a8ea02",
+      "ClientSecretAzure": "GitHub:ClientSecretAzure",
+      "ClientIdLocal": "968faf4d2e8bfa8fe03f",
+      "ClientSecretLocal": "GitHub:ClientSecretLocal"
+    }
+  }
+
+## Building and Running the Application
+
+### Build the Project
+- Execute the following command in the root directory:
+dotnet build
+
+
+### Run the Application
+- Start the application with:
+direct to Chirp.Web from the root directory
+
+cd .\src\Chirp.Web\
+
+Then you have two options, running in Delevoper mode (runs sqlite) or production mode (ran on the azure SQL)
+
+Delevoper command: dotnet run -lp Dev
+Production command: dotnet run -lp Prod
+
+
+## Expected Outcome
+
+- The application compiles without errors.
+- On running, it should start a local server, check if it has been seeded, if not seed the database and output a URL to access the application (https://5232).
+
+## Troubleshooting Guide
+
+- **Build Errors**: Check for missing NuGet packages or unresolved dependencies. Ensure the .NET 7 SDK is correctly installed.
+- **Runtime Errors**: Verify environment variables and `appsettings.json` configurations. Check for database connectivity issues if applicable.
+- **IDE-Specific Issues**: Ensure the IDE is configured for .NET 7 development, with the correct SDK paths and extensions/plugins installed.
 
 ## How to run test suite locally
 List all necessary steps that Rasmus or Helge have to perform to execute your test suites. Here, you can assume that we already cloned your repository in the step above.
