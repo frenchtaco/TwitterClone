@@ -67,6 +67,26 @@ Show a screenshot of your project board right before hand-in. Briefly describe w
 
 Upon creating a new issue two synchronous timelines start simultaneously, one where the issue is being created, a branch made and the functionality implemented, while the other follow the timeline of the issue’s lifespan on the project board. A part of both timelines are iterative, meaning that if our implementation fails or does not live up to the requirements, we will work continuously until the branch can be successfully merged into main. Then, and only then, will our issue be moved to ‘Done’ in our project board.
 
+<img src="images/FinalProjectBoard.png" alt="Flowchart over issues and project board" width="900px" />
+
+We've cleaned our project board making sure we've finished our ongoing issues. We moved nice-to-have features to the on-hold column focusing on finishing up higher priority issues based on project requirements. 
+
+Here is a brief description of some of the issues and ideas for future development.
+
+### Github authentication
+We tried repeatedly to solve this issue, but were unable to make it work. Since we had many high priority issues, and the problem persisted, we decided to let go of it and rely solely on our own account system.
+
+### Edit personal info
+The aim of this feature was for the user to be able to change their username or associated email. The thought was directed towards giving the users more control of their accounts. 
+
+### Comments
+Adding comments to cheeps would aim the application towards a more socially interactive state, where users would be able to somewhat communicate directly to eachother. 
+For further development, we believe that adding this functionality would have a great impact on the user's experience. 
+We went as far as implementing a button for this purpose, but without functionality. The idea was to make a new entity called Comment, which would hold a reference to a certain cheep and author. 
+
+### Profile Picture
+We implemented a way to show pictures on the user's profile, but never got around to finish it up and allow users to actually upload one. This feature would add more customization, allowing users to better express themselves and maybe lay some groundwork for future image-cheeps.
+
 ## How to make _Chirp!_ work locally
 ### Chirp! Project Setup Guide
 
