@@ -39,8 +39,8 @@ Illustrate typical scenarios of a user journey through your Chirp! application. 
 
 Make sure that the illustrations are in line with the actual behavior of your application.
 
-## Sequence of functionality/calls trough _Chirp!_
-### UML exists in images: 
+## Sequence of functionality/calls through _Chirp!_
+![Sequence diagram](images/SEQUENCE.png "Sequence Diagram")
 "Once entering the landing page, Public, of our Chirp! application an HTTP Get Request is send to our database and returns all of our cheeps to be displayed. Note that seeing all cheeps is possible for an unauthorized user whereas liking, following, and cheeping is not. In order to be granted those rights, one must either login or register a new user which renders the same Public page just with different functionality. Logging in or registering a new account will redirect one to their respective pages. Logging in or registering an account is by HTTP Post methods either validating the login or registering (i.e. creating a new author) the new account and in both cases one is redirected to the Public page, now with additional rights."
 
 With a UML sequence diagram, illustrate the flow of messages and data through your Chirp! application. Start with an HTTP request that is send by an unauthorized user to the root endpoint of your application and end with the completely rendered web-page that is returned to the user.
