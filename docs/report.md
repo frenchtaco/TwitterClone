@@ -39,6 +39,12 @@ Illustrate typical scenarios of a user journey through your Chirp! application. 
 
 Make sure that the illustrations are in line with the actual behavior of your application.
 
+The Chirp! platform initiates user engagement through a publicly available timeline, where non-authenticated visitors can peruse user-generated content. This allows for a preliminary understanding of the platform's community activities. Interested individuals are then guided to either log in, if they are returning users, or to register, should they be new to the community. The registration process is straightforward, requiring standard user information and adherence to password protocols.
+
+Upon successful entry into the community, the user experience becomes personalized. The platform greets users by their chosen names and opens up a suite of interactive possibilities. Users can contribute their own content and engage with others through established social mechanisms. Furthermore, each user has access to a personal dashboard reflecting their activity and interactions within the community. Chirp! also prioritizes user privacy and control, exemplified by the 'Forget Me' feature, which allows users to remove their presence and data from the platform permanently.
+
+![Sequence diagram](images/UserJourney.drawio.png "Sequence Diagram")
+
 ## Sequence of functionality/calls through _Chirp!_
 ![Sequence diagram](images/SEQUENCE.png "Sequence Diagram")
 
