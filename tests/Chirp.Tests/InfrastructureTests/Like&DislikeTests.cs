@@ -4,6 +4,7 @@ using Chirp.Interfaces;
 using Chirp.ODTO;
 using DBContext;
 using Enums.ACO;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LAD;
 
@@ -14,6 +15,7 @@ public class LikeAndDislikeTest
     private readonly IAuthorRepository _authorRepository;
     private readonly ICheepRepository _cheepRepository;
     private readonly ILikeDisRepository _likeDisRepository;
+    private readonly IServiceProvider _serviceProvider;
 
     private Author Author1 { get; set; } = null!;
     private Author Author2 { get; set; } = null!;
@@ -22,10 +24,13 @@ public class LikeAndDislikeTest
     {
         DB = new InMemoryTestController();
         _dbContext = DB.GetDatabaseContext();
+        _serviceProvider = DB.ServiceProvider;
 
-        _authorRepository  = new AuthorRepository(_dbContext);
-        _likeDisRepository = new LikeDisRepository(_dbContext, _authorRepository);
-        _cheepRepository   = new CheepRepository(_dbContext, _authorRepository, _likeDisRepository);
+        _authorRepository  = _serviceProvider.GetRequiredService<IAuthorRepository>();
+        _cheepRepository   = _serviceProvider.GetRequiredService<ICheepRepository>();
+        _likeDisRepository = _serviceProvider.GetRequiredService<ILikeDisRepository>();
+
+
     }
 
     [Fact]
@@ -38,9 +43,11 @@ public class LikeAndDislikeTest
         _dbContext.Authors.Add(Author1);
         _dbContext.Authors.Add(Author2);
 
+        _dbContext.SaveChanges();
+
         for (int i = 0; i < 32; i++)
         {
-            CheepDTO newCheep = new CheepDTO($"Cheep Nr.{i+1}", "Author1");
+            CheepDTO newCheep = new CheepDTO($"Cheep Nr.{i+1}", "AdamWest");
             await _cheepRepository.CreateCheep(newCheep);
         }
 
@@ -85,7 +92,5 @@ public class LikeAndDislikeTest
 
         Assert.Equal(4, totalNumLikes);
         Assert.Equal(0, totalNumDislikes);
-
-        // Need to add Dislikes:
     }
 }

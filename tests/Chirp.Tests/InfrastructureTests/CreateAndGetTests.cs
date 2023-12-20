@@ -13,7 +13,6 @@ public class CreateTestAndGetTests
     private readonly DatabaseContext _dbContext;
     private readonly IAuthorRepository _authorRepository;
     private readonly ICheepRepository _cheepRepository;
-    private readonly ILikeDisRepository _likeDisRepository;
     private readonly IServiceProvider _serviceProvider;
     private List<Author> Authors { get; set; } = null!;
     
@@ -24,7 +23,6 @@ public class CreateTestAndGetTests
         _serviceProvider = DB.ServiceProvider;
 
         _authorRepository  = _serviceProvider.GetRequiredService<IAuthorRepository>();
-        _likeDisRepository = _serviceProvider.GetRequiredService<ILikeDisRepository>();
         _cheepRepository   = _serviceProvider.GetRequiredService<ICheepRepository>();
 
         Authors = new List<Author>();
