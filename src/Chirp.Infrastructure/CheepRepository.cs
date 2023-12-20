@@ -154,7 +154,6 @@ public class CheepRepository : ICheepRepository
         {
             throw new Exception($"File: CheepRepository.cs - Method: 'CreateCheep()' - Stack Trace: {ex.StackTrace}");
         }
-
     }
 
     public async Task<bool> DeleteAllCheepsFromAuthor(string AuthorUserName)

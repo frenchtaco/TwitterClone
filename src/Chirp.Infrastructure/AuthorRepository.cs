@@ -78,7 +78,7 @@ public class AuthorRepository : IAuthorRepository
             var authorToFollow = await GetAuthorByName(followersDTO.FollowAuthor);
 
             if(!targetAuthor.Following.Contains(authorToFollow)) // additional check that !(authorToFollow.Followers.Contains(targetAuthor))
-            {                
+            { 
                 targetAuthor.Following.Add(authorToFollow);
                 authorToFollow.Followers.Add(targetAuthor);
             } 
@@ -111,7 +111,6 @@ public class AuthorRepository : IAuthorRepository
             throw new Exception($"Exception: {ex.Message}");
         }
     }
-
 
     public async Task<IEnumerable<Author>> GetAuthorFollowers(string authorName)
     {
