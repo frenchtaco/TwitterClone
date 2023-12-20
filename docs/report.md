@@ -13,7 +13,7 @@ numbersections: true
 # Design and Architecture of _Chirp!_
 
 ## Domain model
-<img src="images/DomainModel.png" alt="Domain Model" width="800px" />
+<img src="images/DomainModel.png" alt="Domain Model" width="800px" style="display: block; margin: 0 auto;" />
 
 ## Architecture — In the small
 Illustrate the organization of your code base. That is, illustrate which layers exist in your (onion) architecture. Make sure to illustrate which part of your code is residing in which layer.
