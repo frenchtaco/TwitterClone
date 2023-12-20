@@ -115,24 +115,12 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         return Page();
                     }
 
-                    var user = new Author
-                    {
-                        UserName = Input.UserName,
-                        Email = Input.Email,
-                        Cheeps = new List<Cheep>(),
-                        Followers = new HashSet<Author>(),
-                        Following = new HashSet<Author>(),
-                        EmailConfirmed = true,
-                        IsForgotten = false,
-                    };
-                    
-                    Console.WriteLine($"[REGISTRATION] Followers Count: {user.Followers?.Count}");
-                    Console.WriteLine($"[REGISTRATION] Following Count: {user.Following?.Count}");
+                    Author user = _authorRepository.CreateAuthor(Input.UserName, Input.Email);
 
                     var result = await _userManager.CreateAsync(user, Input.Password);
 
                     if (result.Succeeded)
-                    {   
+                    {                        
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }

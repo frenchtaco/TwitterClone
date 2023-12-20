@@ -13,14 +13,12 @@ namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository
 {
-    private readonly ILogger<CheepRepository> _logger;
     private readonly DatabaseContext _context;
     private readonly IAuthorRepository _authorRepository;
     private readonly ILikeDisRepository _likeDisRepository;
 
-    public CheepRepository(DatabaseContext context, IAuthorRepository authorRepository, ILikeDisRepository likeDisRepository, ILogger<CheepRepository> logger)
+    public CheepRepository(DatabaseContext context, IAuthorRepository authorRepository, ILikeDisRepository likeDisRepository)
     {
-        _logger = logger;
         _context = context;
         _authorRepository = authorRepository;
         _likeDisRepository = likeDisRepository;
@@ -31,7 +29,7 @@ public class CheepRepository : ICheepRepository
         return 32;
     }
 
-    public async Task<IEnumerable<Cheep>> GetCheeps(int page, string orderBy)
+    public async Task<IEnumerable<Cheep>> GetCheeps(int page = 0, string orderBy = "")
     {
         var cheepQuery = _context.Cheeps
             .Include(cheep => cheep.Author)
@@ -54,7 +52,7 @@ public class CheepRepository : ICheepRepository
                     .Skip(page * CheepsPerPage())
                     .Take(CheepsPerPage())
                     .ToListAsync();
-            case "hated":
+            case "disliked":
                 return await cheepQuery
                     .OrderByDescending(cheep => cheep.LikesAndDislikes.Dislikes.Count)
                     .Skip(page * CheepsPerPage())
@@ -124,9 +122,8 @@ public class CheepRepository : ICheepRepository
             .FirstOrDefaultAsync() ?? throw new Exception("File: 'CheepRepository.cs' - Method: 'GetCheepById' - Message: 'Cheep couldn't be located with CheepId and was NULL'");
     }
 
-    public async Task CreateCheep(CheepDTO cheepDTO)
+    public async Task<Cheep> CreateCheep(CheepDTO cheepDTO)
     {
-        _logger.LogInformation($"[BEFORE] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas{_context.CheepLikeDis.Count()}");
         try
         {
             var author = await _authorRepository.GetAuthorByName(cheepDTO.Author) ?? throw new Exception("Author was NULL");
@@ -139,24 +136,24 @@ public class CheepRepository : ICheepRepository
                 TimeStamp = DateTime.UtcNow,
             };
 
-            //02. Link Author to Cheep:
+            // 02. Link Author to Cheep:
             author.Cheeps ??= new List<Cheep>();
             author.Cheeps.Add(newCheep);
 
-            //03. Update Context:
+            // 03. Update Context:
             _context.Cheeps.Add(newCheep);
             _context.CheepLikeDis.Add(_likeDisRepository.CreateLikeDisSchema(newCheep));
 
-            //04. Save the changes:
+            // 04. Save the changes:
             await _context.SaveChangesAsync();
+
+            // 05. Return the newly created Cheep:
+            return newCheep;
         }
         catch (Exception ex)
         {
-            throw new Exception(
-                $"File: CheepRepository.cs - Method: 'CreateCheep()' - Stack Trace: {ex.StackTrace}"
-            );
+            throw new Exception($"File: CheepRepository.cs - Method: 'CreateCheep()' - Stack Trace: {ex.StackTrace}");
         }
-        _logger.LogInformation($"[AFTER] Num. Cheeps: {_context.Cheeps.Count()} - Num. CheepOpinionSchemas: {_context.CheepLikeDis.Count()}");
     }
 
     public async Task<bool> DeleteAllCheepsFromAuthor(string AuthorUserName)
@@ -165,9 +162,6 @@ public class CheepRepository : ICheepRepository
         {
             bool IsSuccess = false;
             var authorToForget = await _authorRepository.GetAuthorByName(AuthorUserName);
-
-            _logger.LogInformation($"[DeleteAllCheepsFromAuthor()] Author: {authorToForget.UserName}");
-
             var authorCheeps = await GetAllCheepsFromAuthor(AuthorUserName);
 
             int cheepCounter = 0;
@@ -177,11 +171,10 @@ public class CheepRepository : ICheepRepository
                 cheepCounter++;
                 int cID = cheep.CheepId;
                 
-                CheepLikeDis cheepOpinionSchema = await _likeDisRepository.GetCheepLikeDis(cheep.CheepId);
+                CheepLikeDis cheepOpinionSchema = await _likeDisRepository.GetCheepLikeDis(cheep.CheepId) ?? throw new Exception("The 'CheepLikeDisSchema' could not be located");
                 
                 if(cheepOpinionSchema != null)
                 {
-                    _logger.LogInformation("[DeleteAllCheepsFromAuthor()] Opinion was not null");
                     cheepOpinionSchema.Likes.Clear();
                     cheepOpinionSchema.Dislikes.Clear();
                     
@@ -192,13 +185,10 @@ public class CheepRepository : ICheepRepository
                 else 
                 { 
                     IsSuccess = false; 
-                    _logger.LogInformation("[DeleteAllCheepsFromAuthor()] Break triggered");
                     break; 
                 }
 
                 var removedCheep = _context.Cheeps.Remove(cheep);
-
-                if(removedCheep != null)  _logger.LogInformation($"[DeleteAllCheepsFromAuthor()] Cheep Nr.{cheepCounter}");
             }
 
             await _context.SaveChangesAsync();
@@ -232,7 +222,6 @@ public class CheepRepository : ICheepRepository
                 }
             }
 
-
             return IsSuccess;
         }
         catch(Exception ex)
@@ -248,63 +237,53 @@ public class CheepRepository : ICheepRepository
             Author author = await _authorRepository.GetAuthorByName(AuthorName);
             CheepOpinionDTO CODTO = await _likeDisRepository.GetAuthorCheepOpinion(CheepId, AuthorName);
 
-            // [!BEWARE!] Potential need for Fail-Safe
-
-            string testPrint = "";
-
             switch(CODTO.AuthorCheepOpinion)
             {
 
-                // Case .01: They Liked it but now they don't:
+                // Case 1.0: They previously Liked it:
                 case AuthorCheepOpinion.LIKES:  
                     if(!IsLike)
                     {
+                        // 1.1: They Disliked it, but now they Like it:
                         CODTO.CheepOpinionSchema.Likes.Remove(author);
                         CODTO.CheepOpinionSchema.Dislikes.Add(author);
-                        testPrint += "Author was added to 'Dislikes' and removed from 'Likes'";
                     } 
                     else 
                     {
+                        // 1.2: They Liked it, but they want to take that back:
                         CODTO.CheepOpinionSchema.Likes.Remove(author);
-                        testPrint += "Author already in 'Likes', so removed them from this Cheeps 'Likes'"; 
                     }
                     break;
 
-                // Case .02: They Disliked it but now they do like it:
+                // Case 2.0: Their previous opinion was they Disliked it:
                 case AuthorCheepOpinion.DISLIKES:
                     if(IsLike)
                     {
+                        // 2.1: They Liked it, but now they Dislike it:
                         CODTO.CheepOpinionSchema.Dislikes.Remove(author);
                         CODTO.CheepOpinionSchema.Likes.Add(author);
-                        testPrint += "Author was added to 'Likes' and removed from 'Dislikes'";
                     } 
                     else 
                     { 
+                        // 2.2: They Disliked it, but then want to take it back.
                         CODTO.CheepOpinionSchema.Dislikes.Remove(author);
-                        testPrint += "Author already in 'Dislikes', so removed them from this Cheeps 'Dislikes'"; 
                     }
-                    _logger.LogInformation($"Author {author.UserName} 'Dislikes' this Cheep");
                     break;
                     
-                // Case .03: They did neither and now they either Like or Dislike:
+                // Case 3.0: They did neither and now they either Like or Dislike:
                 case AuthorCheepOpinion.NEITHER:
                     if(IsLike)
                     {
+                        // 3.1: They Like the Cheep:
                         CODTO.CheepOpinionSchema.Likes.Add(author);
-                        testPrint += "Author was added to 'Likes'";
                     } 
                     else
                     {
+                        // 3.2: They Dislike it:
                         CODTO.CheepOpinionSchema.Dislikes.Add(author);
-                        testPrint += "Author was added to 'Dislikes'";
                     }
-
-                    _logger.LogInformation($"Author {author.UserName} had NO opinion of this Cheep");
                     break;
             }
-
-            _logger.LogInformation(testPrint);
-            _logger.LogInformation($"[SIZE TEST] Size of Cheep {CheepId}'s 'Like' HashSet: {CODTO.CheepOpinionSchema.Likes.Count()} and 'Dislikes' HashSet: {CODTO.CheepOpinionSchema.Dislikes.Count()}");
 
             await _context.SaveChangesAsync();
         }

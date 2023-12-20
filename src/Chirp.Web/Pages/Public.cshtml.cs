@@ -91,7 +91,7 @@ public class PublicModel : PageModel
 
                 CheepDTO cheepDTO = new(CheepText, currUser.UserName);  // [TODO] Change to User.Identity.?.Name;
 
-                await _cheepRepository.CreateCheep(cheepDTO);
+                var newCheep = await _cheepRepository.CreateCheep(cheepDTO);
 
                 return RedirectToPage("Public", new { pgNum });
             }

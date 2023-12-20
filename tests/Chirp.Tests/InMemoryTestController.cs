@@ -2,60 +2,49 @@ using Microsoft.Data.Sqlite;
 using DBContext;
 using Microsoft.EntityFrameworkCore;
 using Chirp.Infrastructure;
-using SQLitePCL;
+using Microsoft.Extensions.DependencyInjection;
+using Chirp.Interfaces;
 
 public class InMemoryTestController //Inspired by https://learn.microsoft.com/en-us/ef/core/testing/testing-without-the-database
 {
 
     private readonly SqliteConnection _connection;
     private readonly DbContextOptions<DatabaseContext> _contextOptions;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly DatabaseContext _databaseContext;
 
     public InMemoryTestController()
     {
+        // 01. We create the connection string and open our SQLite DB:
         _connection = new SqliteConnection("filename=:memory:");
         _connection.Open();
 
+        // 02. We specify that we are using an SQLite server:
         _contextOptions = new DbContextOptionsBuilder<DatabaseContext>().UseSqlite(_connection).Options;
 
-        using var context = new DatabaseContext(_contextOptions);
+        // 03. We configure the services:
+        var services = new ServiceCollection();
+        ConfigureServices(services);
 
-        context.Database.EnsureCreated(); //Can use template below to create a view for later queries.
-        /*if (context.Database.EnsureCreated())
-        {
-            using var viewCommand = context.Database.GetDbConnection().CreateCommand();
-            viewCommand.CommandText = @"
-                CREATE VIEW AllCheeps AS
-                SELECT Text
-                FROM Cheeps;";
-            viewCommand.ExecuteNonQuery();
-        }*/
-
-        context.AddRange(
-            new Cheep { CheepId = 1, Author = new Author() { Email = "author1@id.com", UserName = "AuthorName1" }, Text = "First cheep", TimeStamp = DateTime.Now },
-            new Cheep { CheepId = 2, Author = new Author() { Email = "author2@id.com", UserName = "AuthorName2" }, Text = "Second cheep", TimeStamp = DateTime.Now },
-            new Cheep { CheepId = 3, Author = new Author() { Email = "author3@id.com", UserName = "AuthorName3" }, Text = "Third cheep", TimeStamp = DateTime.Now });
-        context.SaveChanges();
-
+        _serviceProvider = services.BuildServiceProvider();
+        _serviceProvider.GetRequiredService<DatabaseContext>().Database.EnsureCreated();
+        _databaseContext = _serviceProvider.GetRequiredService<DatabaseContext>();
     }
 
-    DatabaseContext CreateContext() => new DatabaseContext(_contextOptions);
+    private void ConfigureServices(IServiceCollection services)
+    {
+        services.AddDbContext<DatabaseContext>(options => options.UseSqlite(_connection));
+        services.AddSingleton<IAuthorRepository, AuthorRepository>();
+        services.AddSingleton<ILikeDisRepository, LikeDisRepository>();
+        services.AddSingleton<ICheepRepository, CheepRepository>();
+    }
 
-    public void Dispose() => _connection.Dispose();
+    public DatabaseContext GetDatabaseContext() { return _databaseContext; }
+    public IServiceProvider ServiceProvider => _serviceProvider;
 
-    /*
-        [Fact]
-        public async void GetAllCheeps()
-        {
-            using var context = CreateContext();
-            var repository = new CheepRepository(context, new AuthorRepository(context), null);
-
-            IEnumerable<Cheep> cheeps = await repository.GetAllCheeps();
-
-            Assert.Collection(
-                cheeps.Reverse(),
-                cheep => Assert.Equal("First cheep", cheep.Text),
-                cheep => Assert.Equal("Second cheep", cheep.Text),
-                cheep => Assert.Equal("Third cheep", cheep.Text));
-        }
-        */
+    public void Dispose()
+    {
+        _connection.Dispose();
+        (_serviceProvider as IDisposable)?.Dispose();
+    }
 }

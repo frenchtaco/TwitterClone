@@ -26,7 +26,7 @@
         <h3> @routeName's Timeline </h3>
         @if(SignedInUser && username != null) @* 'username != null' should be always FALSE if user is signed in [This was just added to remove warning] *@
         {
-            // 01. Embed option to Follow User:
+            // 01. Here we allow a user the option to follow someone:
             @if(routeName != username)
             {
                 try
@@ -37,7 +37,7 @@
                         {
                             <input type="hidden" asp-for="IsFollow" value="false" />
                             <input type="hidden" asp-for="TargetAuthorUserName" value="@TLU.UserName" />
-                            <button type="submit" class="following-button" OnClientClick="return false;">
+                            <button type="submit" class="following-button btn" OnClientClick="return false;">
                                 <img id="unfollow" src="/images/unfollow.svg" alt="Unfollow"></img>
                             </button>
                         }
@@ -45,7 +45,7 @@
                         {
                             <input type="hidden" asp-for="IsFollow" value="true" />
                             <input type="hidden" asp-for="TargetAuthorUserName" value="@TLU.UserName" />
-                            <button type="submit" class="following-button" OnClientClick="return false;">
+                            <button type="submit" class="following-button btn" OnClientClick="return false;">
                                 <img id="follow" src="/images/follow.svg" alt="Follow"></img>
                             </button>
                         }
@@ -56,7 +56,7 @@
                     <p>[USER-TIME-LINE.CSHTML] Exception Message: @ex.Message --- Exception Location: @ex.TargetSite</p>
                 }
             } 
-            // 02. Embed option to be forgotten:
+            // 02. Here we embed the option to allow a user, who is signed in, to remove their account:
             else if(routeName == username)
             {
                 <div class="trigger-forget-me-wrapper">
