@@ -43,7 +43,7 @@ The Chirp! platform initiates user engagement through a publicly available timel
 
 Upon successful entry into the community, the user experience becomes personalized. The platform greets users by their chosen names and opens up a suite of interactive possibilities. Users can contribute their own content and engage with others through established social mechanisms. Furthermore, each user has access to a personal dashboard reflecting their activity and interactions within the community. Chirp! also prioritizes user privacy and control, exemplified by the 'Forget Me' feature, which allows users to remove their presence and data from the platform permanently.
 
-![Sequence diagram](images/UserJourney.drawio.png "Sequence Diagram")
+<img src="images/UserJourney.drawio.png" alt="User Journey" width="700px" />
 
 ## Sequence of functionality/calls through _Chirp!_
 
@@ -59,7 +59,6 @@ Illustrate with a UML activity diagram how your Chirp! applications are build, t
 Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
 
 <img src="images/GitHubActionsBothWorkflow.drawio.png" alt="GitHub Actions Both Workflow" width="700px" />
-images\GitHubActionsBothWorkflow.drawio.png
 
 The CI/CD pipeline for the Chirp application starts with the developer committing code to the main branch or creating a pull request. GitHub Actions are then triggered to execute workflows defined in build_and_testing.yml and main_bdsagroup6chirprazor.yml(deployment).
 This ensures that each commit to the main branch undergoes a thorough process of integration, testing, and deployment, thereby maintaining the quality and reliability of the Chirp application with automated processes for efficiency and consistency.
