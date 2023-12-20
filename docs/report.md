@@ -153,5 +153,6 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 # Ethics
 
 ## License
+In our group we decided to opt for the MIT license as it is open source, allowing others to freely use the software without providing legal obligations on the software creators thus ensuring that they bear no legal liability in the case of software malfunctioning, data loss, etc.
 
 ## LLMs, ChatGPT, CoPilot, and others
