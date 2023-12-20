@@ -31,8 +31,12 @@ Illustrate the architecture of your deployed application. Remember, you develope
 OBS: In case you ran out of credits for hosting an Azure SQL database and you switched back to deploying an application with in-process SQLite database, then do the following:
 
 Under this section, provide two diagrams, one that shows how Chirp! was deployed with hosted database and one that shows how it is now again with SQLite.
-Under this section, provide a brief description of the reason for switching again to SQLite as database.
-In that description, provide a link to the commit hash in your GitHub repository that points to the latest version of your Chirp! application with hosted database (we look at the entire history of your project, so we see that it was there at some point).
+
+"The reasons for switching back to an sqlite database is because we eventually ran out of credits on Azure. 
+The latest version of Chirp! with hosted database is: 
+
+ecb9a43f66883a64cd597735826ed7b143cd5b8c"
+
 
 ## User activities
 The Chirp! platform initiates user engagement through a publicly available timeline, where non-authenticated visitors can read through user-generated content. This allows for a preliminary understanding of the platform's community activities. Interested individuals are then guided to either log in, if they are returning users, or to register, should they be new to the community. The registration process is straightforward, requiring standard user information and adherence to password protocols.
