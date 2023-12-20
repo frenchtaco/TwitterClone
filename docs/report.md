@@ -157,3 +157,5 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 ## License
 
 ## LLMs, ChatGPT, CoPilot, and others
+
+During the development of Chirp!, we utilized ChatGPT, a Language Learning Model (LLM), as a supportive tool. ChatGPT played a significant role in our development process, primarily in code generation, debugging, providing insights into best practices in .NET development, and at last writing the report. It served as an on-demand resource for programming suggestions, offering immediate assistance in clarifying concepts and solving complex coding challenges. This not only accelerated our development cycle but also enhanced our understanding of various aspects of .NET. While ChatGPT proved to be an invaluable asset in streamlining our workflow, we ensured that all code and architectural decisions were meticulously reviewed and tested by our team. This approach maintained the integrity and originality of our project, ensuring that the final product reflected our team's skills and dedication to quality.
