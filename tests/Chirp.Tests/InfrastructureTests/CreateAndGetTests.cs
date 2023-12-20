@@ -40,8 +40,6 @@ public class CreateTestAndGetTests
             Authors.Add(newAuthor);
             _dbContext.Authors.Add(newAuthor);
         }
-
-        _dbContext.SaveChanges();
     }
 
     [Fact]

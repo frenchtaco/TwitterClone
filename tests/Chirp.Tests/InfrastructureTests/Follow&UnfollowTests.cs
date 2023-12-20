@@ -58,32 +58,32 @@ public class FollowAndUnFollowTest
         Assert.DoesNotContain(targetAuthor, followers);
     }
 
-    // [Fact]
-    // public async void FollowTest()
-    // {
-    //     // 01. Follow an Author
-    //     Author a1 = await _authorRepository.GetAuthorByName("Author1");
-    //     Author a2 = await _authorRepository.GetAuthorByName("Author2");
-    //     Author a3 = await _authorRepository.GetAuthorByName("Author3");
-    //     Author a4 = await _authorRepository.GetAuthorByName("Author4");
-    //     Author a5 = await _authorRepository.GetAuthorByName("Author5");
-    //     Author a6 = await _authorRepository.GetAuthorByName("Author6");
+    [Fact]
+    public async void FollowTest()
+    {
+        // 01. Follow an Author
+        Author a1 = await _authorRepository.GetAuthorByName("Author1");
+        Author a2 = await _authorRepository.GetAuthorByName("Author2");
+        Author a3 = await _authorRepository.GetAuthorByName("Author3");
+        Author a4 = await _authorRepository.GetAuthorByName("Author4");
+        Author a5 = await _authorRepository.GetAuthorByName("Author5");
+        Author a6 = await _authorRepository.GetAuthorByName("Author6");
 
-    //     // 02. Pack Authors into a List
-    //     List<Author> authorList = new List<Author> { a1, a2, a3, a4, a5, a6 };
+        // 02. Pack Authors into a List
+        List<Author> authorList = new List<Author> { a1, a2, a3, a4, a5, a6 };
 
-    //     // 03. Make them all Follow the listed target Author:
-    //     Author targetAuthor = await _authorRepository.GetAuthorByName("Author7");
+        // 03. Make them all Follow the listed target Author:
+        Author targetAuthor = await _authorRepository.GetAuthorByName("Author7");
 
-    //     foreach (Author author in authorList) 
-    //     {
-    //         FollowersDTO followerDTO = new FollowersDTO(targetAuthor.UserName, author.UserName);
-    //         await _authorRepository.Follow(followerDTO);
-    //     }
+        foreach (Author author in authorList) 
+        {
+            FollowersDTO followerDTO = new FollowersDTO(author.UserName, targetAuthor.UserName);
+            await _authorRepository.Follow(followerDTO);
+        }
 
-    //     // 04. Get these new followers and confirm the intended amount:
-    //     IEnumerable<Author> followers = await _authorRepository.GetAuthorFollowers(targetAuthor.UserName);
+        // 04. Get these new followers and confirm the intended amount:
+        IEnumerable<Author> followers = await _authorRepository.GetAuthorFollowers(targetAuthor.UserName);
 
-    //     Assert.Equal(authorList.Count, followers.Count());
-    // } 
+        Assert.Equal(6, followers.Count());
+    }
 }

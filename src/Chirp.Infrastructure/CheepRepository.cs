@@ -29,7 +29,7 @@ public class CheepRepository : ICheepRepository
         return 32;
     }
 
-    public async Task<IEnumerable<Cheep>> GetCheeps(int page, string orderBy)
+    public async Task<IEnumerable<Cheep>> GetCheeps(int page = 0, string orderBy = "")
     {
         var cheepQuery = _context.Cheeps
             .Include(cheep => cheep.Author)
@@ -221,7 +221,6 @@ public class CheepRepository : ICheepRepository
                     await _context.SaveChangesAsync();
                 }
             }
-
 
             return IsSuccess;
         }
