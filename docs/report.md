@@ -159,6 +159,18 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 
 # Ethics
 
+### [ASP.NET](http://ASP.NET) Core Identity
+Using [ASP.NET](http://ASP.NET) Core Identity for our login and registration functionality ensures heightened security for users since their passwords are automatically hashed, making it impossible for cyber criminals to abuse users’ accounts if they hack into our database without being able to decrypt the hashed passwords. 
+
+### Anonymity and Uniqueness
+Using [ASP.Net](http://ASP.Net) Core Identity also ensures uniqueness constraints which creates a more robust set of users since users can not easily be replicated. In addition to this, by adding the ability to create username, people can specify their own level of anonymity on the platform since their emails are not visible between users. 
+
+### Forget Me Functionality
+In order to be compliant with GDPR which reflects current data ethics, we have implemented a “Forget Me” feature which ensures that users at any point in time can delete their accounts along with the cheeps they have posted. This functionality not only promotes compliance but also promotes trust between creator and user. 
+
+### Inclusivity and Accessibility
+As mentioned above, our Chirp! application offers users anonymity.  Pairing the anonymity freature with unrestricted language use we aim to  create a community rooted in principles of free speech and inclusivity. The introduction of 'Like' and 'Dislike' functionalities allows users to self-moderate, promoting an environment where free speech is maintained by the community rather than enforced by the creators.
+
 ## License
 In our group we decided to opt for the MIT license as it is open source, allowing others to freely use the software without providing legal obligations on the software creators thus ensuring that they bear no legal liability in the case of software malfunctioning, data loss, etc.
 
