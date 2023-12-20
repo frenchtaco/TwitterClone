@@ -13,18 +13,18 @@ numbersections: true
 # Design and Architecture of _Chirp!_
 
 ## Domain model
-<img src="images/DomainModel.png" alt="Domain Model" width="800px" style="display: block; margin: 0 auto;" />
+<img src="images/DomainModel.png" alt="Domain Model" width="700px" />
 
 ## Architecture — In the small
 Illustrate the organization of your code base. That is, illustrate which layers exist in your (onion) architecture. Make sure to illustrate which part of your code is residing in which layer.
 
-![Onion-Architecture](images/Final_Onion-Architecture.jpg "Onion-Architecture")
+<img src="images/Final_Onion-Architecture.jpg" alt="Onion-Architecture" width="700px" />
 
 ## Architecture of deployed application
 
-![Deployment using Azure Database](images/AzureDeploymentArchitectureDiagram.png "Deployment using Azure Database")
+<img src="images/AzureDeploymentArchitectureDiagram.png" alt="Deployment using Azure Database" width="500px" />
 
-![Deployment using Local Database](images/LocalDeploymentArchitectureDiagram.png "Deployment using Local Database")
+<img src="images/LocalDeploymentArchitectureDiagram.png" alt="Deployment using Local Database" width="500px" />
 
 Illustrate the architecture of your deployed application. Remember, you developed a client-server application. Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
 
@@ -40,7 +40,8 @@ Illustrate typical scenarios of a user journey through your Chirp! application. 
 Make sure that the illustrations are in line with the actual behavior of your application.
 
 ## Sequence of functionality/calls through _Chirp!_
-![Sequence diagram](images/SEQUENCE.png "Sequence Diagram")
+
+<img src="images/SEQUENCE.png" alt="Sequence diagram" width="400px" />
 
 Once you enter the landing page, Public, of our Chirp! application an HTTP Get Request is sent to our database and returns all of our cheeps to be displayed. Note that seeing all cheeps is possible for an unauthorized user whereas liking, following, and cheeping is not. To be granted those rights, one must either log in or register a new user which renders the same Public page just with different functionality. Logging in or registering a new account will redirect one to their respective pages. Logging in or registering an account is done by HTTP Post methods either validating the login or registering (i.e. creating a new author) the new account and in both cases, one is redirected to the Public page, now with additional rights.
 
@@ -51,7 +52,7 @@ Once you enter the landing page, Public, of our Chirp! application an HTTP Get R
 Illustrate with a UML activity diagram how your Chirp! applications are build, tested, released, and deployed. That is, illustrate the flow of activities in your respective GitHub Actions workflows.
 Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
 
-![GitHubActionsBothWorkflow](images/GitHubActionsBothWorkflow.drawio.png "GitHub Actions Both Workflow")
+<img src="images/GitHubActionsBothWorkflow.drawio.png" alt="GitHub Actions Both Workflow" width="700px" />
 images\GitHubActionsBothWorkflow.drawio.png
 
 The CI/CD pipeline for the Chirp application starts with the developer committing code to the main branch or creating a pull request. GitHub Actions are then triggered to execute workflows defined in build_and_testing.yml and main_bdsagroup6chirprazor.yml(deployment).
@@ -60,7 +61,8 @@ This ensures that each commit to the main branch undergoes a thorough process of
 
 ## Team work
 Show a screenshot of your project board right before hand-in. Briefly describe which tasks are still unresolved, i.e., which features are missing from your applications or which functionality is incomplete.
-![Issues_project_UML](images/Teamwork_diagram.drawio.png "Flowchart over issues and project board")
+
+<img src="images/Teamwork_diagram.drawio.png" alt="Flowchart over issues and project board" width="500px" />
 
 ### Description: Upon creating a new issue two synchronous timelines start simultaneously, one where the issue is being created, a branch made and the functionality implemented, while the other follow the timeline of the issue’s lifespan on the project board. A part of both timelines are iterative meaning that if our implementation fails or does not live up to the requirements we will begin anew, working continuously until the branch can be successfully merged into main. Then and only then will our issue be moved to ‘Done’ in our project board.
 
