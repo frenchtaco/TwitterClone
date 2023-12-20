@@ -13,10 +13,10 @@ numbersections: true
 # Design and Architecture of _Chirp!_
 
 ## Domain model
+
 <img src="images/DomainModel.png" alt="Domain Model" width="700px" />
 
 ## Architecture — In the small
-Illustrate the organization of your code base. That is, illustrate which layers exist in your (onion) architecture. Make sure to illustrate which part of your code is residing in which layer.
 
 <img src="images/Final_Onion-Architecture.jpg" alt="Onion-Architecture" width="700px" />
 
@@ -35,13 +35,9 @@ Under this section, provide a brief description of the reason for switching agai
 In that description, provide a link to the commit hash in your GitHub repository that points to the latest version of your Chirp! application with hosted database (we look at the entire history of your project, so we see that it was there at some point).
 
 ## User activities
-Illustrate typical scenarios of a user journey through your Chirp! application. That is, start illustrating the first page that is presented to a non-authorized user, illustrate what a non-authorized user can do with your Chirp! application, and finally illustrate what a user can do after authentication.
+The Chirp! platform initiates user engagement through a publicly available timeline, where non-authenticated visitors can read through user-generated content. This allows for a preliminary understanding of the platform's community activities. Interested individuals are then guided to either log in, if they are returning users, or to register, should they be new to the community. The registration process is straightforward, requiring standard user information and adherence to password protocols.
 
-Make sure that the illustrations are in line with the actual behavior of your application.
-
-The Chirp! platform initiates user engagement through a publicly available timeline, where non-authenticated visitors can peruse user-generated content. This allows for a preliminary understanding of the platform's community activities. Interested individuals are then guided to either log in, if they are returning users, or to register, should they be new to the community. The registration process is straightforward, requiring standard user information and adherence to password protocols.
-
-Upon successful entry into the community, the user experience becomes personalized. The platform greets users by their chosen names and opens up a suite of interactive possibilities. Users can contribute their own content and engage with others through established social mechanisms. Furthermore, each user has access to a personal dashboard reflecting their activity and interactions within the community. Chirp! also prioritizes user privacy and control, exemplified by the 'Forget Me' feature, which allows users to remove their presence and data from the platform permanently.
+Upon successful entry into the community, the user experience becomes personalized. The platform greets users by their chosen names and opens up a suite of interactive possibilities. Users can contribute their own content and engage with others through established social mechanisms. Furthermore, each user has access to a personal dashboard reflecting their activity and interactions within the community. Lastly, the user has the opportunity to delete all personal data using the "Forget me"-button.
 
 <img src="images/UserJourney.drawio.png" alt="User Journey" width="700px" />
 
@@ -49,54 +45,47 @@ Upon successful entry into the community, the user experience becomes personaliz
 
 <img src="images/SEQUENCE.png" alt="Sequence diagram" width="400px" />
 
-Once you enter the landing page, Public, of our Chirp! application an HTTP Get Request is sent to our database and returns all of our cheeps to be displayed. Note that seeing all cheeps is possible for an unauthorized user whereas liking, following, and cheeping is not. To be granted those rights, one must either log in or register a new user which renders the same Public page just with different functionality. Logging in or registering a new account will redirect one to their respective pages. Logging in or registering an account is done by HTTP Post methods either validating the login or registering (i.e. creating a new author) the new account and in both cases, one is redirected to the Public page, now with additional rights.
-
+Once you enter the root endpoint, Public, of our Chirp! application an HTTP Get Request is sent to our database and returns all of our cheeps to be displayed. Note that seeing all cheeps is possible for an unauthorized user whereas liking, following, and cheeping is not. When trying to log in or register a new account, the user will be redirected to the respective page. Logging in or registering an account is done by HTTP Post methods, which either validates the login or registers (i.e. creating a new author) the new account. In both cases, the user is redirected to the Public page, now with additional rights.
 
 # Process
 
 ## Build, test, release, and deployment
-Illustrate with a UML activity diagram how your Chirp! applications are build, tested, released, and deployed. That is, illustrate the flow of activities in your respective GitHub Actions workflows.
-Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
 
 <img src="images/GitHubActionsBothWorkflow.drawio.png" alt="GitHub Actions Both Workflow" width="700px" />
 
-The CI/CD pipeline for the Chirp application starts with the developer committing code to the main branch or creating a pull request. GitHub Actions are then triggered to execute workflows defined in build_and_testing.yml and main_bdsagroup6chirprazor.yml(deployment).
+The CI/CD pipeline for the Chirp application starts with the developer committing code to the main branch or creating a pull request. GitHub Actions are then triggered to execute workflows defined in build_and_testing.yml and main_bdsagroup6chirprazor.yml (deployment).
 This ensures that each commit to the main branch undergoes a thorough process of integration, testing, and deployment, thereby maintaining the quality and reliability of the Chirp application with automated processes for efficiency and consistency.
-
 
 ## Team work
 Show a screenshot of your project board right before hand-in. Briefly describe which tasks are still unresolved, i.e., which features are missing from your applications or which functionality is incomplete.
 
 <img src="images/Teamwork_diagram.drawio.png" alt="Flowchart over issues and project board" width="500px" />
 
-### Description: Upon creating a new issue two synchronous timelines start simultaneously, one where the issue is being created, a branch made and the functionality implemented, while the other follow the timeline of the issue’s lifespan on the project board. A part of both timelines are iterative meaning that if our implementation fails or does not live up to the requirements we will begin anew, working continuously until the branch can be successfully merged into main. Then and only then will our issue be moved to ‘Done’ in our project board.
-
-
-Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the main branch of your repository.
+Upon creating a new issue two synchronous timelines start simultaneously, one where the issue is being created, a branch made and the functionality implemented, while the other follow the timeline of the issue’s lifespan on the project board. A part of both timelines are iterative, meaning that if our implementation fails or does not live up to the requirements, we will work continuously until the branch can be successfully merged into main. Then, and only then, will our issue be moved to ‘Done’ in our project board.
 
 ## How to make _Chirp!_ work locally
-## Chirp! Project Setup Guide
+### Chirp! Project Setup Guide
 
 This guide assists new contributors, like Rasmus and Helge, in setting up the Chirp! project locally.
 
-## Cloning the Chirp! Repository
+### Cloning the Chirp! Repository
 
 ### Install Git
 - Ensure Git is installed on your system. 
 - Download and install from [git-scm.com](https://git-scm.com/).
 
-## Clone the Repository
+### Clone the Repository
 - Open a terminal or command prompt.
 - Clone the Chirp! repository:
 git clone https://github.com/ITU-BDSA23-GROUP6/Chirp.git
 
-## Prerequisites
+### Prerequisites
 
 - **.NET 7 SDK**: Install from [Microsoft's .NET download page](https://dotnet.microsoft.com/en-us/download/dotnet/7.0).
 - **IDE**: Use an IDE supporting .NET 7, such as:
-- Visual Studio 2022 (with the latest updates)
-- Visual Studio Code with C# extension
-- JetBrains Rider
+  - Visual Studio 2022 (with the latest updates)
+  - Visual Studio Code with C# extension
+  - JetBrains Rider
 
 ## Environment Setup and Configuration
 
@@ -110,6 +99,7 @@ dotnet restore
 
 ### Check Configuration
 - Ensure `appsettings.json` in the project root is correctly configured and contains:
+
 "ConnectionStrings": {
     "DefaultConnection": "Server=tcp:bdsagroup6chirpserver.database.windows.net,1433;Initial Catalog=bdsagroup6chirpdb;Persist Security Info=False;User ID=chripadmin;Password=chirpdbPassword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   },
@@ -126,12 +116,14 @@ dotnet restore
 
 ### Build the Project
 - Execute the following command in the root directory:
+
 dotnet build
 
 
 ### Run the Application
 - Start the application with:
-direct to Chirp.Web from the root directory
+
+direct to Chirp.Web from the root directory using:
 
 cd .\src\Chirp.Web\
 
@@ -140,11 +132,13 @@ Then you have two options, running in Delevoper mode (runs sqlite) or production
 Delevoper command: dotnet run -lp Dev
 Production command: dotnet run -lp Prod
 
+If the command isn't recognized, then developer-mode will run by default with the command "dotnet run"
+
 
 ## Expected Outcome
 
 - The application compiles without errors.
-- On running, it should start a local server, check if it has been seeded, if not seed the database and output a URL to access the application (https://5232).
+- On running, it should start a local server, check if it has been seeded. If not, seed the database and output a URL to access the application (https://localhost:5232).
 
 ## Troubleshooting Guide
 
@@ -153,27 +147,33 @@ Production command: dotnet run -lp Prod
 - **IDE-Specific Issues**: Ensure the IDE is configured for .NET 7 development, with the correct SDK paths and extensions/plugins installed.
 
 ## How to run test suite locally
+
+To run the tests, do the following:
+
+Navigate to the root directory and run command: "dotnet test"
+
+
 List all necessary steps that Rasmus or Helge have to perform to execute your test suites. Here, you can assume that we already cloned your repository in the step above.
 
 Briefly describe what kinds of tests you have in your test suites and what they are testing.
 
 # Ethics
 
-### [ASP.NET](http://ASP.NET) Core Identity
-Using [ASP.NET](http://ASP.NET) Core Identity for our login and registration functionality ensures heightened security for users since their passwords are automatically hashed, making it impossible for cyber criminals to abuse users’ accounts if they hack into our database without being able to decrypt the hashed passwords. 
+### ASP.NET Core Identity
+Using ASP.NET Core Identity for our login and registration functionality ensures heightened security for users since their passwords are automatically hashed, making it impossible for cyber criminals to abuse users’ accounts if they hack into our database without being able to decrypt the hashed passwords. 
 
 ### Anonymity and Uniqueness
-Using [ASP.Net](http://ASP.Net) Core Identity also ensures uniqueness constraints which creates a more robust set of users since users can not easily be replicated. In addition to this, by adding the ability to create username, people can specify their own level of anonymity on the platform since their emails are not visible between users. 
+Using ASP.NET Core Identity also ensures uniqueness constraints which creates a more robust set of users since users can not easily be replicated. In addition to this, by adding the ability to create username, people can specify their own level of anonymity on the platform since their emails are not visible between users. 
 
 ### Forget Me Functionality
 In order to be compliant with GDPR which reflects current data ethics, we have implemented a “Forget Me” feature which ensures that users at any point in time can delete their accounts along with the cheeps they have posted. This functionality not only promotes compliance but also promotes trust between creator and user. 
 
 ### Inclusivity and Accessibility
-As mentioned above, our Chirp! application offers users anonymity.  Pairing the anonymity freature with unrestricted language use we aim to  create a community rooted in principles of free speech and inclusivity. The introduction of 'Like' and 'Dislike' functionalities allows users to self-moderate, promoting an environment where free speech is maintained by the community rather than enforced by the creators.
+Pairing the anonymity feature with unrestricted language use we aim to create a community rooted in principles of free speech and inclusivity. The introduction of 'Like' and 'Dislike' functionalities promotes an environment where free speech is maintained by the community rather than enforced by the creators.
 
 ## License
 In our group we decided to opt for the MIT license as it is open source, allowing others to freely use the software without providing legal obligations on the software creators thus ensuring that they bear no legal liability in the case of software malfunctioning, data loss, etc.
 
 ## LLMs, ChatGPT, CoPilot, and others
 
-During the development of Chirp!, we utilized ChatGPT, a Language Learning Model (LLM), as a supportive tool. ChatGPT played a significant role in our development process, primarily in code generation, debugging, providing insights into best practices in .NET development, and at last writing the report. It served as an on-demand resource for programming suggestions, offering immediate assistance in clarifying concepts and solving complex coding challenges. This not only accelerated our development cycle but also enhanced our understanding of various aspects of .NET. While ChatGPT proved to be an invaluable asset in streamlining our workflow, we ensured that all code and architectural decisions were meticulously reviewed and tested by our team. This approach maintained the integrity and originality of our project, ensuring that the final product reflected our team's skills and dedication to quality.
+During the development of Chirp!, we utilized ChatGPT, a Large Language Model (LLM), as a supportive tool. ChatGPT played a significant role in our development process, primarily in code generation, debugging and providing insights into best practices in .NET development. It served as an on-demand resource for programming suggestions, offering immediate assistance in clarifying concepts and solving complex coding challenges. This not only accelerated our development cycle but also enhanced our understanding of various aspects of .NET. While ChatGPT proved to be an invaluable asset in streamlining our workflow, we ensured that all code and architectural decisions were meticulously reviewed and tested by our team. This approach maintained the integrity and originality of our project, ensuring that the final product reflected our team's skills and dedication to quality.
