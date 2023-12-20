@@ -26,16 +26,11 @@ numbersections: true
 
 <img src="images/LocalDeploymentArchitectureDiagram.png" alt="Deployment using Local Database" width="500px" />
 
-Illustrate the architecture of your deployed application. Remember, you developed a client-server application. Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
+Due to a second round of lacking credits on our Azure Database, we decided to go back to our SQLite Database. Luckily we were already using sqlite when running the application in developer-mode, so we used that going forward.
 
-OBS: In case you ran out of credits for hosting an Azure SQL database and you switched back to deploying an application with in-process SQLite database, then do the following:
+The commit-hash for the latest version of Chirp! with hosted Azure database is: 
 
-Under this section, provide two diagrams, one that shows how Chirp! was deployed with hosted database and one that shows how it is now again with SQLite.
-
-"The reasons for switching back to an sqlite database is because we eventually ran out of credits on Azure. 
-The latest version of Chirp! with hosted database is: 
-
-ecb9a43f66883a64cd597735826ed7b143cd5b8c"
+ecb9a43f66883a64cd597735826ed7b143cd5b8c
 
 
 ## User activities
@@ -176,10 +171,10 @@ To run the tests, do the following:
 
 Navigate to the root directory and run command: "dotnet test"
 
+Our test-directory consists of a number of XUnit tests. Here we make sure, that our application is always running, handling data and executing requests as intended. As an exmample, we made tests for methods in CheepRepository and AuthorRepository, to make sure that every time we make changes, it will always be able to handle cheeps and users correctly. To make sure that our test environment will also be the same and also making sure it won't change anything in our current database, we implemented an in-memory test environment. This will create a database for us on demand, without having to store it somewhere or look for existing files. This also insures that we have a fresh database without using unnecessary storagespace.
 
-List all necessary steps that Rasmus or Helge have to perform to execute your test suites. Here, you can assume that we already cloned your repository in the step above.
-
-Briefly describe what kinds of tests you have in your test suites and what they are testing.
+Besides our test-directory, we've made other kinds of tests. We used user testing by having other people try out our application and then used the feedback for further development. A good example would be our delete cheep button. One of our testers mentioned it would make sense that you could only delete cheeps from the profile page. We thought that would make sense and went on to implement that feature.
+Visual testing was also part of our process. Running the application and testing new and existing features by using them and confirming the results.
 
 # Ethics
 

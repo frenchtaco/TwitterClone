@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-Chirp.Web-d1261a4a-63b1-4e41-a018-ad4a7404131b</UserSecretsId>
+    <NoWarn>*</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
