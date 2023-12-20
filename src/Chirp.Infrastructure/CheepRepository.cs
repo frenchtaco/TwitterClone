@@ -37,6 +37,8 @@ public class CheepRepository : ICheepRepository
                 .ThenInclude(cheepLikeDis => cheepLikeDis.Likes) 
             .Include(cheep => cheep.LikesAndDislikes) 
                 .ThenInclude(cheepLikeDis => cheepLikeDis.Dislikes);
+
+        Console.WriteLine($"Order by: {orderBy}");
             
         switch(orderBy)
         {
@@ -52,7 +54,7 @@ public class CheepRepository : ICheepRepository
                     .Skip(page * CheepsPerPage())
                     .Take(CheepsPerPage())
                     .ToListAsync();
-            case "disliked":
+            case "hated":
                 return await cheepQuery
                     .OrderByDescending(cheep => cheep.LikesAndDislikes.Dislikes.Count)
                     .Skip(page * CheepsPerPage())
