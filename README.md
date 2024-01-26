@@ -6,7 +6,7 @@
 The goal of this project was to create a social network, Chirp, using .NET Framework and C#.
 
 ## Context
-This project was made during the 3rd semester at the IT University of Copenhagen in cooperation with two fellow students in the course "Analysis, Design and Software Architecture" which was the first project we ever deployed to the web via Azure.
+This project was made during the 3rd semester at the IT University of Copenhagen in cooperation with four fellow students in the course "Analysis, Design and Software Architecture" which was the first project we ever deployed to the web via Azure.
 
 We used the Onion Architecture in conjunction with the repository pattern to create functionality via interfaces.
 
