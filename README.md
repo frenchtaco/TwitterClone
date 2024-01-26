@@ -16,7 +16,7 @@ For all members of the group, it was our third official project in which we deve
 This project taught us to create and deploy a web application where users would all write to the same database.
 
 
-#### CMD Commands
-Commands to Run program:
+### CMD Commands
+Commands to run program:
  - Dev: 'dotnet run -lp Dev'
  - Prod: 'dotnet run -lp Prod'
